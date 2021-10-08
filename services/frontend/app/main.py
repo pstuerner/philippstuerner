@@ -13,31 +13,6 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-def create_gradient_descent_data():
-    m = 50
-    plus_minus = 1 if np.random.random() < 0.5 else -1
-    X = np.random.randint(1,8) * np.random.rand(m, 1)
-    y = (4 + 3 * X + np.random.randn(m, 1)) * plus_minus
-    df = (
-        pd.DataFrame(np.c_[np.ones((m, 1)), X, y], columns=['X_b','X','y'])
-        .reset_index()
-        .rename(columns={'index':'i'})
-    )
-
-    lr = LinearRegression()
-    lr.fit(X,y)
-    theta0_best, theta1_best = lr.intercept_[0], lr.coef_[0][0]
-
-    return {
-        'data': json.loads(df.to_json(orient='records')),
-        'theta0_best': theta0_best,
-        'theta1_best': theta1_best 
-        }
-
-data_ids = {
-    'gradient_descent': create_gradient_descent_data
-}
-
 all_posts = [
     {
         'id': 'gradient_descent',
@@ -97,14 +72,3 @@ async def posts(request: Request):
 @app.get("/posts/{post_id}", response_class=HTMLResponse)
 async def post(request: Request, post_id: str):
     return templates.TemplateResponse(f"{post_id}.html", {"request": request})
-
-@app.get("/data/{data_id}")
-async def data(request: Request, data_id: str):
-    if data_id in data_ids:
-        return data_ids[data_id]()
-    else:
-        return 'error'
-
-@app.get("/posts/gradient_descent/chart2")
-async def gradient_descent_chart2(learning_rate: float, n_iter: int):
-    return {'lr':learning_rate, 'n':n_iter}

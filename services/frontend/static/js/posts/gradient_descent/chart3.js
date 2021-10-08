@@ -292,13 +292,13 @@ function chart3(data) {
   updateChart(data.data);
 
   d3.select('#chart3-fresh-data').on('click', function() {
-    d3.json('http://127.0.0.1:8000/data/gradient_descent').then(function(data) {
+    d3.json('http://127.0.0.1:8001/data/gradient_descent').then(function(data) {
       updateControls(data);
       updateChart(data.data);
     });
   });
 }
 
-d3.json('http://127.0.0.1:8000/data/gradient_descent').then(function(data) {
+d3.json('http://127.0.0.1:8001/data/gradient_descent').then(function(data) {
     chart3(data);
   });
