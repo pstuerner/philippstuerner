@@ -291,13 +291,13 @@ function chart1(data) {
   updateChart(data.data);
 
   d3.select('#chart1-fresh-data').on('click', function() {
-    d3.json('http://127.0.0.1:8001/data/gradient_descent').then(function(data) {
+    d3.json('https://api.philippstuerner.com/data/gradient_descent').then(function(data) {
       updateControls(data);
       updateChart(data.data);
     });
   });
 }
 
-d3.json('http://127.0.0.1:8001/data/gradient_descent').then(function(data) {
+d3.json('https://api.philippstuerner.com/data/gradient_descent').then(function(data) {
     chart1(data);
   });
