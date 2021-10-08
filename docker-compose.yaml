@@ -11,7 +11,7 @@ services:
       - traefik.http.routers.app-http.tls.certresolver=letsencrypt
     
   api:
-    build: ./services/api
+    build: ./services/api/
     restart: always
     labels:
       - traefik.enable=true
