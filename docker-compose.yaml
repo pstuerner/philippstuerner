@@ -9,15 +9,12 @@ services:
       - traefik.http.routers.app-http.rule=Host(`web.philippstuerner.com`)
       - traefik.http.routers.app-http.tls=true
       - traefik.http.routers.app-http.tls.certresolver=letsencrypt
-    
+  
   api:
     build: ./services/api/
     restart: always
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.app-http.rule=Host(`api.philippstuerner.com`)
-      - traefik.http.routers.app-http.tls=true
-      - traefik.http.routers.app-http.tls.certresolver=letsencrypt
+    ports:
+      - 8001:8001
 
   traefik:
     image: traefik:v2.3
