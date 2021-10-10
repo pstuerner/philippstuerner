@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 app = FastAPI()
 
 app.add_middleware(CORSMiddleware,
-allow_origins=["http://localhost:8000","http://web.philippstuerner.com","https://web.philippstuerner.com"],
+allow_origins=["*"],
 allow_credentials=True,
 allow_methods=["*"],
 allow_headers=["*"],)
