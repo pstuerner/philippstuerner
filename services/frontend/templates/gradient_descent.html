@@ -354,8 +354,6 @@
             <button type="button" id="chart4-btn-fast-forward" class="btn btn-primary">
                 <i class="fa fa-fast-forward"></i>
             </button>    
-            <!-- <button class="btn btn-primary" id='chart2-play'>Play</button>
-            <button class="btn btn-primary" id="chart2-stop">Stop</button> -->
         </div>
         <div class="col-12 p-1" style="text-align: center;">
             <button class="btn btn-primary" id='chart4-normalize-button'>Normalize</button>
@@ -467,7 +465,21 @@
 <p>
     As in the previous examples, this is a linear regression problem with one dependent variable and one explanatory variable (plus the bias term, hence two parameters to optimize). The underlying data as well as the current regression model for each Gradient Descent step are shown in the left graph. Pay attention: since we are comparing three different algorithms, we get three different results for each step. In the right chart we see the cost function as a contour plot for different \(\theta_0, \theta_1\) values. The red diamond is the starting point (random initialization) and all three Gradient Descent variants try step by step to reach the green X, which is the global optimum. The dropdown menu below <code># instances</code> controls the size of the data set. To save you from having to perform many individual Gradient Descent steps, you can increase the counter by clicking on <code>NEXT STEP(S)</code> and thus perform multiple iterations with a single click. In the table you can set the respective learning schedules and the batch size for Mini-Batch Gradient Descent. To ensure consistent scenarios, the learning schedules, batch size and data set size cannot be changed once the first Gradient Descent step has been calculated. Just click the <code>RESET</code> button to start a new experiment and try out new options. Just give it a shot. After the dashboard, I discuss a few noteworthy scenarios that highlight differences and similarities.
 </p>
-<div style="background-color: rgb(0,0,0,.1); height: 10em; width: 80%; text-align: center; margin-left: auto; margin-right: auto;"></div>
+<div id="chart5">
+    <div class="row">
+        <div class="col-6 p-0 text-center">
+            <!-- <h5 id='chart4-function'>\(h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}1\\2\end{pmatrix} \cdot x\)</h5> -->
+            <div id="chart5-scatter" style="height: 25em;" ></div>
+        </div>
+        <div class="col-6 p-0 text-center">
+            <!-- <h5 id='chart4-function'>\(h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}1\\2\end{pmatrix} \cdot x\)</h5> -->
+            <div id="chart5-contour" style="height: 25em;" ></div>
+        </div>
+    </div>
+</div>
+<button type="button" id="chart5-new-data-button">New Data!</button>
+<button type="button" id="chart5-normalize-button">Normalize!</button>
+<button type="button" id="chart5-race-button">Play</button>
 <ul>
     <li>
         <p>
@@ -494,11 +506,13 @@
 {% block body_js %}
 {{ super() }}
 <script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.0.0/d3.js" integrity="sha512-reQU82rwG8kg8TCrYyjH5CknWEEIYafi6q7pSHiIRRd463E3iQ7/WbbezgCz4bKdx4Bd9+FMWVv4ig/oAAunHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.0.0/d3.js" integrity="sha512-reQU82rwG8kg8TCrYyjH5CknWEEIYafi6q7pSHiIRRd463E3iQ7/WbbezgCz4bKdx4Bd9+FMWVv4ig/oAAunHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://unpkg.com/d3-simple-slider@1.10.4/dist/d3-simple-slider.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart1.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart2.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart3.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart4.js') }}"></script>
+<script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart5.js') }}"></script>
 {% endblock %}

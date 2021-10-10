@@ -1,0 +1,320 @@
+function createData (n) {
+	let xStart = +(2 * Math.random()).toFixed(2),
+		xEnd = +(10 + 5 * Math.random()).toFixed(2),
+		yStart = +(5 * Math.random()).toFixed(2),
+		yEnd = (10 + +(10 * Math.random()).toFixed(2)) * (Math.random() > 0.5 ? 1 : -1),
+		m = Math.round(10*(Math.random() > 0.5 ? 1 : -1)*Math.random()),
+		b = Math.round(20*(Math.random() > 0.5 ? 1 : -1)*Math.random()),
+		f = function (x) {return m * x + b},
+		data = []
+	
+	for (let i = 0; i < n; i++) {
+		let x = +((xEnd - xStart) * Math.random()).toFixed(2);
+		data.push(
+			{
+				i:i,
+				x:x,
+				y:f(x) + 10 * Math.random() * (Math.random() > 0.5 ? 1 : -1)
+			}
+		)
+	}
+	
+	return {f:f, data:data, m:m, b:b}
+}
+
+function updateScatterChart () {
+	function updateScatter () {
+		scatter
+		.selectAll('.dot')
+		.data(data.data)
+		.join(
+			enter => enter
+					.append('circle')
+					.attr('class', 'dot')
+					.attr('r', 5)
+					.attr('cx', d=>xScaleScatter(d.x))
+					.attr('cy', d=>yScaleScatter(d.y))
+                    .style('fill','blue'),
+			update => update
+					.transition()
+					.duration(500)
+					.attr('cx', d=>xScaleScatter(d.x))
+					.attr('cy', d=>yScaleScatter(d.y)),
+			exit => exit.remove()
+		)
+	}
+	
+    // Update scales & axis
+	xScaleScatter.domain(d3.extent(data.data.map(d=>d.x)))
+	yScaleScatter.domain(d3.extent(data.data.map(d=>d.y)))
+	xAxisScatter.transition().duration(500).call(d3.axisBottom(xScaleScatter))
+	yAxisScatter.transition().duration(500).call(d3.axisLeft(yScaleScatter));
+	
+	// Scatter
+	updateScatter()
+}
+
+function updateContourChart () {
+	function updateContour () {
+		contours
+		.selectAll("path.contour")
+		.data(contourValues)
+		.join(
+			enter => enter
+					.append("path")
+					.attr('class', 'contour')
+					.attr("d", d3.geoPath(d3.geoIdentity().scale((width-margin.top)/theta1Range.length)))
+					.attr("fill", function(d) {return color(d.value); }),
+			update => update
+					.attr("d", d3.geoPath(d3.geoIdentity().scale(width/theta1Range.length)))
+					.attr("fill", function(d) {return color(d.value); }),
+			exit => exit.remove()
+		)
+	}
+	
+	
+	// Contour
+	xScaleContour.domain(d3.extent(theta0Range))
+	yScaleContour.domain(d3.extent(theta1Range))
+	xAxisContour.transition().duration(500).call(d3.axisBottom(xScaleContour))
+	yAxisContour.transition().duration(500).call(d3.axisLeft(yScaleContour))
+	
+	let thresholds = d3.range(d3.min(loss, d=>d.loss),d3.max(loss, d=>d.loss),(d3.max(loss, d=>d.loss)- d3.min(loss, d=>d.loss))/21),
+		color = d3.scaleSequential(d3.interpolateGreys).domain([d3.min(thresholds),d3.max(thresholds)]),
+		contourValues = d3.contours()
+				.size([theta0Range.length,theta1Range.length])
+				.smooth(true)
+				.thresholds(thresholds)
+				(loss.map(d=>d.loss))
+	
+	updateContour();
+	
+	// GD Paths
+	gdPaths.selectAll('path.gd-line').remove()
+}
+
+function transition(path) {
+  path.transition()
+      .duration(1000)
+      .attrTween("stroke-dasharray", tweenDash)
+      //.on("end", function() { d3.select(this).call(transition); });
+}
+
+function tweenDash() {
+  var l = this.getTotalLength(),
+      i = d3.interpolateString("0," + l, l + "," + l);
+  return function(t) { return i(t); };
+}
+
+function updateRegression (regressionData) {
+	regression
+	.selectAll('path.regression-line')
+	.data(regressionData)
+	.join(
+		enter => enter
+				.append('path')
+				.attr('class', `regression-line ${d=>d.id}`)
+				.attr('fill', 'none')
+				.attr('stroke', d=>d.color)
+				.attr('stroke-width', 2)
+				.attr('d', d=>d3.line().x(d=>xScaleScatter(d.x)).y(d=>yScaleScatter(d.y))(d.values)),
+		update => update
+				.transition()
+				.duration(100)
+				.attr('d', d=>d3.line().x(d=>xScaleScatter(d.x)).y(d=>yScaleScatter(d.y))(d.values))
+	)
+}
+
+function updateGD (data) {
+	let lineGenerator = d3.line().x(d=>xScaleContour(d.theta0)).y(d=>yScaleContour(d.theta1));
+	let paths = gdPaths.selectAll('path.gd-line').data(data)
+	
+	paths = paths.enter(d=>d.id).append('path').attr('class',d=>`gd-line ${d.id}`).merge(paths)
+	paths.attr('fill', 'none')
+	.attr('stroke', d=>d.color)
+	.attr('stroke-width', 3)
+	.attr('d', d=>lineGenerator(d.values))	
+}
+
+function computeLoss (data, theta0, theta1) {
+	return 1/(2*data.length)*d3.sum(data.map(d=>((theta1*d.x+theta0)-d.y)**2))
+}
+
+function thetaRange (theta, magnitude, step) {
+	let extent = d3.extent([theta-magnitude,theta+magnitude])
+	return _.range(extent[0],extent[1],step).map(d=>+d.toFixed(2))
+}
+
+function normalize (x, min, max) {
+	return (x - min) / (max - min)
+}
+
+function resetParameters () {
+	if (!normalized) {data = dataRaw} else {data = dataNormalized}
+	
+	theta0BestGD = 0; theta1BestGD = 0;
+	for (let i=0; i<5000; i++) {[theta0BestGD, theta1BestGD]=batchGDStep(data.data, theta0BestGD, theta1BestGD)};
+	
+	dataExtent = d3.extent(data.data.map(d=>d.x))
+	theta0Range = thetaRange(theta0BestGD, d3.max([Math.abs(theta0BestGD), Math.abs(theta1BestGD)]) * .5, .1)
+	theta1Range = thetaRange(theta1BestGD, d3.max([Math.abs(theta0BestGD), Math.abs(theta1BestGD)]) * .5, .1)		
+	theta0Init = Math.random() > .5 ? theta0Range[_.random(0,10)] : theta0Range.slice(-_.random(0,10))[0]
+	theta1Init = Math.random() > .5 ? theta1Range[_.random(0,10)] : theta1Range.slice(-_.random(0,10))[0]
+	theta0BGD = theta0Init; theta1BGD = theta1Init; bgdPath = [];
+	theta0SGD = theta0Init; theta1SGD = theta1Init; sgdPath = [];
+	theta0MBGD = theta0Init; theta1MBGD = theta1Init; mbgdPath = [];
+	bgdPath.push({theta0:theta0BGD, theta1:theta1BGD})
+    sgdPath.push({theta0:theta0SGD, theta1:theta1SGD})
+    mbgdPath.push({theta0:theta0MBGD, theta1:theta1MBGD})
+	
+	loss = []
+	theta0Range.forEach(function (theta0) {
+		theta1Range.forEach(function (theta1) {
+			loss.push({theta0:theta0, theta1:theta1, loss:computeLoss(data.data, theta0, theta1)})
+		})
+	})
+}
+
+function newData () {
+	dataRaw = createData(100)
+	dataExtent = d3.extent(dataRaw.data.map(d=>d.x))
+	dataNormalized = JSON.parse(JSON.stringify(dataRaw))
+	dataNormalized.data.forEach(d=>d.x=normalize(d.x, dataExtent[0], dataExtent[1]))
+	
+	data = dataRaw
+}
+
+function djdt0 (data, theta0, theta1) {
+	return (1/data.length)*d3.sum(data.map(d=>(theta0+theta1*d.x)-d.y))
+}
+
+function djdt1 (data, theta0, theta1) {
+	return (1/data.length)*d3.sum(data.map(d=>((theta0+theta1*d.x)-d.y)*d.x))
+}
+
+function batchGDStep (data, theta0, theta1) {
+	theta0 = theta0 - djdt0(data, theta0, theta1) * learningRate
+	theta1 = theta1 - djdt1(data, theta0, theta1) * learningRate
+	
+	return [theta0, theta1]
+}
+
+function miniBatchGDStep (data, batchSize, theta0, theta1) {
+	data = _.shuffle(data).slice(0, batchSize)
+	return batchGDStep(data, theta0, theta1)
+}
+
+function stochasticGDStep (data, theta0, theta1) {
+	return miniBatchGDStep(data, 1, theta0, theta1)
+}
+
+function step () {
+	// Contour
+	[theta0BGD, theta1BGD] = batchGDStep(data.data, theta0BGD, theta1BGD);
+    [theta0SGD, theta1SGD] = stochasticGDStep(data.data, theta0SGD, theta1SGD);
+    [theta0MBGD, theta1MBGD] = miniBatchGDStep(data.data, 20, theta0SGD, theta1SGD);
+  
+    bgdPath.push({theta0:theta0BGD, theta1:theta1BGD})
+    sgdPath.push({theta0:theta0SGD, theta1:theta1SGD})
+    mbgdPath.push({theta0:theta0MBGD, theta1:theta1MBGD})
+	
+	updateGD(
+	  [
+		  {id:'bgd', color:'blue', values:bgdPath},
+		  {id:'sgd', color:'red', values:sgdPath},
+		  {id:'mbgd', color:'green', values:mbgdPath}
+	  ]
+    )
+	
+	// Scatter
+	let regressionData, bgdLine, sgdLine, mbgdLine;
+		
+	bgdLine = [{x:dataExtent[0],y:theta0BGD+theta1BGD*dataExtent[0]},{x:dataExtent[1],y:theta0BGD+theta1BGD*dataExtent[1]}]
+	sgdLine = [{x:dataExtent[0],y:theta0SGD+theta1SGD*dataExtent[0]},{x:dataExtent[1],y:theta0SGD+theta1SGD*dataExtent[1]}]
+	mbgdLine = [{x:dataExtent[0],y:theta0MBGD+theta1MBGD*dataExtent[0]},{x:dataExtent[1],y:theta0SGD+theta1SGD*dataExtent[1]}]
+	regressionData = [
+		{id:'bgd', color:'blue', values:bgdLine},
+		{id:'sgd', color:'red', values:sgdLine},
+		{id:'mbgd', color:'green', values:mbgdLine}
+	]
+	
+	updateRegression(regressionData)
+}
+
+function init (createData) {
+	if (createData) {newData()}
+	resetParameters()
+	updateScatterChart()
+	updateContourChart()
+}
+
+let moving, timer;
+d3.select('#chart5-race-button')
+    .on("click", function() {
+    let button = d3.select(this);
+    if (button.text() == "Pause") {
+      moving = false;
+      clearInterval(timer);
+      button.text("Play");
+    } else {
+      moving = true;
+      timer = setInterval(step, 10);
+      button.text("Pause");
+    }
+  })
+
+d3.select('#chart5-new-data-button').on('click', function(){
+	init(true)
+})
+
+d3.select('#chart5-normalize-button').on('click', function(){
+	if (!normalized) {normalized = true} else {normalized = false}
+	init(false)
+})
+
+let margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = d3.select('#chart5-scatter').node().getBoundingClientRect().width-margin.left-margin.right,
+    height = d3.select('#chart5-scatter').node().getBoundingClientRect().height-margin.top-margin.bottom,
+    learningRate = 0.01,
+	theta0BestGT, theta1BestGT,
+	theta0BestGD, theta1BestGD,
+	theta0BGD, theta1BGD, bgdPath,
+	theta0SGD, theta1SGD, sgdPath,
+	theta0MBGD, theta1MBGD, mbgdPath,
+	normalized = false,
+	data, theta0Range, theta1Range, theta0Init, theta1Init, loss,
+	dataExtent, dataRaw, dataNormalized
+
+let svgScatter = d3
+		.select('#chart5-scatter')
+		.append('svg')
+		.attr('width',width + margin.left + margin.right)
+		.attr('height',height + margin.bottom + margin.top)
+		.append('g')
+		.attr('transform', `translate(${margin.left},${margin.top})`),
+	svgContour = d3
+		.select('#chart5-contour')
+		.append('svg')
+		.attr('width',width + margin.left + margin.right)
+		.attr('height',height + margin.bottom + margin.top)
+		.append('g')
+		.attr("fill", "none")
+        .attr("stroke", "#fff")
+        .attr("stroke-opacity", 0.5)
+		.attr('transform', `translate(${margin.left},${margin.top})`);
+	
+let xAxisScatter = svgScatter.append('g').attr('transform', `translate(0, ${height})`),
+	yAxisScatter = svgScatter.append('g'),
+	xScaleScatter = d3.scaleLinear().range([0, width]),
+	yScaleScatter = d3.scaleLinear().range([height, 0]),
+	scatter = svgScatter.append('g'),
+	regression = svgScatter.append('g')
+
+let xScaleContour = d3.scaleLinear().range([ 0, width-margin.right]),
+	yScaleContour = d3.scaleLinear().range([ height, 0]),
+	xAxisContour = svgContour.append("g").attr('class', 'axis x').attr("transform", `translate(0,${height})`),
+	yAxisContour = svgContour.append("g").attr('class', 'axis y'),
+	contours = svgContour.append('g'),
+	gdPaths = svgContour.append('g')
+
+init(true)
