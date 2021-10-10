@@ -82,12 +82,7 @@ function tocMakeLinks (parent) {
         liNode.firstChild.addEventListener(
             "click",
             function () {
-                if (parent.contains(tocParent) || !tocParent) {
-                    parent.querySelectorAll('H1, H2, H3, H4, H5, H6')[i+1].scrollIntoView();
-                }
-                else {
-                    parent.querySelectorAll('H1, H2, H3, H4, H5, H6')[i].scrollIntoView();
-                }
+                parent.querySelectorAll('.section-heading')[i].scrollIntoView();
             }
         );
     });
