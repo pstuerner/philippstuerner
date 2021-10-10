@@ -72,6 +72,7 @@
 {% block header_img %}gradientdescent_header.jpg{% endblock %}
 
 {% block post_content %}
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <p>
     Some things in life are important such as giving your parents a call from time to time, brushing your teeth, drinking enough water or making sure not to forget your fiancé's birthday. The list of important things is of course much longer and depends on the individual, but I'm pretty sure that Gradient Descent should be on everyone's list. Why? Because the world is full of problems that revolve around finding an optimal solution and Gradient Descent, which is a generic optimization algorithm, is capable of finding these solutions! It is such an important algorithm that many people assume that it must be really complicated. Spoiler warning: it's not 🙏.
 </p>
@@ -91,7 +92,8 @@
 <p>
     Let’s work on a dead simple regression problem including one explanatory variable \(X\) and one dependent variable \(y\). Our goal is to find a linear model that describes the underlying data best and can be used for future predictions. If you’re not familiar with linear models yet make sure to read through <a href="#" target="_blank">one of my other dashboards</a> that covers all kinds of linear models in greater detail. The following interactive chart should give you an idea about what kind of problem we’re dealing with and which assumptions I took to simplify this example as much as possible.
 </p>
-<div id="chart1">
+</div>
+<div id="chart1" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="col-12 p-1" style="text-align: center;">
             <a id="chart1-mse">MSE:</a>
@@ -117,6 +119,7 @@
         </div>
     </div>    
 </div>
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <p>
     As you can see, our problem is limited to finding the best possible \(\theta_1\) parameter. This is because I have already calculated the best possible \(\theta_0\) parameter and set it for the entire example. The reason for this is that it allows me to plot the gradient and the cost function in a 2D scatter plot, which really helps to understand how Gradient Descent works step by step. So don't worry about \(\theta_0\) now, we will talk about how to use Gradient Descent to optimize multiple parameters later.
 </p>
@@ -134,7 +137,8 @@
 </p>
 <!-- <div id="chart2" style="background-color: rgb(0,0,0,.1); height: 20em; width: 80%; text-align: center; margin-left: auto; margin-right: auto;">
 </div> -->
-<div id="chart2">
+</div>
+<div id="chart2" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="col-6 p-0 text-center">
             <h5 id='chart2-function'>\(h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}1\\2\end{pmatrix} \cdot x\)</h5>
@@ -208,6 +212,7 @@
         </div>
     </div>
 </div>
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <p>
     The first thing we see is that Gradient Descent is an iterative process. We start somewhere far away and approach the optimal solution with each subsequent step. This is done by iteratively setting and updating \(\theta_1\) based on the value of the gradient and the learning rate. If you track the gradient in the graph on the right, you will see that it is actually approaching zero as the red line gets flatter with each step. To give you a feel for the learning rate, let's cover four of the most common scenarios. Be sure to click on the hyperlinks and run a few next steps on the interactive graph to see what it looks like.
 </p>
@@ -245,7 +250,8 @@
 <p>
     Most real examples deal with more than one parameter, so we will abandon this assumption. In the following example, we have the same underlying data set, but we will try to find the optimal solution by finding the line with the best slope and intercept. The following interactive diagram should once again give you an idea of the type of problem we are dealing with and which best fitting line to look for.
 </p>
-<div id="chart3">
+</div>
+<div id="chart3" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="col-12 p-1" style="text-align: center;">
             <h5 id="chart3-mse"></h5>
@@ -269,13 +275,15 @@
         </div>
     </div>    
 </div>
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <p>
     I am aware that most real-life cases also deal with more than two parameters, but for Gradient Descent it makes no difference whether you have two or a hundred model parameters. This is because the underlying concept remains the same and only the computational complexity increases. Let's find out what Gradient Descent looks like with two parameters and what changes from the previous example.
 </p>
 <p>
     We still have our MSE cost function: $$ \textrm{MSE}(\theta) = \frac{1}{2m}\sum_{i=1}^{m}{(\theta^Tx^i-y^i)^2}, \: \textrm{with} \: \theta=\begin{pmatrix}\theta_0\\\theta_1\end{pmatrix} $$ The only difference is that we loosen our assumption about a fixed \(\theta_0\) value and treat it as a real model parameter. Pretty much the same way we treated \(\theta_1\) in the previous example. Here is the first difference: since we need to calculate the partial derivative of the cost function with respect to each model parameter, we have an additional equation: $$ \frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{0}^{i} $$ $$ \frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{1}^{i} $$ Unlike the first example, we are now dealing with an actual gradient and cannot further oversimplify \(\frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta), \frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)\) to the slope of the cost function. However, everything else remains the same. We take a random guess for the initialization of \(\theta_0\) and \(\theta_1\), measure the local gradient of the cost function with respect to each model parameter, and update the parameters based on the learning rate. In this way, we slowly move towards the descending gradient. Interested to see what this example looks like? Check out the interactive chart below. Learning rate, best fit and reset are the same as in the previous example, but you will quickly notice the differences. In fact, everything looks a bit fancier with an additional parameter, but it will feel very natural after some time.
 </p>
-<div id="chart4">
+</div>
+<div id="chart4" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="col-6 p-0 text-center">
             <h5 id='chart4-function'>\(h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}1\\2\end{pmatrix} \cdot x\)</h5>
@@ -360,6 +368,7 @@
         </div>
     </div>
 </div>
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <p>
     When you click <code>NEXT STEP</code>, you should have the same feeling as the previous example: Step by step you are approaching the optimal solution. The only difference in the diagram on the left is that the Gradient Descent updates both the intercept and the slope with each successive iteration. But wait 😱, what the hell happened to our bowl-shaped looking cost function chart on the right? Suddenly we're seeing a fancy 3d chart with all sorts of planes and contours that make things look a lot more complicated.
 </p>
@@ -465,7 +474,8 @@
 <p>
     As in the previous examples, this is a linear regression problem with one dependent variable and one explanatory variable (plus the bias term, hence two parameters to optimize). The underlying data as well as the current regression model for each Gradient Descent step are shown in the left graph. Pay attention: since we are comparing three different algorithms, we get three different results for each step. In the right chart we see the cost function as a contour plot for different \(\theta_0, \theta_1\) values. The red diamond is the starting point (random initialization) and all three Gradient Descent variants try step by step to reach the green X, which is the global optimum. The dropdown menu below <code># instances</code> controls the size of the data set. To save you from having to perform many individual Gradient Descent steps, you can increase the counter by clicking on <code>NEXT STEP(S)</code> and thus perform multiple iterations with a single click. In the table you can set the respective learning schedules and the batch size for Mini-Batch Gradient Descent. To ensure consistent scenarios, the learning schedules, batch size and data set size cannot be changed once the first Gradient Descent step has been calculated. Just click the <code>RESET</code> button to start a new experiment and try out new options. Just give it a shot. After the dashboard, I discuss a few noteworthy scenarios that highlight differences and similarities.
 </p>
-<div id="chart5">
+</div>
+<div id="chart5" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row">
         <div class="col-6 p-0 text-center">
             <!-- <h5 id='chart4-function'>\(h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}1\\2\end{pmatrix} \cdot x\)</h5> -->
@@ -476,10 +486,13 @@
             <div id="chart5-contour" style="height: 25em;" ></div>
         </div>
     </div>
+    <div class="row">
+        <button type="button" id="chart5-new-data-button">New Data!</button>
+        <button type="button" id="chart5-normalize-button">Normalize!</button>
+        <button type="button" id="chart5-race-button">Play</button>
+    </div>
 </div>
-<button type="button" id="chart5-new-data-button">New Data!</button>
-<button type="button" id="chart5-normalize-button">Normalize!</button>
-<button type="button" id="chart5-race-button">Play</button>
+<div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
 <ul>
     <li>
         <p>
@@ -500,7 +513,7 @@
 <p>
     That's it 🔥! That was an intense post so kudos if you made it this far. I had actually planned to do a very short and crisp dashboard on Gradient Descent, but quickly realized that the algorithm and applications are too versatile and a more detailed elaboration is needed. I hope the examples and math notations helped you to get a better overview of Gradient Descent. The racetrack example is, in my opinion, a fun way to illustrate differences in the three algorithms and to show how different alternatives affect the final path. As always, feel free to <a href="mailto:philipp.stuerner@web.de">reach out</a> if you have any questions, the examples are confusing, or you spot an error."
 </p>
-
+</div>
 {% endblock %}
 
 {% block body_js %}
