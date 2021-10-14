@@ -33,7 +33,7 @@ all_posts = [
     {
         'id': 'confusion_matrix',
         'title': "Unconfusing the confusion matrix",
-        'subtitle': "What is the confusion matrix and its most important key metrics? It's not complicated at all and you'll learn why in this post.",
+        'subtitle': "Learn what the confusion matrix and its metrics are by interacting with a simple MNIST classifier.",
         'description': """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on May 28, 2021"""
