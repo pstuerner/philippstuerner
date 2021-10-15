@@ -19,6 +19,6 @@
 [certificatesResolvers.letsencrypt.acme]
   email = "philipp.stuerner@web.de"
   storage= "acme.json"
-  caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  caServer="https://acme-v02.api.letsencrypt.org/directory"
   [certificatesResolvers.letsencrypt.acme.httpChallenge]
     entryPoint = "web"
