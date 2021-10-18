@@ -369,7 +369,7 @@ function chart4(data) {
     }
 
     // Charts
-    const   margin = {top: 40, bottom: 40, left: 40, right: 40},
+    const   margin = {top: 40, bottom: 40, left: 60, right: 40},
             chartWidth = d3.select('#chart4-loss-function').node().getBoundingClientRect().width-margin.left-margin.right,
             chartHeight = d3.select('#chart4-loss-function').node().getBoundingClientRect().height-margin.top-margin.bottom;
 
@@ -536,15 +536,39 @@ function chart4(data) {
     plotLoss(data.data);
     updateMathJax(theta0_init, theta1_init);
 
-    d3.select('#chart4-normalize-button').on('click', function() {
-        if (!normalize) {
-            normalize = true;
+    scatterSvg.append("foreignObject")
+        .attr("height",50)
+        .attr("width",100)
+        .attr("transform",`translate(${-margin.left*1.25},${chartHeight/2+50}),rotate(-90)`)
+        .append("xhtml:span")
+        .attr("class", "axisLabel")
+        .style('font-size', 'medium')
+
+    scatterSvg.append("foreignObject")
+        .attr("height",50)
+        .attr("width",100)
+        .attr("transform",`translate(${chartWidth/2-50},${chartHeight+5})`)
+        .append("xhtml:span")
+        .attr("class", "axisLabel")
+        .style('font-size', 'medium')
+
+    let axisNodes = d3.selectAll('#chart4 .axisLabel').nodes()
+    axisNodes[0].innerHTML = String.raw`$$y$$`
+    axisNodes[1].innerHTML = String.raw`$$X$$`
+    MathJax.typesetPromise(axisNodes).then(() => {});
+
+    d3.select('#chart4-normalize-check').on('click', function () {
+        let currentSlider = slider.value();
+        
+        if (this.checked) {
             currentData = dataNormalized;
         } else {
-            normalize = false;
             currentData = data.data;
         }
+
         steps_dict = {0:[theta0_init,theta1_init]};
+        slider.value(0); slider.value(currentSlider);
+
         xScaleScatter.domain(d3.extent(currentData, d=>d.X));
         xAxisDrawScatter.transition().duration(500).call(d3.axisBottom(xScaleScatter).scale(xScaleScatter));
         plotLoss(currentData);
@@ -556,8 +580,7 @@ function chart4(data) {
         clearInterval (myTimer);
         myTimer = setInterval (function() {
             var t = (slider.value() + 1) % (slider.max() + 1);
-            if (t == 0) { t = slider.min(); }
-            slider.value(t);
+            if (t == 0) {clearInterval (myTimer)} else {slider.value(t);}
           }, 150);
       });
     
@@ -660,6 +683,48 @@ function chart4(data) {
         updateLossDot(point3d.rotateY(beta + startAngleY).rotateX(alpha + startAngleX)([{x:theta0,y:eq(currentData, theta0,theta1),z:theta1}]));
         updateMathJax(theta0, theta1);
       });
+
+      d3.select('#chart4-scenario-1').on('click', function() {
+        slider.value(0);
+        let normalizeButton = document.getElementById("chart4-normalize-check");
+        if (normalizeButton.checked) {normalizeButton.click()};
+        
+        learning_rate = 0.05;
+        theta0_init = 8.5;
+        theta1_init = -4
+        steps_dict = {0:[theta0_init,theta1_init]};
+
+        xScaleScatter.domain(d3.extent(currentData, d=>d.X));
+        xAxisDrawScatter.transition().duration(500).call(d3.axisBottom(xScaleScatter).scale(xScaleScatter));
+        plotLoss(currentData);
+        updateResiduals(theta0, theta1);
+        updateLine(theta0, theta1);
+        document.getElementById("chart4-learning-rate").value=0.05;
+        document.getElementById("chart4-theta0-init").value=8.5;
+        document.getElementById("chart4-theta1-init").value=-4;
+        document.getElementById('chart4-btn-play').click();
+      })
+
+      d3.select('#chart4-scenario-2').on('click', function() {
+        slider.value(_.random(0,200));
+        let normalizeButton = document.getElementById("chart4-normalize-check");
+        if (!normalizeButton.checked) {normalizeButton.click()};
+        
+        learning_rate = 0.05;
+        theta0_init = 8.5;
+        theta1_init = -4
+        steps_dict = {0:[theta0_init,theta1_init]};
+
+        xScaleScatter.domain(d3.extent(currentData, d=>d.X));
+        xAxisDrawScatter.transition().duration(500).call(d3.axisBottom(xScaleScatter).scale(xScaleScatter));
+        plotLoss(currentData);
+        updateResiduals(theta0, theta1);
+        updateLine(theta0, theta1);
+        document.getElementById("chart4-learning-rate").value=0.05;
+        document.getElementById("chart4-theta0-init").value=8.5;
+        document.getElementById("chart4-theta1-init").value=-4;
+        document.getElementById('chart4-btn-play').click();
+      })
 }
 
 d3.json('/static/js/posts/gradient_descent/data.json').then(function(data) {

@@ -185,7 +185,7 @@ function chart2(data) {
       )
   };
 
-  const margin = {top: 40, bottom: 40, left: 40, right: 40},
+  const margin = {top: 40, bottom: 40, left: 60, right: 40},
         chartWidth = d3.select('#chart2-scatter').node().getBoundingClientRect().width-margin.left-margin.right,
         chartHeight = d3.select('#chart2-scatter').node().getBoundingClientRect().height-margin.top-margin.bottom;
   
@@ -296,13 +296,51 @@ function chart2(data) {
   cxSliderG.call(cxSlider.value(30)).attr('id','chart2-cxslider');
   cxSlider.value(0);
 
+  scatterSvg.append("foreignObject")
+    .attr("height",50)
+    .attr("width",100)
+    .attr("transform",`translate(${-margin.left*1.25},${chartHeight/2+50}),rotate(-90)`)
+    .append("xhtml:span")
+    .attr("class", "axisLabel")
+    .style('font-size', 'medium')
+
+  scatterSvg.append("foreignObject")
+    .attr("height",50)
+    .attr("width",100)
+    .attr("transform",`translate(${chartWidth/2-50},${chartHeight+5})`)
+    .append("xhtml:span")
+    .attr("class", "axisLabel")
+    .style('font-size', 'medium')
+
+  lossSvg.append("foreignObject")
+    .attr("height",50)
+    .attr("width",100)
+    .attr("transform",`translate(${-margin.left*1.25},${chartHeight/2+50}),rotate(-90)`)
+    .append("xhtml:span")
+    .attr("class", "axisLabel")
+    .style('font-size', 'medium')
+
+  lossSvg.append("foreignObject")
+    .attr("height",50)
+    .attr("width",100)
+    .attr("transform",`translate(${chartWidth/2-50},${chartHeight+5})`)
+    .append("xhtml:span")
+    .attr("class", "axisLabel")
+    .style('font-size', 'medium')
+  
+  let axisNodes = d3.selectAll('#chart2 .axisLabel').nodes()
+  axisNodes[0].innerHTML = String.raw`$$y$$`
+  axisNodes[1].innerHTML = String.raw`$$X$$`
+  axisNodes[2].innerHTML = String.raw`$$\textrm{MSE}$$`
+  axisNodes[3].innerHTML = String.raw`$$\theta_1$$`
+  MathJax.typesetPromise(axisNodes).then(() => {});
+
   var myTimer;
   d3.select("#chart2-btn-play").on("click", function() {
     clearInterval (myTimer);
     myTimer = setInterval (function() {
         var t = (cxSlider.value() + 1) % (cxSlider.max() + 1);
-        if (t == 0) { t = cxSlider.min(); }
-        cxSlider.value(t);
+        if (t == 0) {clearInterval (myTimer)} else {cxSlider.value(t);}
       }, 150);
   });
 

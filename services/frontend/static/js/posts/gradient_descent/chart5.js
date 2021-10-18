@@ -1,3 +1,5 @@
+import {responsivefy} from '../../helpers.js';
+
 function createData (n) {
 	let xStart = +(2 * Math.random()).toFixed(2),
 		xEnd = +(10 + 5 * Math.random()).toFixed(2),
@@ -63,10 +65,11 @@ function updateContourChart () {
 			enter => enter
 					.append("path")
 					.attr('class', 'contour')
+					.attr('clip-path', 'url(#contour-clip)')
 					.attr("d", d3.geoPath(d3.geoIdentity().scale((width-margin.top)/theta1Range.length)))
 					.attr("fill", function(d) {return color(d.value); }),
 			update => update
-					.attr("d", d3.geoPath(d3.geoIdentity().scale(width/theta1Range.length)))
+					.attr("d", d3.geoPath(d3.geoIdentity().scale((width-margin.top)/theta1Range.length)))
 					.attr("fill", function(d) {return color(d.value); }),
 			exit => exit.remove()
 		)
@@ -114,6 +117,7 @@ function updateRegression (regressionData) {
 		enter => enter
 				.append('path')
 				.attr('class', `regression-line ${d=>d.id}`)
+				.attr('clip-path', 'url(#scatter-clip)')
 				.attr('fill', 'none')
 				.attr('stroke', d=>d.color)
 				.attr('stroke-width', 2)
@@ -129,11 +133,16 @@ function updateGD (data) {
 	let lineGenerator = d3.line().x(d=>xScaleContour(d.theta0)).y(d=>yScaleContour(d.theta1));
 	let paths = gdPaths.selectAll('path.gd-line').data(data)
 	
-	paths = paths.enter(d=>d.id).append('path').attr('class',d=>`gd-line ${d.id}`).merge(paths)
+	paths = paths
+		.enter(d=>d.id)
+		.append('path')
+		.attr('class',d=>`gd-line ${d.id}`)
+		.attr('clip-path', 'url(#contour-clip)')
+		.merge(paths)
 	paths.attr('fill', 'none')
 	.attr('stroke', d=>d.color)
 	.attr('stroke-width', 3)
-	.attr('d', d=>lineGenerator(d.values))	
+	.attr('d', d=>lineGenerator(d.values))
 }
 
 function computeLoss (data, theta0, theta1) {
@@ -209,10 +218,12 @@ function stochasticGDStep (data, theta0, theta1) {
 }
 
 function step () {
+	++stepCount;
+
 	// Contour
 	[theta0BGD, theta1BGD] = batchGDStep(data.data, theta0BGD, theta1BGD);
     [theta0SGD, theta1SGD] = stochasticGDStep(data.data, theta0SGD, theta1SGD);
-    [theta0MBGD, theta1MBGD] = miniBatchGDStep(data.data, 20, theta0SGD, theta1SGD);
+    [theta0MBGD, theta1MBGD] = miniBatchGDStep(data.data, 10, theta0SGD, theta1SGD);
   
     bgdPath.push({theta0:theta0BGD, theta1:theta1BGD})
     sgdPath.push({theta0:theta0SGD, theta1:theta1SGD})
@@ -239,6 +250,28 @@ function step () {
 	]
 	
 	updateRegression(regressionData)
+
+	// MathJax
+	if (stepCount % 10 == 0) {
+		const nodes = [
+			document.getElementById('batchgd-theta'), document.getElementById('batchgd-mse'),
+			document.getElementById('stochasticgd-theta'), document.getElementById('stochasticgd-mse'),
+			document.getElementById('minibatchgd-theta'), document.getElementById('minibatchgd-mse'),
+		];
+		MathJax.typesetClear(nodes);
+		
+		let batchgdMSE = computeLoss(data.data, theta0BGD, theta1BGD),
+			stochasticgdMSE = computeLoss(data.data, theta0SGD, theta1SGD),
+			minibatchgdMSE = computeLoss(data.data, theta0MBGD, theta1MBGD);
+	
+		nodes[0].innerHTML = String.raw`$$\theta=\begin{pmatrix}${theta0BGD.toFixed(2)}\\${theta1BGD.toFixed(2)}\end{pmatrix}$$`
+		nodes[1].innerHTML = String.raw`$$\textrm{MSE}=${batchgdMSE.toFixed(2)}$$`
+		nodes[2].innerHTML = String.raw`$$\theta=\begin{pmatrix}${theta0SGD.toFixed(2)}\\${theta1SGD.toFixed(2)}\end{pmatrix}$$`
+		nodes[3].innerHTML = String.raw`$$\textrm{MSE}=${stochasticgdMSE.toFixed(2)}$$`
+		nodes[4].innerHTML = String.raw`$$\theta=\begin{pmatrix}${theta0MBGD.toFixed(2)}\\${theta1MBGD.toFixed(2)}\end{pmatrix}$$`
+		nodes[5].innerHTML = String.raw`$$\textrm{MSE}=${minibatchgdMSE.toFixed(2)}$$`
+		MathJax.typesetPromise(nodes).then(() => {});
+	}
 }
 
 function init (createData) {
@@ -264,15 +297,17 @@ d3.select('#chart5-race-button')
   })
 
 d3.select('#chart5-new-data-button').on('click', function(){
+	stepCount = 0;
 	init(true)
 })
 
 d3.select('#chart5-normalize-button').on('click', function(){
+	stepCount = 0;
 	if (!normalized) {normalized = true} else {normalized = false}
 	init(false)
 })
 
-let margin = {top: 40, right: 40, bottom: 40, left: 40},
+let margin = {top: 40, right: 40, bottom: 40, left: 60},
     width = d3.select('#chart5-scatter').node().getBoundingClientRect().width-margin.left-margin.right,
     height = d3.select('#chart5-scatter').node().getBoundingClientRect().height-margin.top-margin.bottom,
     learningRate = 0.01,
@@ -281,27 +316,53 @@ let margin = {top: 40, right: 40, bottom: 40, left: 40},
 	theta0BGD, theta1BGD, bgdPath,
 	theta0SGD, theta1SGD, sgdPath,
 	theta0MBGD, theta1MBGD, mbgdPath,
-	normalized = false,
+	normalized = false, stepCount = 0,
 	data, theta0Range, theta1Range, theta0Init, theta1Init, loss,
 	dataExtent, dataRaw, dataNormalized
 
-let svgScatter = d3
+let svgScatterBase = d3
 		.select('#chart5-scatter')
 		.append('svg')
 		.attr('width',width + margin.left + margin.right)
 		.attr('height',height + margin.bottom + margin.top)
+		.call(responsivefy),
+	svgScatter = svgScatterBase
 		.append('g')
 		.attr('transform', `translate(${margin.left},${margin.top})`),
-	svgContour = d3
+	ordinal = d3.scaleOrdinal()
+			.domain(["Batch GD", "Stochastic GD", "Mini-batch GD"])
+			.range(["blue", "red", "green"]),
+	legend = d3.legendColor()
+			.shape("line")
+			.shapePadding(2)
+			.scale(ordinal);
+
+let svgContourBase = d3
 		.select('#chart5-contour')
 		.append('svg')
 		.attr('width',width + margin.left + margin.right)
 		.attr('height',height + margin.bottom + margin.top)
+		.call(responsivefy),
+	svgContour = svgContourBase
 		.append('g')
-		.attr("fill", "none")
-        .attr("stroke", "#fff")
-        .attr("stroke-opacity", 0.5)
+		// .attr("fill", "none")
+        // .attr("stroke", "#fff")
+        .attr("stroke-opacity", 0.65)
 		.attr('transform', `translate(${margin.left},${margin.top})`);
+
+svgScatterBase
+.append('clipPath')
+.attr('id', 'scatter-clip')
+.append('rect')
+.attr('width', width + margin.left + margin.right)
+.attr('height', height);
+
+svgContourBase
+.append('clipPath')
+.attr('id', 'contour-clip')
+.append('rect')
+.attr('width', width - margin.right)
+.attr('height', height);
 	
 let xAxisScatter = svgScatter.append('g').attr('transform', `translate(0, ${height})`),
 	yAxisScatter = svgScatter.append('g'),
@@ -318,3 +379,53 @@ let xScaleContour = d3.scaleLinear().range([ 0, width-margin.right]),
 	gdPaths = svgContour.append('g')
 
 init(true)
+
+svgScatter
+.append("g")
+.attr("class", "legend")
+.attr("transform", "translate(20,20)")
+.style("font-size", "medium");
+svgScatter.select(".legend").append("rect")
+svgScatter.select(".legend").call(legend);
+let legendNode = svgScatter.select(".legend").node().getBBox();
+svgScatter.select(".legend rect").attr('transform', `translate(0,${legendNode.y})`)
+.attr('width',legendNode.width).attr('height',legendNode.height);
+
+svgContour.append("foreignObject")
+	.attr("height",50)
+	.attr("width",100)
+	.attr("transform",`translate(${-margin.left*1.25},${height/2+50}),rotate(-90)`)
+	.append("xhtml:span")
+	.attr("class", "axisLabel")
+	.style('font-size', 'medium')
+
+svgContour.append("foreignObject")
+	.attr("height",50)
+	.attr("width",100)
+	.attr("transform",`translate(${width/2-50},${height+5})`)
+	.append("xhtml:span")
+	.attr("class", "axisLabel")
+	.style('font-size', 'medium')
+
+svgScatter.append("foreignObject")
+	.attr("height",50)
+	.attr("width",100)
+	.attr("transform",`translate(${-margin.left*1.25},${height/2+50}),rotate(-90)`)
+	.append("xhtml:span")
+	.attr("class", "axisLabel")
+	.style('font-size', 'medium')
+
+svgScatter.append("foreignObject")
+	.attr("height",50)
+	.attr("width",100)
+	.attr("transform",`translate(${width/2-50},${height+5})`)
+	.append("xhtml:span")
+	.attr("class", "axisLabel")
+	.style('font-size', 'medium')
+
+let axisNodes = d3.selectAll('.axisLabel').nodes()
+axisNodes[0].innerHTML = String.raw`$$y$$`
+axisNodes[1].innerHTML = String.raw`$$X$$`
+axisNodes[2].innerHTML = String.raw`$$\theta_1$$`
+axisNodes[3].innerHTML = String.raw`$$\theta_0$$`
+MathJax.typesetPromise(axisNodes).then(() => {});

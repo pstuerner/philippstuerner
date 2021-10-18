@@ -256,7 +256,7 @@ function chart1(data) {
   updateControls(data);
 
   // Chart
-  const margin = {top: 40, bottom: 40, left: 40, right: 40},
+  const margin = {top: 40, bottom: 40, left: 60, right: 40},
         chartWidth = d3.select('#chart1-graph').node().getBoundingClientRect().width-margin.left-margin.right,
         chartHeight = d3.select('#chart1-graph').node().getBoundingClientRect().height-margin.top-margin.bottom,
         xScale = d3.scaleLinear().range([0, chartWidth]),
@@ -289,6 +289,27 @@ function chart1(data) {
         yAxisDraw = svg.append('g').attr('class', 'y axis');
     
   updateChart(data.data);
+
+svg.append("foreignObject")
+  .attr("height",50)
+  .attr("width",100)
+  .attr("transform",`translate(${-margin.left*1.25},${chartHeight/2+50}),rotate(-90)`)
+  .append("xhtml:span")
+  .attr("class", "axisLabel")
+  .style('font-size', 'medium')
+
+svg.append("foreignObject")
+  .attr("height",50)
+  .attr("width",100)
+  .attr("transform",`translate(${chartWidth/2-50},${chartHeight+5})`)
+  .append("xhtml:span")
+  .attr("class", "axisLabel")
+  .style('font-size', 'medium')
+
+let axisNodes = d3.selectAll('#chart1 .axisLabel').nodes()
+axisNodes[0].innerHTML = String.raw`$$y$$`
+axisNodes[1].innerHTML = String.raw`$$X$$`
+MathJax.typesetPromise(axisNodes).then(() => {});
 
   d3.select('#chart1-fresh-data').on('click', function() {
     d3.json('https://api.philippstuerner.com/data/gradient_descent').then(function(data) {

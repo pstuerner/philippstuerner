@@ -17,7 +17,7 @@ all_posts = [
     {
         'id': 'gradient_descent',
         'title': 'Gradient Descent',
-        'subtitle': 'How machine learning methods find the best possible model parameters and what the underlying algorithm looks like.',
+        'subtitle': "Have a deep dive into one of the most important optimization algorithms in the entire machine learning landscape.",
         'description': """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on July 3, 2021"""
