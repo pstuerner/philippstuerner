@@ -220,5 +220,4 @@ function createVoronoi() {
   }
 }
 
-
 createVoronoi();
