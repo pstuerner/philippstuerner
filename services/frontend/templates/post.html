@@ -16,6 +16,7 @@
     </div>
 </header>
 
+<button onclick="topFunction()" id="to-top-button" title="Go to top"><i class="fas fa-arrow-up"></i></button> 
 
 <article data-toc data-toc-id="main-toc" data-toc-class="toc-custom" data-toc-parent-id="toc-parent" class="mb-4">
     <div class="container px-4 px-lg-5">
@@ -30,6 +31,7 @@
 {% block body_js %}
 {{ super() }}
 <script src="{{ url_for('static', path='/js/toc.js') }}"></script>
+<script src="{{ url_for('static', path='/js/back-to-top.js') }}"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script type="text/javascript" id="MathJax-script" defer
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
