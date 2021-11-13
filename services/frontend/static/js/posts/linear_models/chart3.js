@@ -230,7 +230,7 @@ function chart3(dataRaw) {
                         .size(200)()
                     )
                     .on('end.slider', val => {
-                        d3.json(`http://localhost:8081/data/poly_data?degrees=20&noise=${+val}`).then(function(dataUpdate) {
+                        d3.json(`https://api.philippstuerner.com/data/poly_data?degrees=20&noise=${+val}`).then(function(dataUpdate) {
                             dataRaw = dataUpdate;
                             dataInit()
                             predict()
@@ -241,7 +241,7 @@ function chart3(dataRaw) {
                     })
                     .on('onchange.slider', val => {
                         if (noiseChangeAllow) {
-                            d3.json(`http://localhost:8081/data/poly_data?degrees=20&noise=${+val}`).then(function(dataUpdate) {
+                            d3.json(`https://api.philippstuerner.com/data/poly_data?degrees=20&noise=${+val}`).then(function(dataUpdate) {
                                 dataRaw = dataUpdate;
                                 dataInit()
                                 predict()
@@ -357,7 +357,7 @@ function chart3(dataRaw) {
     })
 }
 
-d3.json('http://localhost:8081/data/poly_data?degrees=20&noise=5').then(function(dataRaw) {
+d3.json('https://api.philippstuerner.com/data/poly_data?degrees=20&noise=5').then(function(dataRaw) {
     chart3(dataRaw); 
 });
     

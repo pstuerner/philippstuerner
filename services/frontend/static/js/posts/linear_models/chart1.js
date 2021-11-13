@@ -372,7 +372,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
   updateRegression()
   
   d3.selectAll('.chart1-new-data').on('click', function() {
-    d3.json('http://localhost:8081/data/linear?return_theta=true').then(function(dataRaw) {
+    d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(dataRaw) {
       data = _.sortBy(dataRaw.data, [function(o) { return o.X; }])
       theta0_best = dataRaw.theta0_best
       theta1_best = dataRaw.theta1_best
@@ -409,6 +409,6 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
   });
 }
 
-d3.json('http://localhost:8081/data/linear?return_theta=true').then(function(dataRaw) {
+d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(dataRaw) {
     chart1(dataRaw); 
   });
