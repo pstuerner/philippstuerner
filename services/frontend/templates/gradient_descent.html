@@ -501,9 +501,8 @@
         This is a neat trick and can save you some work. The following minimal example shows that the gradient vector
         leads to the same result as the more time-consuming way of evaluating the partial derivatives one by one. Pay attention to how <code>gradients_manual</code> and <code>gradients_nabla</code> are calculated in two different ways but end up having the same result.
     </p>
-    <pre>
-    <code class="language-python">
->>> import numpy as np
+    <pre class="p-0">
+    <code class="language-python">>>> import numpy as np
 >>> 
 >>> m = 50
 >>> X = 2 * np.random.rand(m, 2)
@@ -533,8 +532,7 @@ array([
 [-0.90448282],
 [-1.58994555],
 [-0.11876997]
-])
-    </code>
+])</code>
 </pre>
     <p>
         Although the gradient vector is an enormous improvement, it does not solve the root of the problem: \(X\). The

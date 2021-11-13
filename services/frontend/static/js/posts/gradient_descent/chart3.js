@@ -313,13 +313,13 @@ function chart3(data) {
   MathJax.typesetPromise(axisNodes).then(() => {});
 
   d3.select('#chart3-fresh-data').on('click', function() {
-    d3.json('https://api.philippstuerner.com/data/gradient_descent').then(function(data) {
+    d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(data) {
       updateControls(data);
       updateChart(data.data);
     });
   });
 }
 
-d3.json('https://api.philippstuerner.com/data/gradient_descent').then(function(data) {
+d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(data) {
     chart3(data);
   });
