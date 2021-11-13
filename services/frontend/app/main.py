@@ -17,43 +17,27 @@ all_posts = [
     {
         'id': 'gradient_descent',
         'title': 'Gradient Descent',
-        'subtitle': "Have a deep dive into one of the most important optimization algorithms in the entire machine learning landscape.",
+        'subtitle': "Have a deep dive into one of the most important optimization algorithms in machine learning.",
         'description': """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on July 3, 2021"""
+                    on November 5, 2021"""
     },
     {
         'id': 'linear_models',
-        'title': 'Under the Hood – Linear Models',
+        'title': 'Linear Models',
         'subtitle': 'In-depth analysis of linear regression and classification models.',
         'description': """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on June 9, 2021"""
+                    on September 20, 2021"""
     },
     {
         'id': 'confusion_matrix',
-        'title': "Unconfusing the confusion matrix",
+        'title': "Confusion Matrix",
         'subtitle': "Learn what the confusion matrix and its metrics are by interacting with a simple MNIST classifier.",
         'description': """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on May 28, 2021"""
-    },
-    {
-        'id': 'cornycryptohitter',
-        'title': "CornyCryptoHitter",
-        'subtitle': "Real-time cryptocurrency trading by exploiting short-term price fluctuations leveraging exchange websockets and TimescaleDB.",
-        'description': """Posted by
-                    <a href="about">Philipp Stuerner</a>
-                    on May 13, 2021"""
-    },
-    {
-        'id': 'ocelot',
-        'title': "Ocelot",
-        'subtitle': "Scraping and analyzing 13f reports of major asset managers to gather insights of quarterly portfolio changes.",
-        'description': """Posted by
-                    <a href="about">Philipp Stuerner</a>
-                    on April 13, 2021"""
-    },
+                    on July 15, 2021"""
+    }
 ]
 
 @app.get("/", response_class=HTMLResponse)
@@ -64,10 +48,6 @@ async def index(request: Request):
 @app.get("/about", response_class=HTMLResponse)
 async def about(request: Request):
     return templates.TemplateResponse("about.html", {"request": request})
-
-@app.get("/posts", response_class=HTMLResponse)
-async def posts(request: Request):
-    return 'nice'
 
 @app.get("/posts/{post_id}", response_class=HTMLResponse)
 async def post(request: Request, post_id: str):
