@@ -1,128 +1,50 @@
-function sliders() {
-    var width = 400,
-        height = 200,
-        n = 1,
-        pos = 1,
-        id = "slider-id",
-        prefix = "val = ",
-        min = 0,
-        max = 100,
-        padding = .05;
-    
-    function mySlider(selection) {
-        selection.each(function(data) {
-            function update(h) {
-                // update position and text of label according to slider scale
-                handle.attr("cx", xScale(h));                
-                label.selectAll('svg').remove();
-                label.append(() => MathJax.tex2svg(String.raw`${data.prefix}${h.toFixed(1)}`).querySelector("svg"));
-                var labelWidth = label.select('svg').node().getBoundingClientRect().width
-                label.attr("transform", `translate(${Math.min(xScale(data.max)-labelWidth, xScale(h))}, ${-35})`);
-                label.attr("value", h);
-                }
-
-            var sliderWidth = width / n - 2 * (width / n) * padding;
-            var xPos = width / n * (data.pos - 1) + (width / n) * padding;
-            var yPos = height / 2;
-
-            var xScale = d3.scaleLinear().range([0, sliderWidth]).domain([data.min, data.max]).clamp(true);
-            var svg = d3.select(this);
-            var slider = svg.append("g")
-                            .attr("class", "slider")
-                            .attr("id", data.id)
-                            .attr("transform", "translate(" + xPos + "," + yPos + ")");
-
-            slider.append("line")
-                .attr("class", "track")
-                .attr("x1", xScale.range()[0])
-                .attr("x2", xScale.range()[1])
-                .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-                .attr("class", "track-inset")
-                .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-                .attr("class", "track-overlay")
-                .call(d3.drag()
-                    .on("start.interrupt", function() { slider.interrupt(); })
-                    .on("start drag", function(event) {
-                        var currentValue = event.x;
-                        update(xScale.invert(currentValue)); 
-                    })
-                );
-
-            slider.insert("g", ".track-overlay")
-                .attr("class", "ticks")
-                .attr("transform", "translate(0," + 18 + ")")
-                .selectAll("text")
-                .data(xScale.ticks(10))
-                .enter()
-                .append("text")
-                .attr("x", xScale)
-                .attr("y", 10)
-                .attr("text-anchor", "middle")
-                .text(function(d) { return d; });
-                
-            var handle = slider.insert("circle", ".track-overlay")
-                            .attr("class", "handle")
-                            .attr("r", 9);
-                            
-            var label = slider.append('g');
-            label
-            .append(() => MathJax.tex2svg(String.raw`${data.prefix}${data.min.toFixed(1)}`)
-                                .querySelector("svg"))
-                                .attr("transform", `translate(${-10}, ${-35})`);                        
-        })
+function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddot=false) {
+    let matrixSmall = [];
+  
+    row_dots = !(row_dots===false) ? row_dots -1 : row_dots;
+    col_dots = !(col_dots===false) ? col_dots - 1 : col_dots;
+    // debugger;
+    for (let r=0; r<rows; ++r) {
+      if (cols > 1) {
+        matrixSmall.push(math.subset(math.row(matrix,r),math.index(0,_.range(cols))).valueOf()[0])
+      } else {
+        matrixSmall.push([math.row(matrix,r)])
+      }
     }
   
-    mySlider.width = function(value) {
-      if (!arguments.length) return width;
-      width = value;
-      return mySlider;
-    };
-
-    mySlider.height = function(value) {
-        if (!arguments.length) return height;
-        height = value;
-        return mySlider;
-      };
-
-    mySlider.min = function(value) {
-        if (!arguments.length) return min;
-        min = value;
-        return mySlider;
-      };
-
-    mySlider.max = function(value) {
-        if (!arguments.length) return max;
-        max = value;
-        return mySlider;
-    };
-
-    mySlider.n = function(value) {
-        if (!arguments.length) return n;
-        n = value;
-        return mySlider;
-    };
-
-    mySlider.pos = function(value) {
-        if (!arguments.length) return pos;
-        pos = value;
-        return mySlider;
-    };
-
-    mySlider.id = function(value) {
-        if (!arguments.length) return id;
-        id = value;
-        return mySlider;
-    };
-
-    mySlider.prefix = function(value) {
-        if (!arguments.length) return prefix;
-        prefix = value;
-        return mySlider;
-    };
+    matrixSmall = math.matrix(matrixSmall)
+    
+    if (!(row_dots===false)) {
+      let dot_cell = cols % 2 == 0 ? cols/2 : Math.round(cols/2)-1;
+      for (let c=0;c<cols;++c) {
+        if (!(c==dot_cell)) {
+          matrixSmall._data[row_dots][c] = null
+        } else {
+          matrixSmall._data[row_dots][c] = 999
+        }
+      }
+    }
+    
+    if (!(col_dots===false)) {
+      let dot_cell = rows % 2 == 0 ? rows/2 : Math.round(rows/2)-1;
+      for (let r=0;r<rows;++r) {
+        if (!(r==dot_cell)) {
+          matrixSmall._data[r][col_dots] = null
+        } else {
+          matrixSmall._data[r][col_dots] = -999
+        }
+      }
+    }
   
-    return mySlider;
+    if (ddot) {
+      matrixSmall._data[rows-1][cols-1] = 1530
+    }
+  
+    let matrixStr = math.matrix(matrixSmall).toString()
+    let matrixTex = math.parse(matrixStr).toTex().replaceAll('null','').replace('-999','\\dots').replace('999','\\vdots').replace('1530','\\ddots')
+  
+    return matrixTex
   }
-
 
 function responsivefy(svg) {
     // get container + svg aspect ratio
@@ -155,4 +77,4 @@ function arrAvg(arr) {
     return arr.reduce((a,b) => a + b, 0) / arr.length;
 }
 
-export {responsivefy, sliders, arrAvg}
+export {responsivefy, arrAvg, latexifyMatrix}
