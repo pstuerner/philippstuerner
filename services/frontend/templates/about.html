@@ -7,13 +7,14 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
-<header class="masthead" style="background-image: url('static/images/about.jpg'); height: calc(20rem + 57px); width: 100%;">
+<header class="masthead">
     <!-- <img src="{{ url_for('static', path='/images/about.jpg') }}" alt="" style="position: relative; width: 100%; height: 100%;"> -->
   <!-- <div class="overlay"  style="background-image: url('static/img/about.jpg'); filter: brightness(70%);"></div> -->
+  <div id="about-header" style="background-color: black; position: absolute; left: 0; top: 0; width: 100%; height: 100%;"></div>
   <div class="center" style="z-index: 1;">
     <div class="site-heading">
-        <h1>About me</h1>
-        <span class="subheading">education, work, interests</span>
+        <h1>About</h1>
+        <span class="subheading">who I am, what I do, what this is about</span>
     </div>
 </div>
 </header>
@@ -22,21 +23,25 @@
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
       <article>
-        <h3>That's me</h3>
-        <p>My name is Philipp, I am 28 years old and currently live in Frankfurt am Main. I was born and raised in Southern Germany, which is certainly the most beautiful area in the country with the most delicious food.</p>
-        
-        <h3>Interests</h3>
-        <p>This is an area that I have to update regularly, as my interests are always changing. At the moment I am very interested in music, especially the guitar. I own an Ibanez AW54OPN. Songs I play at the moment are for example river flows in you (Yiruma), slow cheetah (RHCP), i took a pill in ibiza (Mike Posner), let her go (Passenger), perfect (Ed Sheeran), wish you were (Pink Floyd). I'm also a passionate cook, like to go running, keep in shape, am interested in stocks and investments, and enjoy working on side projects in my spare time.</p>
-        
-        <h3>Background</h3>
-        <p>After graduating from high school, I began my educational journey by studying international management at Karlsruhe University of Applied Sciences. I then went on to get my master's degree in economics at the University of Ulm, majoring in finance and computer science. I particularly enjoyed my experiences abroad in Mexico, Malaysia and China. I fell in love with Shanghai, the culture, the people and all the little dumplings.</p>
-        
-        <h3>Work experience</h3>
-        <p>My first major work experience was in the project management and logistics department for <a class="blue-url" href="https://www.bbraun.de/de.html" target="_blank"><strong>B. Braun</strong></a>, which is a German healthcare company. I quickly realized my enthusiasm for numbers, patterns and models and wanted to gain more experience in the financial sector. In the following years, I worked at <a class="blue-url" href="https://careers.allianz.com/en_EN/explore-allianz/allianz-global-business-lines/allianz-technology.html" target="_blank"><strong>Allianz Technology SE</strong></a> in the financial department and at <a class="blue-url" href="https://www.allianzgi.com/" target="_blank"><strong>Allianz Global Investors</strong></a> in a team that's best described as being the interface between portfolio management and retirement products. After graduating I decided to combine my roots in the asset management and finance sector with my enthusiasm for Python, databases and machine learning. Currently I am employed as an Analytics Trainee in the <a class="blue-url" href="https://www.ing.jobs/germany/graduates-students/international-talent-programme.htm" target="_blank"><strong>International Talent Programme</strong></a> at <a class="blue-url" href="https://www.ing.de/" target="_blank"><strong>ING Germany</strong></a>. For me, the trainee program is the perfect career start, as working in different departments gives me the best possible overview of data science within the banking sector.</p>
-        <p>Check out my CV if you're interested in the detailed version of my working experience:</p>
-        <p><a href="{{ url_for('static', path='/files/cv.pdf') }}" target="_blank"><button type="button" class="btn btn-primary btn-sm" style="margin: auto; display: block;">CV</button></a></p>
+        <h3>Hi, I'm Philipp 👋</h3>
+        <p>
+          I'm a data scientist at ING Germany. This website is my personal playground on which I develop side projects, try out new technologies and talk about ideas worth sharing. I am very interested in everything related to machine learning and data visualization. That's probably why most of my content is either related to one or both of these topics. My main tools are Python and D3, although the latter forced me to wrap my head around JavaScript.
+        </p>
+        <p>
+          The website's backend is based on Sebastián Ramírez's <a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a> framework, while the beautiful visualizations rely on Mike Bostock's <a href="https://d3js.org/" target="_blank">D3.js</a>. Both tools are simply amazing and you should definitely consider having a look at them. The website is deployed on a DigitalOcean droplet using Docker containers to make the release process less painful 😜. 
+        </p>
+        <p>
+          Let me know if you want to know how to build your own website/portfolio using Python, JS, HTML, and CSS. I didn't write about it yet, but I would definitely come up with something if enough people are interested. Until then, feel free to skip through my existing content. I really hope that you find it useful 🙂 I'm always happy to catch up, so don't hesitate to get in touch with me by mail or LinkedIn.<br><br>
+          Best,<br>
+          Philipp
+        </p>
       </article>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block body_js %}
+{{ super() }}
+<script src="{{ url_for('static', path='/js/about.js') }}"></script>
 {% endblock %}
