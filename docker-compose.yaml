@@ -46,6 +46,15 @@ services:
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro" 
+  
+  mongojs:
+    build: ./services/mongojs
+    container_name: "mongojs"
+    ports:
+      - "4567:4567"
+    env_file:
+      - "./services/mongojs/mongojs.env"
+    restart: always
 
 volumes:
   traefik-public-certificates:

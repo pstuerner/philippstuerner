@@ -1,3 +1,7 @@
-**/*.pyc
+node_modules
 venv
 letsencrypt
+
+**/*.pyc
+**/*.env
+**/*cpython-37.pyc
