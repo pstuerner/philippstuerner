@@ -15,6 +15,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 all_posts = [
     {
+        'id': 'cmcscanner',
+        'title': 'CMC Scanner',
+        'subtitle': "Small web application to query and compare historical CoinMarketCap snapshots.",
+        'description': """Posted by
+                    <a href="about">Philipp Stuerner</a>
+                    on November 27, 2021"""
+    },
+    {
         'id': 'gradient_descent',
         'title': 'Gradient Descent',
         'subtitle': "Have a deep dive into one of the most important optimization algorithms in machine learning.",
