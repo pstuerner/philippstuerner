@@ -8,6 +8,10 @@ const uri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_USER_PW}@${
 
 app.use(cors());
 
+app.get("/", (req, res) => {
+    res.send('This is the home endpoint of my MongoDB API 🏠.')
+});
+
 mongodb.MongoClient.connect(uri, async (err, client) => {
   app.get("/listings", (req, res) => {
     let query;

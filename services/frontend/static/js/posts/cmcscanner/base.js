@@ -150,7 +150,7 @@ function main(dataRaw) {
         } else {
             startDate = +d.target.value;
             d3.selectAll('.overlay').transition().duration(1000).style('opacity',1);
-            d3.json(`mongodb.philippstuerner.com/listings?unixTimestamp=${startDate}`).then(function(dataRaw) {
+            d3.json(`https://mongodb.philippstuerner.com/listings?unixTimestamp=${startDate}`).then(function(dataRaw) {
                 startListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
                 data = changeListings.slice(0, topN);
