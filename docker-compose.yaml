@@ -8,7 +8,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.routers.frontend.rule=Host(`web.philippstuerner.com`)"
+      - "traefik.http.routers.frontend.rule=Host(`philippstuerner.com`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
        
@@ -37,7 +37,8 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+      # - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.myresolver.acme.email=philipp.stuerner@web.de"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
@@ -50,11 +51,15 @@ services:
   mongojs:
     build: ./services/mongojs
     container_name: "mongojs"
-    ports:
-      - "4567:4567"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mongojs.tls=true"
+      - "traefik.http.routers.mongojs.rule=Host(`mongodb.philippstuerner.com`)"
+      - "traefik.http.routers.mongojs.entrypoints=websecure"
+      - "traefik.http.routers.mongojs.tls.certresolver=myresolver"
     env_file:
       - "./services/mongojs/mongojs.env"
-    restart: always
 
 volumes:
   traefik-public-certificates:

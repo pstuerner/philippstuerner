@@ -117,7 +117,7 @@ function main(dataRaw) {
     let timestamps, startDate, endDate;
 
     // Set date options
-    d3.json('http://localhost:4567/listings?allTimestamps=true').then(function(dataRaw) {
+    d3.json('https://mongodb.philippstuerner.com/listings?allTimestamps=true').then(function(dataRaw) {
         timestamps = dataRaw;
         let dateSelection = d3.selectAll('.form-select');
         
@@ -150,8 +150,7 @@ function main(dataRaw) {
         } else {
             startDate = +d.target.value;
             d3.selectAll('.overlay').transition().duration(1000).style('opacity',1);
-            console.log('hier')
-            d3.json(`http://localhost:4567/listings?unixTimestamp=${startDate}`).then(function(dataRaw) {
+            d3.json(`mongodb.philippstuerner.com/listings?unixTimestamp=${startDate}`).then(function(dataRaw) {
                 startListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
                 data = changeListings.slice(0, topN);
@@ -168,7 +167,7 @@ function main(dataRaw) {
         } else {
             endDate = +d.target.value;
             d3.selectAll('.overlay').transition().duration(1000).style('opacity',1);
-            d3.json(`http://localhost:4567/listings?unixTimestamp=${endDate}`).then(function(dataRaw) {
+            d3.json(`https://mongodb.philippstuerner.com/listings?unixTimestamp=${endDate}`).then(function(dataRaw) {
                 endListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
                 data = changeListings.slice(0, topN);
@@ -224,7 +223,7 @@ function main(dataRaw) {
 
 d3.selectAll('.overlay').transition().duration(1000).style('opacity',1);
 
-d3.json('http://localhost:4567/listings?last=2').then(function(dataRaw) {
+d3.json('https://mongodb.philippstuerner.com/listings?last=2').then(function(dataRaw) {
     main(dataRaw);
     d3.selectAll('.overlay').transition().duration(500).style('opacity',0);
   });

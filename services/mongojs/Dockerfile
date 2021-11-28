@@ -7,6 +7,6 @@ RUN npm install --production
 
 WORKDIR /app
 
-EXPOSE 4567
+EXPOSE 8002
 
 CMD [ "node", "main.js" ]

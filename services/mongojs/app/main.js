@@ -2,7 +2,7 @@ const express = require("express");
 const mongodb = require("mongodb");
 const cors = require('cors');
 
-const port = 4567;
+const port = 8002;
 const app = express();
 const uri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_USER_PW}@${process.env.MONGO_IP}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
 
