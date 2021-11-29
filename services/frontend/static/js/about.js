@@ -47,7 +47,8 @@ function main() {
     d3.select(this)
         .attr("d", line)
         .attr("transform", null)
-        .style("stroke", "white")  ;
+        .style("stroke", "white")
+        .style('opacity', 0.8)  ;
 
     // Slide it to the left.
     d3.active(this)

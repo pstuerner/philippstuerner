@@ -1,6 +1,6 @@
 function createVoronoi() {
-  var width = d3.select('#carousel-header').node().getBoundingClientRect().width;
-      height = d3.select('#carousel-header').node().getBoundingClientRect().height;
+  var width = d3.select('header').node().getBoundingClientRect().width;
+      height = d3.select('header').node().getBoundingClientRect().height;
 
   var canvas = d3.select("#canvas-voronoi")
             .attr("width", width)
@@ -13,8 +13,8 @@ function createVoronoi() {
 
   var rainbow1 = color.interpolateCubehelixLong(color.cubehelix(-100, 0.75, 0.35), color.cubehelix(80, 1.50, 0.8)),
       rainbow2 = color.interpolateCubehelixLong(color.cubehelix(80, 1.50, 0.8), color.cubehelix(260, 0.75, 0.35));
-
-  var n = 50,
+  
+  var n = Math.ceil(width*0.03),
       particles = new Array(n),
       radius = 20;
 

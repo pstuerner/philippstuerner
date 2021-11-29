@@ -1,5 +1,5 @@
-var width = d3.select('#carousel-header').node().getBoundingClientRect().width;
-    height = d3.select('#carousel-header').node().getBoundingClientRect().height;
+var width = d3.select('header').node().getBoundingClientRect().width;
+    height = d3.select('header').node().getBoundingClientRect().height;
 
 var svg = d3.select("#circles-container").append("svg")
     .attr("width", width)
@@ -83,8 +83,8 @@ move = function() {
         .on("end", move)
 }
 
-var i;
-for (i = 1; i < 250; i ++) {
+var i, n=Math.ceil(width*0.16);
+for (i = 1; i < n; i ++) {
     var circle = svg.append("circle")
     .attr("r", 2 + Math.random()*20)
     .style("fill", "#9a0b16")
