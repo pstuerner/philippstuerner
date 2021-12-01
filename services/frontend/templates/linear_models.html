@@ -74,25 +74,25 @@
         <div id="chart1-graph" style="height: 100%;" class="col-9 p-0"></div>
         <div id="chart1-cost-functions" class="col-3 p-0" style="height: 100%; position: relative; font-size:12pt;">
             <div class="card-deck vertical-center text-center" style="width: 100%;">
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                     <div class="card-body" style="padding: 0.5rem;">
                       <h5 class="card-title">\(\textrm{R}^2\)</h5>
                       <p class="card-text" id="chart1-r2"></p>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                   <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MSE</h5>
                     <p class="card-text" id="chart1-mse">This</p>
                   </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                   <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">RMSE</h5>
                     <p class="card-text" id="chart1-rmse">This</p>
                   </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                   <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MAE</h5>
                     <p class="card-text" id="chart1-mae"></p>
@@ -152,7 +152,7 @@
     <p>
         The normal equation, unlike gradient descent, which is an iterative process, determines the best possible model parameters using a mathematical equation: $$ \hat{\theta} = (X^{T}X)^{-1}X^{T}y $$ For which \(\hat{\theta}\) is the value of \(\theta\) that minimizes the cost function, \(X\) is a matrix containing all values of the descriptive variable, and \(y\) is a vector containing the dependent variable. The normal equation is a so-called closed-form solution, which is an amazing concept, since \(X\), \(y\) and some algebra is all we need to find the best possible model parameters \(\hat{\theta}\). Calculating \(\hat{\theta}\) by hand looks like this:
     </p>
-    <p id='normal-equation'></p>
+    <p id='normal-equation' style="overflow-x: auto;"></p>
     <p>
         😨 no one has time for that. Plus, all the computational steps (transposing, inverting, multiplying) are tedious and error-prone. This is why, instead, we let Python do the hard work for us. Here is the same calculation as above, only much faster since we use Numpy:
     </p>
@@ -185,25 +185,25 @@
         <div id="chart2-graph" style="height: 100%;" class="col-9 p-0"></div>
         <div id="chart2-cost-functions" class="col-3 p-0" style="height: 100%; position: relative; font-size:12pt;">
             <div class="card-deck vertical-center text-center" style="width: 100%;">
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                     <div class="card-body" style="padding: 0.5rem;">
                         <h5 class="card-title">\(\textrm{R}^2\)</h5>
                         <p class="card-text" id="chart2-r2"></p>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                     <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MSE</h5>
                     <p class="card-text" id="chart2-mse">This</p>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                     <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">RMSE</h5>
                     <p class="card-text" id="chart2-rmse">This</p>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="overflow-x: hidden;">
                     <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MAE</h5>
                     <p class="card-text" id="chart2-mae"></p>
@@ -244,7 +244,7 @@
     <p>
         For your current dataset the best fitting line is achieved with <span id='chart2-theta0'></span>, <span id='chart2-theta1'></span>, and <span id='chart2-theta2'></span>. Once again, let's take a look at the matrix and Numpy notations so we can get an idea about how to retrieve these optimal values. Pay attention to how scikit-learn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html" target="_blank">PolynomialFeatures</a> transformer makes computing the polynomial features easy as pie.
     </p>
-    <p id='chart2-normal-equation' style="overflow-x: scroll;" ></p>
+    <p id='chart2-normal-equation' style="overflow-x: auto;" ></p>
     <pre><code id='chart2-normal-equation-code' class="language-python"></code></pre>
     <div class="text-center">
         <button class="chart2-new-data btn btn-primary">New data</button>
@@ -265,7 +265,7 @@
     </p>
 </div>
 
-<div id="chart3" class="col-md-12 col-lg-12 col-xl-12">
+<div id="chart3" class="col-md-12 col-lg-12 col-xl-12" style="overflow-x: hidden;">
     <div class="row pb-3">
         <div style="position: relative; text-align: center;" class="col-1 p-0">
             <div style="position: absolute; bottom: 0; width: 100%;">
@@ -367,7 +367,13 @@
         As with linear regression, the perfect sigmoid curve can be found by minimizing a cost function using gradient descent. We could use the same cost function as before, however, generally speaking <a href="https://i.imgur.com/GOhfk6k.png" target="_blank">one does not simply regress a binary outcome applying ordinary least squares</a>. The reason therefore is that weird things, such as predicted probabilities smaller or larger than zero and one, can happen when optimizing logistic regression using least squares. Let's think about the main objective of a classifier to get an idea of how a better suited loss function could look like.
     </p>
     <p>
-        Simply put, everything a classification task is about is to express how close a classifier's output is to the correct output. We can achieve this by using a loss function that prefers the correct class labels of the training examples to be more likely. This is also called maximum likelihood estimation and everything it does is to choose a set of model parameters that maximize the log probability of the true \(y\) labels in the training data given the observations \(X\). The resulting cost function is the negative log likelihood, often also referred to as the cross-entropy loss: $$ -\frac{1}{m} \sum_{i=1}^{m}[y^{(i)}\log{(\hat{p}^{(i)})}+(1-y^{(i)})\log{(1-\hat{p}^{(i)})}] $$ As you can see, wrong predictions are penalized while correct ones are rewarded. This is because \(y^{(i)}\log{(\hat{p}^{(i)})}\) is large (bad) if the instance belongs to the positive class, but the model predicts a low probability. Similarly, for instances belonging to the negative class, \((1-y^{(i)})\log{(1-\hat{p}^{(i)})}\) becomes large (bad) if a high probability is predicted. Unfortunately, there is no known closed-form equation for the above cost function, which means that we cannot determine the perfect model parameters like above when we used \(\hat{\theta}=(X^{T}X)^{-1}X^{T}y\). The good news is that the cost function is convex and gradient descent is therefore guaranteed to reach the global minimum. Enough theory, let's construct a small example to see how it works.
+        Simply put, everything a classification task is about is to express how close a classifier's output is to the correct output. We can achieve this by using a loss function that prefers the correct class labels of the training examples to be more likely. This is also called maximum likelihood estimation and everything it does is to choose a set of model parameters that maximize the log probability of the true \(y\) labels in the training data given the observations \(X\). The resulting cost function is the negative log likelihood, often also referred to as the cross-entropy loss:
+    </p>
+    <p style="overflow-x: auto;">
+        $$ -\frac{1}{m} \sum_{i=1}^{m}[y^{(i)}\log{(\hat{p}^{(i)})}+(1-y^{(i)})\log{(1-\hat{p}^{(i)})}] $$
+    </p>
+    <p>
+        As you can see, wrong predictions are penalized while correct ones are rewarded. This is because \(y^{(i)}\log{(\hat{p}^{(i)})}\) is large (bad) if the instance belongs to the positive class, but the model predicts a low probability. Similarly, for instances belonging to the negative class, \((1-y^{(i)})\log{(1-\hat{p}^{(i)})}\) becomes large (bad) if a high probability is predicted. Unfortunately, there is no known closed-form equation for the above cost function, which means that we cannot determine the perfect model parameters like above when we used \(\hat{\theta}=(X^{T}X)^{-1}X^{T}y\). The good news is that the cost function is convex and gradient descent is therefore guaranteed to reach the global minimum. Enough theory, let's construct a small example to see how it works.
     </p>
     <pre><code class="language-python">>>> import numpy as np
 >>> import pandas as pd

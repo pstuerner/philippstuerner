@@ -4,4 +4,4 @@ letsencrypt
 
 **/*.pyc
 **/*.env
-**/*cpython-37.pyc
+**/*.cpython-37.pyc

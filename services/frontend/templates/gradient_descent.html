@@ -167,8 +167,13 @@
     </p>
     <p>
         There are a variety of cost functions, but we will stick to the mean squared error (MSE) since it is simple,
-        convex, and differentiable. This is what the equation for MSE looks like: <a id="mse-equation"></a> Nothing too
-        complicated for now 👍. \(m\) defines the numer of instances in the training dataset, \(y^{i}\) is the ground
+        convex, and differentiable. This is what the equation for MSE looks like:
+    </p>
+    <p style="overflow-x: auto;">
+        <a id="mse-equation"></a>
+    </p>
+    <p>
+        Nothing too complicated for now 👍. \(m\) defines the numer of instances in the training dataset, \(y^{i}\) is the ground
         truth for the \(i\)th instance, \(\theta^{T}\) is the transpose of the parameter vector, \(x^{i}\) is the
         feature vector of the \(i\)th instance and both combined (\(\theta^{T}x^{i}\)) is our current prediction for the
         \(i\)th instance. In a nutshell: take the prediction error for each instance, square it, sum all of them and
@@ -177,9 +182,15 @@
         \frac{1}{2m}\sum_{i=1}^{m}{(\theta^{T}x^{i}-y^{i})^2} $$ The reason for this is that it makes the math, in our
         case the derivative of the cost function with respect to each model parameter, easier to handle. Fortunately,
         our simple example contains only one model parameter, which means that the gradient and the slope of the cost
-        function are exactly the same. The derivative of MSE with respect to \(\theta_1\) looks like this: $$
+        function are exactly the same. The derivative of MSE with respect to \(\theta_1\) looks like this:
+    </p>
+    <p style="overflow-x: auto;">
+        $$
         \frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{1}^{i}
-        $$ As you can see, the previously added \(\frac{1}{2}\) cancels out due to the power rule applied to
+        $$
+    </p>
+    <P>
+        As you can see, the previously added \(\frac{1}{2}\) cancels out due to the power rule applied to
         \((\theta^Tx^i-y^i)^2\). So adding \(\frac{1}{2}\) is just for convenience and makes the derivation look
         prettier. It doesn't matter for the result because the minimization is unaffected by constants.
     </p>
@@ -333,16 +344,25 @@
         two parameters and what changes from the previous example.
     </p>
     <p>
-        We still have our MSE cost function: $$ \textrm{MSE}(\theta) = \frac{1}{2m}\sum_{i=1}^{m}{(\theta^Tx^i-y^i)^2},
-        \: \textrm{with} \: \theta=\begin{pmatrix}\theta_0\\\theta_1\end{pmatrix} $$ The only difference is that we
+        We still have our MSE cost function:
+    </p>
+    <p style="overflow-x: auto;">
+        $$ \textrm{MSE}(\theta) = \frac{1}{2m}\sum_{i=1}^{m}{(\theta^Tx^i-y^i)^2},
+        \: \textrm{with} \: \theta=\begin{pmatrix}\theta_0\\\theta_1\end{pmatrix} $$
+    </p>
+    <p>
+        The only difference is that we
         loosen our assumption about a fixed \(\theta_0\) value and treat it as a real model parameter. Pretty much the
         same way we treated \(\theta_1\) in the previous example. Here is the first difference: since we need to
         calculate the partial derivative of the cost function with respect to each model parameter, we have an
-        additional equation: $$
-        \frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{0}^{i}
-        $$ $$
-        \frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{1}^{i}
-        $$ Unlike the first example we are now dealing with two parameters, which is why we cannot further oversimplify the gradient as the slope of the loss function. However, everything else remains the same. We take a random guess for the initialization of \(\theta_0\) and \(\theta_1\), measure the local gradient of the cost function with respect to each model parameter, and update the parameters based on the learning rate. In this way, we slowly move towards the descending gradient.
+        additional equation:
+    </p>
+    <p style="overflow-x: auto;">
+        $$ \frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{0}^{i} $$
+        $$ \frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{1}^{i} $$
+    </p>
+    <p>
+        Unlike the first example we are now dealing with two parameters, which is why we cannot further oversimplify the gradient as the slope of the loss function. However, everything else remains the same. We take a random guess for the initialization of \(\theta_0\) and \(\theta_1\), measure the local gradient of the cost function with respect to each model parameter, and update the parameters based on the learning rate. In this way, we slowly move towards the descending gradient.
     </p>
     <p>
         Interested to see what this example looks like? Check out the D3.js chart below. Once again, feel free to play around with the \(\eta\), \(\theta_0^\textrm{init}\), and \(\theta_1^\textrm{init}\) parameters and interact with the loss surface in the right hand chart. A big thank you to <a href="https://github.com/Niekes" target="_blank">Stefan Nieke</a> for open-sourcing his awesome <a href="https://github.com/Niekes/d3-3d" target="_blank">d3-3d</a> library. Three dimensional plotting in D3.js still seems to be a niche usecase, however Stefan's library makes it as easy as it gets. 
@@ -453,12 +473,12 @@
         see that besides the learning rate, the scaling of the input features also plays a crucial role. Once again, click the play buttons to see both scenarios in action!
     </p>
     <ul>
-        <li>
-            <a id="chart4-scenario-1" class="btn btn-primary btn-sm" href="#chart4" role="button"><i class="fa fa-play"></i></a> Unscaled input features (\(\theta_0=8.5,\theta_1=-4,\eta=0.05,\textrm{normalize}=\textrm{false}\))<br>Depending on the random
+        <li style="overflow-x: auto;">
+            <a id="chart4-scenario-1" class="btn btn-primary btn-sm" href="#chart4" role="button"><i class="fa fa-play"></i></a> Unscaled input features \((\theta_0=8.5,\theta_1=-4,\eta=0.05,\textrm{normalize}=\textrm{false})\)<br>Depending on the random
             initialization, gradient descent takes a complex path with many iterations. After 100 iterations the MSE is still at 1.52.
         </li>
-        <li>
-            <a id="chart4-scenario-2" class="btn btn-primary btn-sm" href="#chart4" role="button"><i class="fa fa-play"></i></a> Scaled input features (\(\theta_0=8.5,\theta_1=-4,\eta=0.05,\textrm{normalize}=\textrm{true}\))<br>Independent of the random initialization, gradient descent quickly finds its way to the global optimum. After 100 iterations the MSE already decreased to 0.56.
+        <li style="overflow-x: auto;">
+            <a id="chart4-scenario-2" class="btn btn-primary btn-sm" href="#chart4" role="button"><i class="fa fa-play"></i></a> Scaled input features \((\theta_0=8.5,\theta_1=-4,\eta=0.05,\textrm{normalize}=\textrm{true})\)<br>Independent of the random initialization, gradient descent quickly finds its way to the global optimum. After 100 iterations the MSE already decreased to 0.56.
         </li>
     </ul>
     <p>
@@ -474,7 +494,10 @@
     <p>
         So what is wrong with batch gradient descent? You have surely noticed that each additional model parameter
         results in another partial derivative of the cost function. For a model with three parameters, for example, the
-        following situation would emerge: $$ \textrm{MSE}(\theta) = \frac{1}{2m}\sum_{i=1}^{m}{(\theta^Tx^i-y^i)^2}, \:
+        following situation would emerge:
+    </p>
+    <p style="overflow-x: auto;">
+        $$ \textrm{MSE}(\theta) = \frac{1}{2m}\sum_{i=1}^{m}{(\theta^Tx^i-y^i)^2}, \:
         \textrm{with} \: \theta=\begin{pmatrix}\theta_0\\\theta_1\\\theta_2\end{pmatrix} $$ $$
         \frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta)=\frac{1}{m}\sum_{i=1}^{m}(\theta^{T}x^{i}-y^{i})x_{0}^{i}
         $$ $$
@@ -493,7 +516,10 @@
             target="_blank">StackOverflow</a> and these <a
             href="http://pillowlab.princeton.edu/teaching/mathtools16/slides/lec10_LeastSquaresRegression.pdf"
             target="_blank">lecture notes</a>. The gradient vector \(\nabla_{\theta}\textrm{MSE}(\theta)\) looks like
-        this: $$
+        this:
+    </p>
+    <p style="overflow-x: auto;">
+        $$
         \nabla_{\theta}\textrm{MSE}(\theta)=\begin{pmatrix}\frac{\partial}{\partial{\theta_0}}\textrm{MSE}(\theta)\\\frac{\partial}{\partial{\theta_1}}\textrm{MSE}(\theta)\\\vdots\\\frac{\partial}{\partial{\theta_n}}\textrm{MSE}(\theta)\end{pmatrix}=\frac{1}{m}X^T(X\theta-y)
         $$
     </p>
@@ -592,7 +618,7 @@ array([
 <div id="chart5" class="col-md-12 col-lg-12 col-xl-12">
     <div class="row">
         <div class="col-4 p-1 text-center">
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%; overflow: hidden">
                 <div class="card-body">
                   <h5 class="card-title">Batch GD</h5>
                   <div class="row">
@@ -603,7 +629,7 @@ array([
             </div>
         </div>
         <div class="col-4 p-1 text-center">
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%; overflow: hidden;">
                 <div class="card-body">
                   <h5 class="card-title">Stochastic GD</h5>
                   <div class="row">
@@ -614,7 +640,7 @@ array([
             </div>
         </div>
         <div class="col-4 p-1 text-center">
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%; overflow: hidden">
                 <div class="card-body">
                   <h5 class="card-title">Mini-batch GD</h5>
                   <div class="row">
