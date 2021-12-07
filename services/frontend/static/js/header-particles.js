@@ -19,7 +19,7 @@ function createParticles() {
         maxDistance = 60,
         minDistance2 = minDistance * minDistance,
         maxDistance2 = maxDistance * maxDistance
-    
+
     var tau = 2 * Math.PI,
         n = Math.ceil(width*0.13),
         particles = new Array(n);

@@ -23,7 +23,7 @@ function chart1(dataRaw) {
     nodes[1].innerHTML = String.raw`$$ ${rmse.toFixed(2)} $$`;
     nodes[2].innerHTML = String.raw`$$ ${mae.toFixed(2)} $$`;
     nodes[3].innerHTML = String.raw`$$ ${r2.toFixed(2)} $$`;
-    MathJax.typesetPromise(nodes).then(() => {}); 
+    MathJax.typesetPromise(nodes).then(() => {});
   }
 
   function updateMathjaxNewData () {
@@ -39,14 +39,14 @@ function chart1(dataRaw) {
         matXTXinv = latexifyMatrix(math.round(XTXinv,2),2,2,false,false,false),
         XTXinvXTy = math.multiply(math.multiply(XTXinv,XT),y_),
         matXTXinvXTy = latexifyMatrix(math.round(XTXinvXTy,2),2,1,false,false,false);
-    
+
     const nodes = [
       document.getElementById('chart1-theta0'),
       document.getElementById('chart1-theta1'),
       document.getElementById('normal-equation'),
     ];
     MathJax.typesetClear(nodes);
-    
+
     nodes[0].innerHTML = String.raw`\(\theta_0=${theta0_best.toFixed(2)}\)`;
     nodes[1].innerHTML = String.raw`\(\theta_1=${theta1_best.toFixed(2)}\)`;
     nodes[2].innerHTML = String.raw`
@@ -59,7 +59,7 @@ function chart1(dataRaw) {
                   & = ${matXTXinvXTy}
     \end{split}`;
     MathJax.typesetPromise(nodes).then(() => {});
-    
+
     d3.select('#normal-equation-code').text(
 `>>> import numpy as np
 >>> X=[${[...math.round(X._data[1].slice(0,5),2),...['...']].toString()}]
@@ -75,7 +75,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
   function updateResiduals () {
     let residualLines = [],
         lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
-    
+
     if (showResiduals) {
       data.forEach(function (d,i) {
         residualLines.push(
@@ -87,7 +87,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
           }
         )
       })
-      
+
       resids
       .selectAll('.residual')
       .data(residualLines)
@@ -143,14 +143,14 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
   }
 
   function updateRegression () {
-    let lineData = 
+    let lineData =
         [{
             v: yHat.valueOf()[0].map(function (d,i) {
               return {x: X.subset(math.index(1,i)), y: _.clamp(d,yExtent[0]-math.abs(yExtent[0]*.1),yExtent[1]+math.abs(yExtent[0]*.1))}
             })
         }],
-        lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y)); 
-    
+        lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
+
     // Update regression
     regressionLine
     .selectAll('.line')
@@ -175,7 +175,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
             .attr('d', d => lineGen(d.v))
         }
     )
-    
+
   }
 
   function updateSliders () {
@@ -185,7 +185,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
         theta1Range = [-2*theta1_value,2*theta1_value],
         theta0 = arrAvg(theta0Range).toFixed(1),
         theta1 = arrAvg(theta1Range).toFixed(1);
-    
+
     theta = math.matrix([[theta0], [theta1]])
 
     svgTheta0Slider
@@ -249,7 +249,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
         }
     )
   }
-  
+
   // Prepare data
   let data = _.sortBy(dataRaw.data, [function(o) { return o.X; }]),
       theta0_best = dataRaw.theta0_best,
@@ -259,10 +259,10 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
       X = math.matrix([data.map(d=>d.X_b), data.map(d=>d.X)]),
       y = math.matrix([data.map(d=>d.y)]),
       yMean = math.mean(y);
-      
+
   let theta, yHat, residuals, squaredResiduals, mse, rmse, mae, r2,
       showResiduals = false;
-  
+
   // Define margin and size
   let margin = {top: 20, right: 30, bottom: 30, left: 40},
       width = d3.select('#chart1-graph').node().getBoundingClientRect().width - margin.left - margin.right,
@@ -270,11 +270,11 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
       marginSliders = {top: 0, right: 50, bottom: 0, left: 50},
       widthSliders = d3.select('#chart1-theta0-container').node().getBoundingClientRect().width - marginSliders.left - marginSliders.right,
       heightSliders = d3.select('#chart1-theta0-container').node().getBoundingClientRect().height - marginSliders.top - marginSliders.bottom;
-  
+
   // Define the scales
   let xScale = d3.scaleLinear().range([0, width]),
       yScale = d3.scaleLinear().range([height, 0]);
-  
+
   // Define sliders
   let theta0Slider = d3
                     .sliderBottom()
@@ -312,7 +312,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
                       updateRegression()
                       updateResiduals()
                 });
-  
+
   // Create chart
   let svg = d3.select("#chart1-graph")
               .append("svg")
@@ -321,7 +321,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
               .call(responsivefy)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
+
   // Apply clip
   svg
     .append('clipPath')
@@ -329,7 +329,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
     .append('rect')
     .attr('width', width)
     .attr('height', height);
-  
+
   // Create axes
   let xAxis = svg.append("g").attr("transform", `translate(0,${height})`),
       yAxis = svg.append("g");
@@ -370,7 +370,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
   updateResiduals()
   updateScatter()
   updateRegression()
-  
+
   d3.selectAll('.chart1-new-data').on('click', function() {
     d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(dataRaw) {
       data = _.sortBy(dataRaw.data, [function(o) { return o.X; }])
@@ -381,7 +381,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
       X = math.matrix([data.map(d=>d.X_b), data.map(d=>d.X)])
       y = math.matrix([data.map(d=>d.y)])
       yMean = math.mean(y)
-      
+
       updateSliders()
       updateAxis()
       predict()
@@ -410,5 +410,5 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`);
 }
 
 d3.json('https://api.philippstuerner.com/data/linear?return_theta=true').then(function(dataRaw) {
-    chart1(dataRaw); 
+    chart1(dataRaw);
   });

@@ -2,13 +2,13 @@ function main() {
     var n = 40,
         random = d3.randomNormal(0, 0.4),
         data = d3.range(n).map(random);
-    
+
     var svg = d3.select("#about-header").append('svg').attr('width','100%').attr('height','100%'),
         margin = {top: 0, right: 0, bottom: 0, left: 0},
         width = d3.select('#about-header').node().getBoundingClientRect().width - margin.left - margin.right,
         height = d3.select('#about-header').node().getBoundingClientRect().height - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+
     var x = d3.scaleLinear()
         .domain([1, n - 2])
         .range([0, width]);

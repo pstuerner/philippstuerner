@@ -1,6 +1,6 @@
 function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddot=false) {
     let matrixSmall = [];
-  
+
     row_dots = !(row_dots===false) ? row_dots -1 : row_dots;
     col_dots = !(col_dots===false) ? col_dots - 1 : col_dots;
     // debugger;
@@ -11,9 +11,9 @@ function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddo
         matrixSmall.push([math.row(matrix,r)])
       }
     }
-  
+
     matrixSmall = math.matrix(matrixSmall)
-    
+
     if (!(row_dots===false)) {
       let dot_cell = cols % 2 == 0 ? cols/2 : Math.round(cols/2)-1;
       for (let c=0;c<cols;++c) {
@@ -24,7 +24,7 @@ function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddo
         }
       }
     }
-    
+
     if (!(col_dots===false)) {
       let dot_cell = rows % 2 == 0 ? rows/2 : Math.round(rows/2)-1;
       for (let r=0;r<rows;++r) {
@@ -35,14 +35,14 @@ function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddo
         }
       }
     }
-  
+
     if (ddot) {
       matrixSmall._data[rows-1][cols-1] = 1530
     }
-  
+
     let matrixStr = math.matrix(matrixSmall).toString()
     let matrixTex = math.parse(matrixStr).toTex().replaceAll('null','').replace('-999','\\dots').replace('999','\\vdots').replace('1530','\\ddots')
-  
+
     return matrixTex
   }
 
@@ -59,7 +59,7 @@ function responsivefy(svg) {
         .attr("preserveAspectRatio", "xMinYMin")
         .call(resize);
 
-    // to register multiple listeners for same event type, 
+    // to register multiple listeners for same event type,
     // you need to add namespace, i.e., 'click.foo'
     // necessary if you call invoke this function for multiple svgs
     // api docs: https://github.com/mbostock/d3/wiki/Selections#on

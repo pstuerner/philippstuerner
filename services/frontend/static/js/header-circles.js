@@ -7,12 +7,12 @@ var svg = d3.select("#circles-container").append("svg")
     .attr("preserveAspectRatio", "xMidYMid meet")
     .attr("viewBox", `0 0 ${width} ${height}`)
     .classed("svg-content", true);
-    
+
 move = function() {
     var newx;
     var newy;
     var rand = Math.random();
-    
+
     if (d3.select(this).attr("cx") == 0) {
         if (rand < 0.3333) {
             newx = width;
@@ -27,7 +27,7 @@ move = function() {
             newy = height;
         }
     };
-    
+
     if (d3.select(this).attr("cx") == width) {
         if (rand < 0.3333) {
             newx = 0;
@@ -42,7 +42,7 @@ move = function() {
             newy = height;
         };
     };
-    
+
     if (d3.select(this).attr("cy") == 0) {
         if (rand < 0.3333) {
             newx = width*Math.random();
@@ -56,9 +56,9 @@ move = function() {
             newx = width;
             newy = height*Math.random();
         };
-            
+
     };
-    
+
     if (d3.select(this).attr("cy") == height) {
         if (rand < 0.3333) {
             newx = width*Math.random();

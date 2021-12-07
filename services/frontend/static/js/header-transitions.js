@@ -2,11 +2,11 @@ function createTransitions() {
     var width = d3.select('header').node().getBoundingClientRect().width,
         height = d3.select('header').node().getBoundingClientRect().height
         n = Math.floor(width/10) * Math.floor(height/10);
-    
+
     var blackred = d3.interpolateRgb("black", "firebrick"),
         redblue = d3.interpolateRgb("firebrick", "steelblue"),
         blueblack = d3.interpolateRgb("steelblue", "black");
-        
+
     d3.select("#transitions-container")
     .select('div')
     .selectAll('div')
@@ -29,7 +29,7 @@ function createTransitions() {
                 .delay(n)
                 .on("start", repeat);
         });
-        
+
 }
 
 createTransitions()

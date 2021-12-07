@@ -113,14 +113,14 @@ function main(dataRaw) {
         intFormatter = new Intl.NumberFormat('en-EN', {maximumFractionDigits: 0, style: 'decimal'}),
         cmcCurrencyUrl = slug => `https://coinmarketcap.com/currencies/${slug}/`,
         cmcImgUrl = coinId => `https://s2.coinmarketcap.com/static/img/coins/64x64/${coinId}.png`;
-    
+
     let timestamps, startDate, endDate;
 
     // Set date options
     d3.json('https://mongodb.philippstuerner.com/listings?allTimestamps=true').then(function(dataRaw) {
         timestamps = dataRaw;
         let dateSelection = d3.selectAll('.form-select');
-        
+
         dateSelection
         .selectAll('option')
         .data(timestamps)
@@ -130,15 +130,15 @@ function main(dataRaw) {
                     .attr('value', d => (new Date(d.timestamp)).getTime())
                     .text(d=>(new Date(d.timestamp)).toLocaleString([], stringFormat))
         );
-        
+
         d3.select('#start-date-selection').select('option:nth-child(2)').attr('selected',true);
         d3.select('#end-date-selection').select('option:nth-child(1)').attr('selected',true);
-        
+
         startDate = (new Date(timestamps[1].timestamp)).getTime();
         endDate = (new Date(timestamps[0].timestamp)).getTime();
     })
 
-    
+
     let table = d3.select('#cmc-table');
     updateTable()
 
@@ -179,7 +179,7 @@ function main(dataRaw) {
 
     d3.select('#top-selection').on('change', function(d) {
         topN = +d.target.value;
-        
+
         data = changeListings.slice(0, topN);
         updateTable();
 
@@ -207,7 +207,7 @@ function main(dataRaw) {
 
         let key = sortKeys[d3.select(this).attr('id')],
             desc = d3.select(this).attr('class')=='sort-desc' ? true : false;
-        
+
         if (desc) {
             data.sort(function(a, b) {return d3.ascending(getProp(a,key), getProp(b,key));});
             d3.select(this).attr('class', 'sort-asc');
@@ -215,7 +215,7 @@ function main(dataRaw) {
             data.sort(function(a, b) {return d3.descending(getProp(a,key), getProp(b,key));});
             d3.select(this).attr('class', 'sort-desc');
         }
-        
+
         updateTable();
     })
 

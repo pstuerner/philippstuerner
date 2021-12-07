@@ -1,6 +1,6 @@
 window.onload = function() {
     var parents = document.querySelectorAll('[data-toc]');
-    
+
     if (!parents) return 0;
 
     parents.forEach(function (parent, nth) {
@@ -15,7 +15,7 @@ window.onload = function() {
 
 function toc(parent, nth) {
     var tocNode = document.createElement('ASIDE');
-    var tocContentNode = document.createElement('DIV');   
+    var tocContentNode = document.createElement('DIV');
     var tocHeaderNode = document.createElement('H3');
     var tocHeaderTextNode = document.createTextNode('Table of content');
     // Using Array() to convert from the NodeList results in a object like this: [NodeList(n)],
@@ -93,7 +93,7 @@ function tocCustomClass (parent) {
     var tocClass = parent.getAttribute('data-toc-class');
 
     if (tocClass) {
-        parent.firstChild.setAttribute('class', "toc-default " + tocClass);  
+        parent.firstChild.setAttribute('class', "toc-default " + tocClass);
     }
 }
 
@@ -109,7 +109,7 @@ function tocCustomId (parent) {
 // Allow user to set his/her own header through data-toc-header attribute
 function tocCustomHeader (parent) {
     var tocHeader = parent.getAttribute('data-toc-header');
-    
+
     if (tocHeader && tocHeader.toLowerCase() == "none") {
         parent.firstChild.removeChild(parent.firstChild.firstChild);
     }

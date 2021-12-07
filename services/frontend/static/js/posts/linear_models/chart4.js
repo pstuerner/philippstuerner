@@ -47,11 +47,11 @@ function chart4 (dataRaw) {
 		.duration(duration)
 		.attr('r', 5)
 	}
-	
+
 	function updateScatter() {
 		let m = math.concat(math.concat(math.column(X,1),y),predData,math.largerEq(predData,0.5)),
 			dataScatter = m.valueOf().map((d,i)=>({i:i,x:+d[0].toFixed(2),y:+d[1].toFixed(2),color:d[1]==d[3] ? 'green' : 'red'}))
-		
+
 		scatter
 		.selectAll('.scatter')
 		.data(dataScatter, d=>`${d['i']}-${d['color']}`)
@@ -64,7 +64,7 @@ function chart4 (dataRaw) {
 					.call(plop, 500),
             update => update
                     .transition()
-                    .delay((d,i)=>10*i) 
+                    .delay((d,i)=>10*i)
                     .duration(500)
                     .attr('cx',d=>xScale(d.x))
                     .attr('cy',d=>yScale(d.y))
@@ -73,10 +73,10 @@ function chart4 (dataRaw) {
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
 	};
-	
+
 	function updateSigmoids() {
 		const line = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
-		
+
         sigmoid
 		.selectAll('.sigmoid-path')
 		.data([
@@ -123,7 +123,7 @@ function chart4 (dataRaw) {
         learningRate = 0.2;
         xRange = math.matrix(_.range(math.min(math.column(X,1)),math.max(math.column(X,1)),0.005).map(d=>[1,+d.toFixed(2)])).reshape([-1,2]);
     }
-	
+
 	function step() {
         let lossOld = loss(X,y,theta);
 		theta=batchGDStep(X,y,learningRate,theta)
@@ -138,9 +138,9 @@ function chart4 (dataRaw) {
         }
 
 	};
-	
+
     let data, X, y, d, theta, learningRate, xRange, predRange, predData, predComb, predCombInv;
-	
+
     // Define margin and size
 	let margin = {top: 20, right: 30, bottom: 30, left: 40},
         width = d3.select('#chart4-logreg-container').node().getBoundingClientRect().width - margin.left - margin.right,
@@ -148,7 +148,7 @@ function chart4 (dataRaw) {
         marginSliders = {top: 0, right: 50, bottom: 0, left: 50},
         widthSliders = d3.select('#chart4-theta0-container').node().getBoundingClientRect().width - marginSliders.left - marginSliders.right,
         heightSliders = d3.select('#chart4-theta0-container').node().getBoundingClientRect().height - marginSliders.top - marginSliders.bottom;
-    
+
     // Define the scales
     let xScale = d3.scaleLinear().range([0, width]),
         yScale = d3.scaleLinear().range([height, 0]).domain([0,1]);
@@ -206,7 +206,7 @@ function chart4 (dataRaw) {
             .call(responsivefy)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+
     // Apply clip
     svg
     .append('clipPath')
@@ -218,7 +218,7 @@ function chart4 (dataRaw) {
     // Create axes
     let xAxis = svg.append("g").attr("transform", `translate(0,${height})`),
         yAxis = svg.append("g").call(d3.axisLeft(yScale));
-    
+
     // Create groups
     let	sigmoid = svg.append('g').attr('class','sigmoid-group'),
         line2sig = svg.append('g').attr('class','line2sig-group'),
@@ -243,7 +243,7 @@ function chart4 (dataRaw) {
                         .append('g')
                         .attr('transform', `translate(${marginSliders.left},${heightSliders/2})`)
                         .attr('id','chart4-theta1-slider');
-    
+
         let tooltip = d3
                     .select("#chart4-logreg-container")
                     .append("div")
@@ -302,7 +302,7 @@ function chart4 (dataRaw) {
                                     <div class="card" style="width: 18rem;">
                                         <div class="card-body">
                                             <h5 class="card-title"><span style="color:${color}">${bucket}</span></h5>
-                                        </div>        
+                                        </div>
                                         <ul class="list-group list-group-flush">
                                             <li id="logreg-prob" class="list-group-item"></li>
                                         </ul>
@@ -320,9 +320,9 @@ function chart4 (dataRaw) {
                             nodes[0].innerHTML = String.raw`$$ \sigma(${dotX.toFixed(2)}) = \frac{1}{1+e^{-${dotX.toFixed(2)}}} = ${dotY.toFixed(3)} $$ $$ 1 - \sigma(${dotX.toFixed(2)}) = ${(1-dotY).toFixed(3)} $$`
                             MathJax.typesetPromise(nodes).then(() => {});
 
-                            
+
                             let offsetY = actualY==0 ? tooltip.node().clientHeight : 0
-                            
+
                             tooltip
                             .style("left", (d3.pointer(d)[0]+margin.left) + 10 + "px")
                             .style("top", (d3.pointer(d)[1]+margin.top) - offsetY + 10 + "px")
@@ -332,7 +332,7 @@ function chart4 (dataRaw) {
                             d3.select(this).transition().duration(200).style("stroke", "none").style("opacity", 0.8)
                             line2sig.selectAll('.line2sig').remove()
                         };
-    
+
     init()
     updateAxes();
     updateSliders();
@@ -365,5 +365,5 @@ function chart4 (dataRaw) {
 }
 
 d3.json('https://api.philippstuerner.com/data/logreg_data?X_idx=2&y_idx=2&return_theta=true&normalize=false').then(function(dataRaw) {
-    chart4(dataRaw); 
+    chart4(dataRaw);
 });

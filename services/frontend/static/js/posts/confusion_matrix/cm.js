@@ -23,7 +23,7 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
                 cm.fn.push(d)
                 d['bucket'] = 'fn'
             }
-        
+
         })
     };
 
@@ -35,7 +35,7 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
             document.getElementById('eq-f1'),
         ];
         MathJax.typesetClear(nodes);
-        
+
         let accuracy = +((cm.tn.length+cm.tp.length)/(cm.tn.length+cm.tp.length+cm.fn.length+cm.fp.length)).toFixed(4),
             precision = +(cm.tp.length/(cm.tp.length+cm.fp.length)).toFixed(4),
             recall = +(cm.tp.length/(cm.tp.length+cm.fn.length)).toFixed(4);
@@ -58,7 +58,7 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
         });
 
         bubbles = bubbles.data(data, function(d) { return d.i;});
-        
+
         bubbles.exit().transition().attr("r", 0).remove();
 
         bubbles = bubbles.enter()
@@ -72,14 +72,14 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
                 return colorScale(d.pred);
             })
             .merge(bubbles);
-        
+
         simulation.nodes(data).on('tick',ticked);
         simulation.force("x").initialize(data);
         simulation.force("y").initialize(data);
         simulation.force("collide").initialize(data);
         simulation.alpha(0.5).alphaTarget(0.3).restart();
     }
-    
+
     let cm, data;
     let margin = {top: 40, bottom: 40, left: 40, right: 40},
         chartWidth = d3.select('#force').node().getBoundingClientRect().width-margin.left-margin.right,
@@ -90,8 +90,8 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
         ];
 
     dataRaw.forEach(function(d){d['i']=+d['i'];d['pred']=+d['pred'];d['true']=+d['true'];});
-    shuffleData(500);    
-    
+    shuffleData(500);
+
     var cutoffSliderSvg = d3
                 .select('div#cutoff-slider')
                 .append('svg')
@@ -119,15 +119,15 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
                     simulation.force("x").initialize(data);
                     simulation.force("y").initialize(data);
                     simulation.force("collide").initialize(data);
-                    
-                    // bubbles.attr("r", function(d) { 
+
+                    // bubbles.attr("r", function(d) {
                     //     return radiusScale(d.pred);
                     //     }).style("fill", function(d) {
                     //     return colorScale(d.pred);
-                    //     }); 
+                    //     });
                 }),
         cutOffSliderG = cutoffSliderSvg.append('g').attr('transform', `translate(${cutoffSliderSvgRect.width*2/3},${chartHeight*.1})`);
-    
+
     cutOffSliderG.call(cutoffSlider.min(0).max(1).value(0.)).attr('id','cutoff-slider');
 
     var svg = d3.select("#force")
@@ -135,15 +135,15 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
     .attr("width", chartWidth)
     .attr("height", chartHeight)
     .attr("transform", `translate(${margin.left},${margin.top})`)
-    
+
     var radiusScale = d3.scaleLinear()
         .domain([0, 1])
         .range([5,30]);
-    
+
     var colorScale = d3.scaleLinear()
         .domain([0,0.5,1])
-        .range(["#c7e9b4","#41b6c4","#253494"]);  
-    
+        .range(["#c7e9b4","#41b6c4","#253494"]);
+
     var simulation = d3.forceSimulation()
         .force("x", d3.forceX(function(d) {
             if (d.bucket == 'tn') {
@@ -166,14 +166,14 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
                 } else {
                     return chartHeight*3/4
                 }
-            }   
+            }
         ).strength(0.05))
         .force("collide", d3.forceCollide()
         .radius(function(d) {
             return radiusScale(d.pred)
         }).strength(0.3));
-    
-        
+
+
     let bubbles = svg
         .selectAll("circle.bubble")
         .data(data)
@@ -186,8 +186,8 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
         })
         .style("fill", function(d) {
             return colorScale(d.pred);
-        });    
-    
+        });
+
     // updateBubbles();
     // var labels = svg.selectAll("text")
     // .data(data.slice(0,endslice))
@@ -197,9 +197,9 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
     //     return d.true;
     // })
     // .style("text-anchor","middle");
-    
+
     simulation.nodes(data).on("tick", ticked);
-    
+
     function ticked() {
         bubbles.attr("cx", function(d) {
             return d.x;
@@ -209,14 +209,14 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
-        
+
         // labels.attr("x", function(d) {
         //     return d.x;
         // })
         // .attr("y", function(d) {
         //     return d.y +5;
         // })
-    
+
     }
 
     // create a tooltip
@@ -253,7 +253,7 @@ d3.csv('/static/data/rf_pred.csv').then(function(dataRaw) {
             digit = data[data.findIndex(d=>d.i==id)],
             color = (digit.bucket=='tn' || digit.bucket=='tp') ? 'forestgreen' : 'crimson',
             bucketDict = {'tn': 'True Negative', 'fp': 'False Positive', 'fn': 'False Negative', 'tp': 'True Positive'};
-        
+
         tooltip
             .html(`
                 <div class="card" style="width: 18rem;">

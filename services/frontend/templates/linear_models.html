@@ -37,7 +37,7 @@
         stroke-opacity: 0.5;
         stroke-width: 1.25px;
     }
-    
+
     .legend rect {
         fill:white;
         opacity:0.9;
@@ -170,7 +170,7 @@
         In general, that's all you need to know about univariate linear regression. For the multivariate case, that is, when multiple explanatory variables enter the equation, the approach is very similar. In the next section you will see that although the equations and matrices are larger and more comprehensive, the underlying procedure is the same.
     </p>
 
-    
+
     <h1 class="section-heading">Polynomial regression</h1>
     <p>
         The above is all nice and great, but there's one big problem that you've probably already noticed. Every time you click on "New dataset" in the chart above, scikit-learn's <a href="https://scikit-learn.org/0.16/modules/generated/sklearn.datasets.make_regression.html#sklearn.datasets.make_regression" target="_blank"><code>make_regression</code></a> function creates a new dataset with a clear linear relationship between the dependent and explanatory variables. I do this on purpose because linear regression is a high bias model, which means that certain conditions must apply to the dataset. Unfortunately, not all relationships in life are linear, which is why you cannot simpy throw a linear regression on everything. So does this mean that linear regression is only applicable if the underlying dataset also has a linear structure 😢? No, it does not! At this point I'd like to introduce polynomial features, as they allow us to model a non-linear relationship in a linear way.
@@ -182,7 +182,7 @@
         In the following D3.js chart you can explore how a polynomial regression behaves. \(\theta_0\) and \(\theta_1\) have the same behavior as above: they change the vertical positioning and slope of the line. But what does \(\theta_2\) do? Find out by adjusting the sliders and creating new datasets. Also observe how the metrics change when you display the best fit.
     </p>
 </div>
-    
+
 <div id="chart2" class="col-md-10 col-lg-10 col-xl-10">
     <div class="row" style="height: 22em;">
         <div id="chart2-graph" style="height: 100%;" class="col-9 p-0"></div>
@@ -259,7 +259,7 @@
         That's all I have to say about polynomial regressions. To be honest, it sounds a lot fancier than it actually is. Basically, you're just extending some existing features to make the model more flexible. Still, I find it fascinating that linear models can be used to explain quadratic or cubic relationships.
     </p>
     <p>
-        At this point, a somewhat naive but valid question would be: why don't we just keep adding polynomial features to our model until we have a perfect model?  Couldn't we then explain every dataset perfectly? To some extent, this statement is true. By continuously adding polynomial features we are able to explain larger parts of the variance. This means that our prediction model gets better. Up until we are able to perfectly reproduce the dataset. Unfortunately, this approach doesn't help us much and is actually one of the best known pitfalls in machine learning. 
+        At this point, a somewhat naive but valid question would be: why don't we just keep adding polynomial features to our model until we have a perfect model?  Couldn't we then explain every dataset perfectly? To some extent, this statement is true. By continuously adding polynomial features we are able to explain larger parts of the variance. This means that our prediction model gets better. Up until we are able to perfectly reproduce the dataset. Unfortunately, this approach doesn't help us much and is actually one of the best known pitfalls in machine learning.
     </p>
 
     <h1 class="section-heading">Over- and underfitting</h1>
@@ -353,7 +353,7 @@
         But what about the noise slider? Noise adds another layer of complexity on top, since it amplifies the just explained problem of overfitting. For example, have a look at the following polynomial regression with <a class="chart3-options" id="chart3-degrees-15-noise-0" href="#chart3"><code>degree = 15</code> on a dataset with <code>noise = 0</code></a>. This is a perfectly clean dataset without any variation or noise, so everything learned on train can be applied to test. That's the reason why there's no difference between train and test metrics, despite the high number of polynomial features. Let's keep the degrees of freedom at <a class="chart3-options" id="chart3-degrees-15-noise-15" href="#chart3"><code>degree = 15</code>, but work on a dataset with <code>noise = 15</code></a> to see what impact underlying noise has on high polynomial regressions.
     </p>
     <p>
-        As expected, there is a high discrepancy between our train and test metrics. The reason for this is that high degrees of freedom allow the polynomial regression to pick up the entire noise in the training dataset. The result is a model that's pretty good at resembling all the patterns and noise in the training data but cannot generalize to any unseen data. 
+        As expected, there is a high discrepancy between our train and test metrics. The reason for this is that high degrees of freedom allow the polynomial regression to pick up the entire noise in the training dataset. The result is a model that's pretty good at resembling all the patterns and noise in the training data but cannot generalize to any unseen data.
     </p>
     <p>
         I hope this takes out the complexity of the entire over-/underfitting tradeoff. It's really not a big deal and not too hard to understand if you have some visual assistance. This concludes my take on linear regression models! There's one more thing I'd like to explain, since everything I've covered above is just one part of what linear models are capable of. All of the above can be used to train a model that predicts continous values such as stock prices, temperatures, country's GDPs or heights. These so-called regression problems are a major part of machine learning, however, not all tasks boil down to predicting a continous number. Just think about recommender systems, spam filters or detecting whether a picture includes a cat or a dog. Let's have a look at classification problems and how the so-called logistic function enables a simple linear regression model to predict probabilities.
@@ -367,7 +367,7 @@
     </p>
     <div id="sigmoid-chart" style="height: 20em;"></div>
     <p>
-        \(\sigma(t)\) has a distinct S-shape and only outputs values between zero and one. This means that \(\hat{y} = \theta^{T}x\) becomes: $$ \hat{p} = \sigma(\theta^{T}x) $$ Determining whether an instance belongs to the positive or negative class is really easy just by looking at \(\hat{p}\): $$ \hat{y} = \begin{cases} 0 & \text{if } \hat{p} < 0.5 \\ 1 & \text{if } \hat{p} \geq 0.5 \end{cases} $$ Simple, right? The final prediction only depends on whether the probability \(\hat{p}\) is greater than or equal to 0.5. If \(\hat{p}\) is greater than or equal to 0.5 then \(\hat{y}=1\), otherwise \(\hat{y}=0\). 
+        \(\sigma(t)\) has a distinct S-shape and only outputs values between zero and one. This means that \(\hat{y} = \theta^{T}x\) becomes: $$ \hat{p} = \sigma(\theta^{T}x) $$ Determining whether an instance belongs to the positive or negative class is really easy just by looking at \(\hat{p}\): $$ \hat{y} = \begin{cases} 0 & \text{if } \hat{p} < 0.5 \\ 1 & \text{if } \hat{p} \geq 0.5 \end{cases} $$ Simple, right? The final prediction only depends on whether the probability \(\hat{p}\) is greater than or equal to 0.5. If \(\hat{p}\) is greater than or equal to 0.5 then \(\hat{y}=1\), otherwise \(\hat{y}=0\).
     </p>
     <p>
         As with linear regression, the perfect sigmoid curve can be found by minimizing a cost function using gradient descent. We could use the same cost function as before, however, generally speaking <a href="https://i.imgur.com/GOhfk6k.png" target="_blank">one does not simply regress a binary outcome applying ordinary least squares</a>. The reason therefore is that weird things, such as predicted probabilities smaller or larger than zero and one, can happen when optimizing logistic regression using least squares. Let's think about the main objective of a classifier to get an idea of how a better suited loss function could look like.
@@ -386,7 +386,7 @@
 >>> from sklearn import datasets
 >>> X, y = datasets.load_iris(return_X_y=True, as_frame=True)</code></pre>
     <p>
-        We use sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html" target="_blank"><code>datasets.load_iris()</code></a> method to load the iris dataset, which is a common and simple dataset for multi-class classification of iris species. The dataset contains three different species of irises (setosa, versicolour, and virginica), as well as their petal and sepal widths and lengths. Basically, it is a dataset of three flowers of the same species (labels) with different measurements (features). 
+        We use sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html" target="_blank"><code>datasets.load_iris()</code></a> method to load the iris dataset, which is a common and simple dataset for multi-class classification of iris species. The dataset contains three different species of irises (setosa, versicolour, and virginica), as well as their petal and sepal widths and lengths. Basically, it is a dataset of three flowers of the same species (labels) with different measurements (features).
     </p>
     <p>
         We'd like to keep things as simple as possible, which is why we restrict the problem to predicting a single target with one feature. This allows me to plot the entire binary classification task in a single graph with the feature \(X\) on the horizontal axis, the target \(y\) on the vertical axis, and the sigmoid decision boundary in the chart. Furthermore, I've implemented additional functionalities that allow you to train a classifier based on different target-feature combinations. For example, if you select "petal width" and "virginica" in the dropdowns below, what happens under the hood is the following:
@@ -448,23 +448,23 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
     </p>
     <ul>
         <li>
-            Correctly classifying a positive target. In the chart above this corresponds to a green dot at \(y=1\). The prediction is correct since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a true positive. 
+            Correctly classifying a positive target. In the chart above this corresponds to a green dot at \(y=1\). The prediction is correct since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a true positive.
         </li>
         <li>
-            Incorrectly classifying a positive target. In the chart above this corresponds to a red dot at \(y=1\). The prediction is false since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a false negative. 
+            Incorrectly classifying a positive target. In the chart above this corresponds to a red dot at \(y=1\). The prediction is false since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a false negative.
         </li>
         <li>
-            Correctly classifying a negative target. In the chart above this corresponds to a green dot at \(y=0\). The prediction is correct since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a true negative. 
+            Correctly classifying a negative target. In the chart above this corresponds to a green dot at \(y=0\). The prediction is correct since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a true negative.
         </li>
         <li>
-            Incorrectly classifying a negative target. In the chart above this corresponds to a red dot at \(y=0\). The prediction is false since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a false positive. 
+            Incorrectly classifying a negative target. In the chart above this corresponds to a red dot at \(y=0\). The prediction is false since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a false positive.
         </li>
     </ul>
     <p>
-        Don't worry if you have no experience with false positives, true negatives and all the other metrics yet. I've already worked on <a href="https://web.philippstuerner.com/posts/confusion_matrix" target="_blank">another post</a> that covers all the important aspects in an easy to understand and visual way.  
+        Don't worry if you have no experience with false positives, true negatives and all the other metrics yet. I've already worked on <a href="https://web.philippstuerner.com/posts/confusion_matrix" target="_blank">another post</a> that covers all the important aspects in an easy to understand and visual way.
     </p>
     <p>
-        Probably you've already recognized that some target-feature combinations are easier to separate than others. For example, training a versicolor classifier based on the flower's petal widths results in a really weird, almost linear, sigmoid shape. The resulting classifier predicts zero for all data points. This might look wrong, however, in that case these are just the best model parameters to separate all the ones from the zeroes. Other combinations, such as petal width as the feature and virginica as the target, are easier to separate and result in a more visually appealing sigmoid shape. This is, once again, a reminder that you must be really careful about imbalanced datasets, the right choice of your loss function, and choosing an appropriate learning algorithm for the underlying task.  
+        Probably you've already recognized that some target-feature combinations are easier to separate than others. For example, training a versicolor classifier based on the flower's petal widths results in a really weird, almost linear, sigmoid shape. The resulting classifier predicts zero for all data points. This might look wrong, however, in that case these are just the best model parameters to separate all the ones from the zeroes. Other combinations, such as petal width as the feature and virginica as the target, are easier to separate and result in a more visually appealing sigmoid shape. This is, once again, a reminder that you must be really careful about imbalanced datasets, the right choice of your loss function, and choosing an appropriate learning algorithm for the underlying task.
     </p>
 
     <h1 class="section-heading">Conclusion</h1>

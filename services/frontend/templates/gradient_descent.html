@@ -65,7 +65,7 @@
         vertical-align: bottom;
     }
 
-    
+
     .legend rect {
         fill:white;
         opacity:0.9;
@@ -365,7 +365,7 @@
         Unlike the first example we are now dealing with two parameters, which is why we cannot further oversimplify the gradient as the slope of the loss function. However, everything else remains the same. We take a random guess for the initialization of \(\theta_0\) and \(\theta_1\), measure the local gradient of the cost function with respect to each model parameter, and update the parameters based on the learning rate. In this way, we slowly move towards the descending gradient.
     </p>
     <p>
-        Interested to see what this example looks like? Check out the D3.js chart below. Once again, feel free to play around with the \(\eta\), \(\theta_0^\textrm{init}\), and \(\theta_1^\textrm{init}\) parameters and interact with the loss surface in the right hand chart. A big thank you to <a href="https://github.com/Niekes" target="_blank">Stefan Nieke</a> for open-sourcing his awesome <a href="https://github.com/Niekes/d3-3d" target="_blank">d3-3d</a> library. Three dimensional plotting in D3.js still seems to be a niche usecase, however Stefan's library makes it as easy as it gets. 
+        Interested to see what this example looks like? Check out the D3.js chart below. Once again, feel free to play around with the \(\eta\), \(\theta_0^\textrm{init}\), and \(\theta_1^\textrm{init}\) parameters and interact with the loss surface in the right hand chart. A big thank you to <a href="https://github.com/Niekes" target="_blank">Stefan Nieke</a> for open-sourcing his awesome <a href="https://github.com/Niekes/d3-3d" target="_blank">d3-3d</a> library. Three dimensional plotting in D3.js still seems to be a niche usecase, however Stefan's library makes it as easy as it gets.
     </p>
 </div>
 <div id="chart4" class="col-md-10 col-lg-10 col-xl-10">
@@ -482,7 +482,7 @@
         </li>
     </ul>
     <p>
-        As you can see, mean normalization changes the shape of the loss surface. In the unnormalized case the loss function can have a higher curvature, which eventually will require gradient descent to take more steps to converge. Normalizing the input features allows us to avoid error functions shaped like elongated bowls and rather turn them into nicely spherical looking objects. Don't worry, the entire concept is a lot easier to understand when looking at a so-called contour chart, which we'll do in the final D3.js chart of this post. Just try to remember that without prior scaling the path to the optimal solution is often complicated and cornered. However, after prior scaling gradient descent usually follows a straight line to the best possible solution and converges much faster. 
+        As you can see, mean normalization changes the shape of the loss surface. In the unnormalized case the loss function can have a higher curvature, which eventually will require gradient descent to take more steps to converge. Normalizing the input features allows us to avoid error functions shaped like elongated bowls and rather turn them into nicely spherical looking objects. Don't worry, the entire concept is a lot easier to understand when looking at a so-called contour chart, which we'll do in the final D3.js chart of this post. Just try to remember that without prior scaling the path to the optimal solution is often complicated and cornered. However, after prior scaling gradient descent usually follows a straight line to the best possible solution and converges much faster.
     </p>
     <p>
         Congratulations! If you sticked with me until here you should have already learned a lot about gradient descent along the way. To be precise, we have dealt
@@ -529,24 +529,24 @@
     </p>
     <pre class="p-0">
     <code class="language-python">>>> import numpy as np
->>> 
+>>>
 >>> m = 50
 >>> X = 2 * np.random.rand(m, 2)
 >>> X_b = np.c_[np.ones(len(X)), X]
 >>> y = 4 + 3 * X[:,0].reshape(-1,1) + np.random.randn(m, 1)
->>> 
+>>>
 >>> theta0, theta1, theta2 = 2, 2, 2
 >>> theta = np.array([[theta0], [theta1], [theta2]])
->>> 
+>>>
 >>> dMSEdt0 = lambda X,y,theta: 1/m*((X.dot(theta)-y)*X[:,0].reshape(-1,1)).sum()
 >>> dMSEdt1 = lambda X,y,theta: 1/m*((X.dot(theta)-y)*X[:,1].reshape(-1,1)).sum()
 >>> dMSEdt2 = lambda X,y,theta: 1/m*((X.dot(theta)-y)*X[:,2].reshape(-1,1)).sum()
->>> 
+>>>
 >>> nabla = lambda X,y,theta: 1/m*X.T.dot(X.dot(theta)-y)
->>> 
+>>>
 >>> gradients_manual = np.array([[dMSEdt0(X_b,y,theta)],[dMSEdt1(X_b,y,theta)],[dMSEdt2(X_b,y,theta)]])
 >>> gradients_nabla = nabla(X_b,y,theta)
->>> 
+>>>
 >>> gradients_manual
 array([
 [-0.90448282],
@@ -716,7 +716,7 @@ array([
             <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
               <div class="accordion-body">As mentioned before, mean normalization is a powerful preprocessing technique for gradient descent. When normalizing the dataset you can recognize that the loss contour turns into a more spherically shaped area. This makes it easier for gradient descent to converge and also avoids the already mentioned jumpy behavior of stochastic and mini-batch gradient descent when the underlying dataset has more noise.</div>
             </div>
-        </div>      
+        </div>
     </div>
     <h1 class="section-heading">Wrap-up</h1>
     <p>

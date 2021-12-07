@@ -17,7 +17,7 @@ function chart2(data) {
     MathJax.typesetClear(nodes);
     nodes[0].innerHTML = String.raw`$$ h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}${data.theta0_best.toFixed(2)}\\${theta1.toFixed(2)}\end{pmatrix} \cdot x $$`;
     nodes[1].innerHTML = String.raw`$$ \textrm{MSE}=${mse.toFixed(2)} $$`;
-    MathJax.typesetPromise(nodes).then(() => {});  
+    MathJax.typesetPromise(nodes).then(() => {});
   };
 
   function plotScatter() {
@@ -55,8 +55,8 @@ function chart2(data) {
       const lineGen = d3
                       .line()
                       .x(d=>xScaleLoss(d.x))
-                      .y(d=>yScaleLoss(d.y)); 
-      
+                      .y(d=>yScaleLoss(d.y));
+
       loss
       .selectAll('.line')
       .data(lineData)
@@ -120,7 +120,7 @@ function chart2(data) {
               }
           )
       });
-      
+
       residuals
       .selectAll('.residual')
       .data(residualLines)
@@ -157,8 +157,8 @@ function chart2(data) {
       const lineGen = d3
                       .line()
                       .x(d=>xScaleScatter(d.x))
-                      .y(d=>yScaleScatter(d.y)); 
-      
+                      .y(d=>yScaleScatter(d.y));
+
       // Update regression
       lines
       .selectAll('.line')
@@ -188,14 +188,14 @@ function chart2(data) {
   const margin = {top: 40, bottom: 40, left: 60, right: 40},
         chartWidth = d3.select('#chart2-scatter').node().getBoundingClientRect().width-margin.left-margin.right,
         chartHeight = d3.select('#chart2-scatter').node().getBoundingClientRect().height-margin.top-margin.bottom;
-  
+
   const scatterBaseSvg = d3
                   .select('#chart2-scatter')
                   .append("svg")
                   .attr('width', chartWidth+margin.left+margin.right)
                   .attr('height', chartHeight+margin.top+margin.bottom)
                   .call(responsivefy);
-  
+
   const lossBaseSvg = d3
     .select('#chart2-loss-function')
     .append("svg")
@@ -233,12 +233,12 @@ function chart2(data) {
         xAxisDrawScatter = scatterSvg.append('g').attr('class', 'x axis').attr('transform', `translate(0, ${chartHeight})`).transition(t).call(d3.axisBottom(xScaleScatter).scale(xScaleScatter)),
         yAxisDrawScatter = scatterSvg.append('g').attr('class', 'y axis').transition(t).call(d3.axisLeft(yScaleScatter).scale(yScaleScatter));
         yAxisDrawScatter.selectAll('text').attr('dx', '-0.6em');
-  
+
   const xStartLoss = data.theta1_best*-2,
         xEndLoss = data.theta1_best*4,
         xRangeLoss = _.range(xStartLoss, xEndLoss + 0.1, 0.1),
         yRangeLoss = xRangeLoss.map(function(theta1) {return 1/(2*data.data.length)*d3.sum(data.data.map(d=>Math.pow(data.theta0_best*d.X_b+theta1*d.X-d.y,2)))});
-        
+
   const xScaleLoss = d3.scaleLinear().range([0, chartWidth]).domain([xStartLoss,xEndLoss]),
         yScaleLoss = d3.scaleLinear().range([chartHeight, 0]).domain(d3.extent(yRangeLoss)),
         xAxisDrawLoss = lossSvg.append('g').attr('class', 'x axis').attr('transform', `translate(0, ${chartHeight})`).transition(t).call(d3.axisBottom(xScaleLoss).scale(xScaleLoss)),
@@ -247,7 +247,7 @@ function chart2(data) {
 
   plotScatter(data.data);
   plotLoss(data.data);
-  
+
   var theta1_init = +d3.select('#theta1-init').attr('value');
   var learning_rate = +d3.select('#learning-rate').attr('value');
 
@@ -327,7 +327,7 @@ function chart2(data) {
     .append("xhtml:span")
     .attr("class", "axisLabel")
     .style('font-size', 'medium')
-  
+
   let axisNodes = d3.selectAll('#chart2 .axisLabel').nodes()
   axisNodes[0].innerHTML = String.raw`$$y$$`
   axisNodes[1].innerHTML = String.raw`$$X$$`

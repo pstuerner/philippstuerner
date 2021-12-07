@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     restart: always
-  
+
   api:
     build: ./services/api
     ports:

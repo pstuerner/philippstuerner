@@ -5,17 +5,17 @@ function chart1(data) {
     var yExtent = d3.extent(data.data, d => d.y),
         xExtent = d3.extent(data.data, d => d.X),
         m_value = Number((Math.max(...yExtent.map(d=>Math.abs(d)))/Math.max(...xExtent.map(d=>Math.abs(d)))).toFixed(1));
-  
+
     var bData = [Number(yExtent[0].toFixed(1)),Number(yExtent[1].toFixed(1))],
         mData = [-2*m_value,2*m_value];
-    
+
     var yMean = arrAvg(data.data.map(d=>d.y)).toFixed(1),
         mMean = arrAvg(mData).toFixed(1);
-    
+
     bSlider.min(d3.min(bData)).max(d3.max(bData)).value(data.theta0_best);
     bSliderG.transition().duration(1000).call(bSlider);
     mSlider.min(d3.min(mData)).max(d3.max(mData)).value(mMean);
-    mSliderG.transition().duration(1000).call(mSlider); 
+    mSliderG.transition().duration(1000).call(mSlider);
 
     // Update MSE equation
     const node = document.getElementById('mse-equation');
@@ -84,7 +84,7 @@ function chart1(data) {
                     }
                 )
             });
-            
+
             residuals
             .selectAll('.residual')
             .data(residualLines)
@@ -131,8 +131,8 @@ function chart1(data) {
             const lineGen = d3
                             .line()
                             .x(d=>xScale(d.x))
-                            .y(d=>yScale(d.y)); 
-            
+                            .y(d=>yScale(d.y));
+
             // Update regression
             lines
             .selectAll('.line')
@@ -161,7 +161,7 @@ function chart1(data) {
 
         const yPred = getPredictions(data.map(d=>d.X), m, b);
         const squaredResiduals = data.map((d,i)=>Math.pow(d.y-yPred[i],2));
-        
+
         updateResiduals();
         updateMSE();
         updateLine();
@@ -206,7 +206,7 @@ function chart1(data) {
 
   var bSliderSvgRect = bSliderSvg.node().getBoundingClientRect(),
       mSliderSvgRect = mSliderSvg.node().getBoundingClientRect();
-      
+
   var bSlider = d3
     .sliderBottom()
     .width(bSliderSvgRect.width*.9)
@@ -249,7 +249,7 @@ function chart1(data) {
 
   var bSliderG = bSliderSvg.append('g').attr('transform', `translate(${bSliderSvgRect.width*.05},${bSliderSvgRect.height/3})`);
   var mSliderG = mSliderSvg.append('g').attr('transform', `translate(${mSliderSvgRect.width*.05},${mSliderSvgRect.height/3})`);
-  
+
   bSliderG.call(bSlider.min(0).max(1).value(0.5)).attr('id','chart1-bslider');
   mSliderG.call(mSlider.min(0).max(1).value(0.5)).attr('id','chart1-mslider');
 
@@ -261,7 +261,7 @@ function chart1(data) {
         chartHeight = d3.select('#chart1-graph').node().getBoundingClientRect().height-margin.top-margin.bottom,
         xScale = d3.scaleLinear().range([0, chartWidth]),
         yScale = d3.scaleLinear().range([chartHeight, 0]);
-  
+
   const baseSvg = d3
                   .select('#chart1-graph')
                   .append("svg")
@@ -287,7 +287,7 @@ function chart1(data) {
         xAxisDraw = svg.append('g').attr('class', 'x axis').attr('transform', `translate(0, ${chartHeight})`),
         yAxis = d3.axisLeft(yScale),
         yAxisDraw = svg.append('g').attr('class', 'y axis');
-    
+
   updateChart(data.data);
 
 svg.append("foreignObject")

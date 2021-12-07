@@ -12,7 +12,7 @@
 // var svg = d3.select("#vis")
 //     .append("svg")
 //     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom);  
+//     .attr("height", height + margin.top + margin.bottom);
 
 // d3.select('#vis').append('g').append(() => MathJax.tex2svg(String.raw`\pi r^2`).querySelector("svg"));
 // slider fnc //
@@ -51,7 +51,7 @@ data.map(function(d) {
 // var targetValue = width;
 
 // var playButton = d3.select("#play-button");
-    
+
 // var x = d3.scaleTime()
 //     .domain([startDate, endDate])
 //     .range([0, targetValue])
@@ -73,7 +73,7 @@ data.map(function(d) {
 //         .on("start.interrupt", function() { slider.interrupt(); })
 //         .on("start drag", function(event) {
 //           currentValue = event.x;
-//           update(x.invert(currentValue)); 
+//           update(x.invert(currentValue));
 //         })
 //     );
 
@@ -93,13 +93,13 @@ data.map(function(d) {
 //     .attr("class", "handle")
 //     .attr("r", 9);
 
-// var label = slider.append("text")  
+// var label = slider.append("text")
 //     .attr("class", "label")
 //     .attr("text-anchor", "middle")
 //     .text(formatDate(startDate))
 //     .attr("transform", "translate(0," + (-25) + ")")
 
- 
+
 // ////////// plot //////////
 
 // var dataset;
@@ -111,7 +111,7 @@ data.map(function(d) {
 // d3.csv("http://127.0.0.1:8000/circles_csv").then(function(data){
 //   dataset = data.map(prepare);
 //   drawPlot(dataset);
-  
+
 //   playButton
 //     .on("click", function() {
 //     var button = d3.select(this);
@@ -134,7 +134,7 @@ data.map(function(d) {
 //   d.date = parseDate(d.date);
 //   return d;
 // }
-  
+
 // function step() {
 //   update(x.invert(currentValue));
 //   currentValue = currentValue + (targetValue/151);

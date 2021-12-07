@@ -5,9 +5,9 @@ function chart3(dataRaw) {
         let degreeIndex = +degreeSlider.value()-1,
             xPolyTrain = math.matrix(dataRaw.polynomials[degreeIndex].X_poly_train),
             xPolyTest = math.matrix(dataRaw.polynomials[degreeIndex].X_poly_test);
-        
+
         theta = math.transpose(math.matrix([thetas[degreeIndex]]))
-        
+
         // Train
         yHatTrain = math.multiply(xPolyTrain,theta)
         residualsTrain = math.subtract(yTrain,yHatTrain)
@@ -20,7 +20,7 @@ function chart3(dataRaw) {
         d3.select('#chart3-train-mse').text(mseTrain.toFixed(2))
         d3.select('#chart3-train-rmse').text(rmseTrain.toFixed(2))
         d3.select('#chart3-train-r2').text(r2Train.toFixed(3))
-        
+
         // Test
         yHatTest = math.multiply(xPolyTest,theta)
         residualsTest = math.subtract(yTest,yHatTest)
@@ -48,7 +48,7 @@ function chart3(dataRaw) {
                 })
             }],
             lineGenTrain = d3.line().x(d=>xScaleTrain(d.x)).y(d=>yScaleTrain(d.y)),
-            lineGenTest = d3.line().x(d=>xScaleTest(d.x)).y(d=>yScaleTest(d.y)); 
+            lineGenTest = d3.line().x(d=>xScaleTest(d.x)).y(d=>yScaleTest(d.y));
 
         // Update regression
         regressionLineTrain
@@ -187,11 +187,11 @@ function chart3(dataRaw) {
         yTestMean = math.mean(yTest)
         thetas = dataRaw.polynomials.map(d=>d.theta)
     }
-    
+
     let dataTrain, dataTest, xExtentTrain, yExtentTrain, xExtentTest, yExtentTest, xTrain, yTrain, yTrainMean, xTest, yTest, yTestMean, thetas, yHatTrain, residualsTrain, squaredResidualsTrain, mseTrain, rmseTrain, maeTrain, r2Train, yHatTest, residualsTest, squaredResidualsTest, mseTest, rmseTest, maeTest, r2Test, theta, noiseChangeAllow = false;
 
     dataInit();
-    
+
     // Define margin and size
     let margin = {top: 20, right: 30, bottom: 30, left: 40},
         width = d3.select('#chart3-train-scatter').node().getBoundingClientRect().width - margin.left - margin.right,
@@ -252,7 +252,7 @@ function chart3(dataRaw) {
                         }
                         noiseChangeAllow = false;
                     });
-    
+
     // Create charts
     let svgTrain = d3.select("#chart3-train-scatter")
                 .append("svg")
@@ -268,7 +268,7 @@ function chart3(dataRaw) {
                 .call(responsivefy)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+
     // Apply clip
     svgTrain
     .append('clipPath')
@@ -288,7 +288,7 @@ function chart3(dataRaw) {
         yScaleTrain = d3.scaleLinear().range([height, 0]),
         xScaleTest = d3.scaleLinear().range([0, width]),
         yScaleTest = d3.scaleLinear().range([height, 0]);
-    
+
     // Create axes
     let xAxisTrain = svgTrain.append("g").attr("transform", `translate(0,${height})`),
         yAxisTrain = svgTrain.append("g"),
@@ -320,7 +320,7 @@ function chart3(dataRaw) {
         .call(responsivefy)
         .append('g')
         .attr('transform', `translate(${widthSliders/2},${marginSliders.top})`);
-    
+
     svgDegreeSlider
         .transition()
         .duration(500)
@@ -330,7 +330,7 @@ function chart3(dataRaw) {
             .value(1)
         )
         .attr('id','chart3-degree-slider');
-    
+
     svgNoiseSlider
         .transition()
         .duration(500)
@@ -358,6 +358,5 @@ function chart3(dataRaw) {
 }
 
 d3.json('https://api.philippstuerner.com/data/poly_data?degrees=20&noise=5').then(function(dataRaw) {
-    chart3(dataRaw); 
+    chart3(dataRaw);
 });
-    

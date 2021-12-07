@@ -9,7 +9,7 @@ function createData (n) {
 		b = Math.round(20*(Math.random() > 0.5 ? 1 : -1)*Math.random()),
 		f = function (x) {return m * x + b},
 		data = []
-	
+
 	for (let i = 0; i < n; i++) {
 		let x = +((xEnd - xStart) * Math.random()).toFixed(2);
 		data.push(
@@ -20,7 +20,7 @@ function createData (n) {
 			}
 		)
 	}
-	
+
 	return {f:f, data:data, m:m, b:b}
 }
 
@@ -45,13 +45,13 @@ function updateScatterChart () {
 			exit => exit.remove()
 		)
 	}
-	
+
     // Update scales & axis
 	xScaleScatter.domain(d3.extent(data.data.map(d=>d.x)))
 	yScaleScatter.domain(d3.extent(data.data.map(d=>d.y)))
 	xAxisScatter.transition().duration(500).call(d3.axisBottom(xScaleScatter))
 	yAxisScatter.transition().duration(500).call(d3.axisLeft(yScaleScatter));
-	
+
 	// Scatter
 	updateScatter()
 }
@@ -74,14 +74,14 @@ function updateContourChart () {
 			exit => exit.remove()
 		)
 	}
-	
-	
+
+
 	// Contour
 	xScaleContour.domain(d3.extent(theta0Range))
 	yScaleContour.domain(d3.extent(theta1Range))
 	xAxisContour.transition().duration(500).call(d3.axisBottom(xScaleContour))
 	yAxisContour.transition().duration(500).call(d3.axisLeft(yScaleContour))
-	
+
 	let thresholds = d3.range(d3.min(loss, d=>d.loss),d3.max(loss, d=>d.loss),(d3.max(loss, d=>d.loss)- d3.min(loss, d=>d.loss))/21),
 		color = d3.scaleSequential(d3.interpolateGreys).domain([d3.min(thresholds),d3.max(thresholds)]),
 		contourValues = d3.contours()
@@ -89,9 +89,9 @@ function updateContourChart () {
 				.smooth(true)
 				.thresholds(thresholds)
 				(loss.map(d=>d.loss))
-	
+
 	updateContour();
-	
+
 	// GD Paths
 	gdPaths.selectAll('path.gd-line').remove()
 }
@@ -132,7 +132,7 @@ function updateRegression (regressionData) {
 function updateGD (data) {
 	let lineGenerator = d3.line().x(d=>xScaleContour(d.theta0)).y(d=>yScaleContour(d.theta1));
 	let paths = gdPaths.selectAll('path.gd-line').data(data)
-	
+
 	paths = paths
 		.enter(d=>d.id)
 		.append('path')
@@ -160,13 +160,13 @@ function normalize (x, min, max) {
 
 function resetParameters () {
 	if (!normalized) {data = dataRaw} else {data = dataNormalized}
-	
+
 	theta0BestGD = 0; theta1BestGD = 0;
 	for (let i=0; i<5000; i++) {[theta0BestGD, theta1BestGD]=batchGDStep(data.data, theta0BestGD, theta1BestGD)};
-	
+
 	dataExtent = d3.extent(data.data.map(d=>d.x))
 	theta0Range = thetaRange(theta0BestGD, d3.max([Math.abs(theta0BestGD), Math.abs(theta1BestGD)]) * .5, .1)
-	theta1Range = thetaRange(theta1BestGD, d3.max([Math.abs(theta0BestGD), Math.abs(theta1BestGD)]) * .5, .1)		
+	theta1Range = thetaRange(theta1BestGD, d3.max([Math.abs(theta0BestGD), Math.abs(theta1BestGD)]) * .5, .1)
 	theta0Init = Math.random() > .5 ? theta0Range[_.random(0,10)] : theta0Range.slice(-_.random(0,10))[0]
 	theta1Init = Math.random() > .5 ? theta1Range[_.random(0,10)] : theta1Range.slice(-_.random(0,10))[0]
 	theta0BGD = theta0Init; theta1BGD = theta1Init; bgdPath = [];
@@ -175,7 +175,7 @@ function resetParameters () {
 	bgdPath.push({theta0:theta0BGD, theta1:theta1BGD})
     sgdPath.push({theta0:theta0SGD, theta1:theta1SGD})
     mbgdPath.push({theta0:theta0MBGD, theta1:theta1MBGD})
-	
+
 	loss = []
 	theta0Range.forEach(function (theta0) {
 		theta1Range.forEach(function (theta1) {
@@ -189,7 +189,7 @@ function newData () {
 	dataExtent = d3.extent(dataRaw.data.map(d=>d.x))
 	dataNormalized = JSON.parse(JSON.stringify(dataRaw))
 	dataNormalized.data.forEach(d=>d.x=normalize(d.x, dataExtent[0], dataExtent[1]))
-	
+
 	data = dataRaw
 }
 
@@ -204,7 +204,7 @@ function djdt1 (data, theta0, theta1) {
 function batchGDStep (data, theta0, theta1) {
 	theta0 = theta0 - djdt0(data, theta0, theta1) * learningRate
 	theta1 = theta1 - djdt1(data, theta0, theta1) * learningRate
-	
+
 	return [theta0, theta1]
 }
 
@@ -224,11 +224,11 @@ function step () {
 	[theta0BGD, theta1BGD] = batchGDStep(data.data, theta0BGD, theta1BGD);
     [theta0SGD, theta1SGD] = stochasticGDStep(data.data, theta0SGD, theta1SGD);
     [theta0MBGD, theta1MBGD] = miniBatchGDStep(data.data, 10, theta0SGD, theta1SGD);
-  
+
     bgdPath.push({theta0:theta0BGD, theta1:theta1BGD})
     sgdPath.push({theta0:theta0SGD, theta1:theta1SGD})
     mbgdPath.push({theta0:theta0MBGD, theta1:theta1MBGD})
-	
+
 	updateGD(
 	  [
 		  {id:'bgd', color:'blue', values:bgdPath},
@@ -236,10 +236,10 @@ function step () {
 		  {id:'mbgd', color:'green', values:mbgdPath}
 	  ]
     )
-	
+
 	// Scatter
 	let regressionData, bgdLine, sgdLine, mbgdLine;
-		
+
 	bgdLine = [{x:dataExtent[0],y:theta0BGD+theta1BGD*dataExtent[0]},{x:dataExtent[1],y:theta0BGD+theta1BGD*dataExtent[1]}]
 	sgdLine = [{x:dataExtent[0],y:theta0SGD+theta1SGD*dataExtent[0]},{x:dataExtent[1],y:theta0SGD+theta1SGD*dataExtent[1]}]
 	mbgdLine = [{x:dataExtent[0],y:theta0MBGD+theta1MBGD*dataExtent[0]},{x:dataExtent[1],y:theta0SGD+theta1SGD*dataExtent[1]}]
@@ -248,7 +248,7 @@ function step () {
 		{id:'sgd', color:'red', values:sgdLine},
 		{id:'mbgd', color:'green', values:mbgdLine}
 	]
-	
+
 	updateRegression(regressionData)
 
 	// MathJax
@@ -259,11 +259,11 @@ function step () {
 			document.getElementById('minibatchgd-theta'), document.getElementById('minibatchgd-mse'),
 		];
 		MathJax.typesetClear(nodes);
-		
+
 		let batchgdMSE = computeLoss(data.data, theta0BGD, theta1BGD),
 			stochasticgdMSE = computeLoss(data.data, theta0SGD, theta1SGD),
 			minibatchgdMSE = computeLoss(data.data, theta0MBGD, theta1MBGD);
-	
+
 		nodes[0].innerHTML = String.raw`$$\theta=\begin{pmatrix}${theta0BGD.toFixed(2)}\\${theta1BGD.toFixed(2)}\end{pmatrix}$$`
 		nodes[1].innerHTML = String.raw`$$\textrm{MSE}=${batchgdMSE.toFixed(2)}$$`
 		nodes[2].innerHTML = String.raw`$$\theta=\begin{pmatrix}${theta0SGD.toFixed(2)}\\${theta1SGD.toFixed(2)}\end{pmatrix}$$`
@@ -363,7 +363,7 @@ svgContourBase
 .append('rect')
 .attr('width', width - margin.right)
 .attr('height', height);
-	
+
 let xAxisScatter = svgScatter.append('g').attr('transform', `translate(0, ${height})`),
 	yAxisScatter = svgScatter.append('g'),
 	xScaleScatter = d3.scaleLinear().range([0, width]),

@@ -16,7 +16,7 @@ function chart4(data) {
         MathJax.typesetClear(nodes);
         nodes[0].innerHTML = String.raw`$$ h_{\theta}(x)=\theta \cdot x = \begin{pmatrix}${theta0.toFixed(2)}\\${theta1.toFixed(2)}\end{pmatrix} \cdot x $$`;
         nodes[1].innerHTML = String.raw`$$ \textrm{MSE}=${eq(currentData, theta0, theta1).toFixed(2)} $$`;
-        MathJax.typesetPromise(nodes).then(() => {});  
+        MathJax.typesetPromise(nodes).then(() => {});
       };
 
     function plotScatter() {
@@ -53,7 +53,7 @@ function chart4(data) {
         const residualLines = [];
         const lineGen = d3.line().x(d=>xScaleScatter(d.x)).y(d=>yScaleScatter(d.y));
         const yPred = getPredictions(currentData.map(d=>d.X), m, b);
-  
+
         currentData.forEach(function(d,i) {
             residualLines.push(
                 {
@@ -65,7 +65,7 @@ function chart4(data) {
                 }
             )
         });
-        
+
         residuals
         .selectAll('.residual')
         .data(residualLines)
@@ -96,14 +96,14 @@ function chart4(data) {
             }
         );
     };
-  
+
     function updateLine(b, m) {
         const lineData = [{v: d3.extent(currentData, d=>d.X).map(d=>({x:d,y:getPredictions([d],m,b)[0]}))}];
         const lineGen = d3
                         .line()
                         .x(d=>xScaleScatter(d.x))
-                        .y(d=>yScaleScatter(d.y)); 
-        
+                        .y(d=>yScaleScatter(d.y));
+
         // Update regression
         lines
         .selectAll('.line')
@@ -198,11 +198,11 @@ function chart4(data) {
         planes.exit().remove();
 
         /* ----------- Scales ----------- */
-        
+
         var xScale = lossBaseSvg.selectAll('path.xScale').data(data[2][0]);
         var yScale = lossBaseSvg.selectAll('path.yScale').data(data[2][1]);
         var zScale = lossBaseSvg.selectAll('path.zScale').data(data[2][2]);
-                
+
         xScale
             .enter()
             .append('path')
@@ -212,7 +212,7 @@ function chart4(data) {
             .attr('stroke', 'black')
             .attr('stroke-width', .5)
             .attr('d', scale3d.draw);
-        
+
         yScale
             .enter()
             .append('path')
@@ -232,7 +232,7 @@ function chart4(data) {
             .attr('stroke', 'black')
             .attr('stroke-width', .5)
             .attr('d', scale3d.draw);
-        
+
         xScale.exit().remove();
         yScale.exit().remove();
         zScale.exit().remove();
@@ -242,7 +242,7 @@ function chart4(data) {
         var xText = lossBaseSvg.selectAll('text.xText').data(data[2][0][0]);
         var yText = lossBaseSvg.selectAll('text.yText').data(data[2][1][0]);
         var zText = lossBaseSvg.selectAll('text.zText').data(data[2][2][0]);
-        
+
         xText
             .enter()
             .append('text')
@@ -349,16 +349,16 @@ function chart4(data) {
                 })
             })
           })
-        
+
         var yMin = d3.min(points, function(d){ return d.y; });
         var yMax = d3.max(points, function(d){ return d.y; });
-        
+
         _.range(Math.round(theta0Range[0]), Math.floor(theta0Range.slice(-1)), 2).forEach(function(d){ xLine.push([d, 0, theta1Range[0]]); });
         _.range(Math.round(theta1Range[0]), Math.floor(theta1Range.slice(-1)), 2).forEach(function(d){ yLine.push([theta0Range[0], 0, d]); });
         d3.range(0, yMax, 10).forEach(function(d){ zLine.push([theta0Range[0], d, theta1Range[0]]); });
-        
+
         color.domain([yMin, yMax]);
-        
+
         var dataChart = [
             grid3d(xGrid),
             surface(points),
@@ -380,7 +380,7 @@ function chart4(data) {
             .attr('height', chartHeight+margin.top+margin.bottom)
             .call(responsivefy);
 
-    var origin = [(chartWidth+margin.left+margin.right)/2, (chartHeight+margin.top+margin.bottom)-(chartHeight+margin.top+margin.bottom)*.15], 
+    var origin = [(chartWidth+margin.left+margin.right)/2, (chartHeight+margin.top+margin.bottom)-(chartHeight+margin.top+margin.bottom)*.15],
         currentData = data.data,
         j = 16,
         points = [],
@@ -398,7 +398,7 @@ function chart4(data) {
         color = d3.scaleLinear(),
         normalize = false,
         mx, my, mouseX, mouseY, myTimer;
-    
+
     const theta0Range = _.range(-data.theta0_best*2.5, data.theta0_best*2.5 + 1, 1.5);
     const theta1Range = _.range(-data.theta1_best*2.5, data.theta1_best*2.5 + 1, 1.5);
     const xMean = d3.mean(data.data.map(d=>d.X)), xStd = d3.deviation(data.data.map(d=>d.X));
@@ -433,7 +433,7 @@ function chart4(data) {
                 .rotateY(startAngleY)
                 .rotateX(startAngleX)
                 .scale(scale);
-    
+
     const scatterBaseSvg = d3
             .select('#chart4-scatter')
             .append("svg")
@@ -454,7 +454,7 @@ function chart4(data) {
         .append('rect')
         .attr('width', chartWidth + margin.left + margin.right)
         .attr('height', chartHeight);
-    
+
     lossBaseSvg
         .append('clipPath')
         .attr('id', 'chart4-loss-clip')
@@ -463,22 +463,22 @@ function chart4(data) {
         .attr('height', chartHeight + margin.top + margin.bottom);
 
     const scatterSvg = scatterBaseSvg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
-    
+
     // Draw frameworks
     const residuals = scatterSvg.append('g').attr('class', 'residuals'),
             scatters = scatterSvg.append('g').attr('class', 'scatters'),
             lines = scatterSvg.append('g').attr('class', 'lines'),
             lossdot = lossBaseSvg.append('g').attr('class', 'lossdot-group');
-    
+
     // Draw axis
     var xScaleScatter = d3.scaleLinear().range([0, chartWidth]).domain([0,d3.max(data.data, d=>d.X)]),
             yScaleScatter = d3.scaleLinear().range([chartHeight, 0]).domain(d3.extent(data.data, d=>d.y)),
             xAxisDrawScatter = scatterSvg.append('g').attr('class', 'x axis').attr('transform', `translate(0, ${chartHeight})`),
             yAxisDrawScatter = scatterSvg.append('g').attr('class', 'y axis').transition(t).call(d3.axisLeft(yScaleScatter).scale(yScaleScatter));
             yAxisDrawScatter.selectAll('text').attr('dx', '-0.6em');
-    
+
     xAxisDrawScatter.transition(t).call(d3.axisBottom(xScaleScatter).scale(xScaleScatter));
-        
+
     var theta0_init = +d3.select('#chart4-theta0-init').attr('value'),
         theta1_init = +d3.select('#chart4-theta1-init').attr('value'),
         learning_rate = +d3.select('#chart4-learning-rate').attr('value'),
@@ -559,7 +559,7 @@ function chart4(data) {
 
     d3.select('#chart4-normalize-check').on('click', function () {
         let currentSlider = slider.value();
-        
+
         if (this.checked) {
             currentData = dataNormalized;
         } else {
@@ -583,16 +583,16 @@ function chart4(data) {
             if (t == 0) {clearInterval (myTimer)} else {slider.value(t);}
           }, 150);
       });
-    
+
       d3.select("#chart4-btn-pause").on("click", function() {
         clearInterval (myTimer);
       });
-    
+
       d3.select("#chart4-btn-stop").on("click", function() {
         clearInterval (myTimer);
         slider.value(slider.min());
       });
-    
+
       d3.select("#chart4-btn-forward").on("click", function() {
         clearInterval (myTimer);
         if (slider.value().toFixed(0) == slider.max().toFixed(0)) {
@@ -601,7 +601,7 @@ function chart4(data) {
           slider.value(slider.value()+1)
         }
       });
-    
+
       d3.select("#chart4-btn-backward").on("click", function() {
         clearInterval (myTimer);
         if (slider.value().toFixed(0) == slider.min().toFixed(0)) {
@@ -610,17 +610,17 @@ function chart4(data) {
           slider.value(slider.value()-1)
         }
       });
-    
+
       d3.select("#chart4-btn-fast-forward").on("click", function() {
         clearInterval (myTimer);
         slider.value(slider.max());
       });
-    
+
       d3.select("#chart4-btn-fast-backward").on("click", function() {
         clearInterval (myTimer);
         slider.value(slider.min());
       });
-    
+
       d3.select("#chart4-learning-rate").on("input", function() {
         learning_rate = +this.value;
         steps_dict = {0:[theta0_init,theta1_init]};
@@ -641,7 +641,7 @@ function chart4(data) {
         updateLossDot(point3d.rotateY(beta + startAngleY).rotateX(alpha + startAngleX)([{x:theta0,y:eq(currentData, theta0,theta1),z:theta1}]));
         updateMathJax(theta0, theta1);
       });
-    
+
       d3.select("#chart4-theta1-init").on("input", function() {
         theta1_init = +this.value;
         steps_dict = {0:[theta0_init,theta1_init]};
@@ -688,7 +688,7 @@ function chart4(data) {
         slider.value(0);
         let normalizeButton = document.getElementById("chart4-normalize-check");
         if (normalizeButton.checked) {normalizeButton.click()};
-        
+
         learning_rate = 0.05;
         theta0_init = 8.5;
         theta1_init = -4
@@ -709,7 +709,7 @@ function chart4(data) {
         slider.value(_.random(0,200));
         let normalizeButton = document.getElementById("chart4-normalize-check");
         if (!normalizeButton.checked) {normalizeButton.click()};
-        
+
         learning_rate = 0.05;
         theta0_init = 8.5;
         theta1_init = -4

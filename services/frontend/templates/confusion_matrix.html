@@ -17,7 +17,7 @@ td.vertical
   text-align: center;
 }
 
-td.vertical span 
+td.vertical span
 {
   -ms-writing-mode: tb-rl;
   -webkit-writing-mode: vertical-rl;
@@ -49,18 +49,18 @@ td.vertical span
         <li>Receiving an email from the son of the Nigerian prince who, for whatever reason, wants to share his fortune with you</li>
     </ul>
     <p>
-        All of these examples have some sort of classification algorithm in the background that determines the most appropriate action. In my experience, the goal of a classification task in most cases is to make a recommendation. Books, songs, movies, products, channels, hotels - you name it. However, there are many more classification tasks, such as automatically classifying emails as spam or determining whether a customer is creditworthy or not. 
+        All of these examples have some sort of classification algorithm in the background that determines the most appropriate action. In my experience, the goal of a classification task in most cases is to make a recommendation. Books, songs, movies, products, channels, hotels - you name it. However, there are many more classification tasks, such as automatically classifying emails as spam or determining whether a customer is creditworthy or not.
     </p>
     <p>
-        There are multiple approaches to constructing a classification algorithm and different algorithms performer better or worse than others. Even the same algorithm performs differently as soon as you start tweaking its internal hyperparameters. Hence, there must be a way to evaluate the performance of different classification algorithms so we can compare and improve them. This is where a major concept in machine learning comes into play: the confusion matrix. Let's get right into it, you can get an idea of how I structured the remaining parts of this post in the table of contents below. 
+        There are multiple approaches to constructing a classification algorithm and different algorithms performer better or worse than others. Even the same algorithm performs differently as soon as you start tweaking its internal hyperparameters. Hence, there must be a way to evaluate the performance of different classification algorithms so we can compare and improve them. This is where a major concept in machine learning comes into play: the confusion matrix. Let's get right into it, you can get an idea of how I structured the remaining parts of this post in the table of contents below.
     </p>
     <div id="toc-parent"></div>
     <h1 class="section-heading">Introduction</h1>
     <p>
-        Honestly, the confusion matrix is fairly simple to understand, although it is such an important concept. A confusion matrix is a \(n \times n\) matrix containing the dataset's ground truth labels and the predictions of a classifier. Each cell contains a count of how often the classifier predicted a particular label to a given ground truth. The resulting matrix contains all the information you need to evaluate if the trained model is good or bad at predicting classes. 
+        Honestly, the confusion matrix is fairly simple to understand, although it is such an important concept. A confusion matrix is a \(n \times n\) matrix containing the dataset's ground truth labels and the predictions of a classifier. Each cell contains a count of how often the classifier predicted a particular label to a given ground truth. The resulting matrix contains all the information you need to evaluate if the trained model is good or bad at predicting classes.
     </p>
     <p>
-        Confusion matrices come in different shapes since the \(n\) depends on the amount of labels. A classifier that assigns handwritten letters will have a \(26 \times 26\) confusion matrix assuming that we're working with a standard latin alphabet. However, a classifier that assigns handwritten digits will have a \(10 \times 10\) confusion matrix. The point I want to stress is that confusion matrices might look different but the resulting metrics remain unchanged.  
+        Confusion matrices come in different shapes since the \(n\) depends on the amount of labels. A classifier that assigns handwritten letters will have a \(26 \times 26\) confusion matrix assuming that we're working with a standard latin alphabet. However, a classifier that assigns handwritten digits will have a \(10 \times 10\) confusion matrix. The point I want to stress is that confusion matrices might look different but the resulting metrics remain unchanged.
     </p>
     <p>
         Let's continue by creating a really simple classification task and actually solving our problem statement by training a learning algorithm. Equipped with a trained model we can continue exploring the confusion matrix and learn about different strengths and pitfalls.
@@ -199,7 +199,7 @@ td.vertical span
         This is where the cutoff slider on the left hand side of the chart becomes important. As soon as you change the slider value you modify the cutoff value at which a prediction will count as a positive one. For example, assume the current cutoff value is 0.5 and you have a test instance with a probability of 0.6. In this case the prediction is that the instance is a five. However, if you change the cutoff value to 0.7 the prediction will change to not being a five. This is because only test instances with predicted probabilities greater equal than 0.7 are classified as fives. Simply said, the higher the cutoff value the more certain the algorithm must be for a test instance to be classified as a five.
     </p>
     <p>
-        Hence, modifying the cutoff value changes the predictions and as a consequence also the confusion matrix and its metrics. Pay close attention to the four metrics on the right hand side while moving the cutoff slider. One last word on the visualization as you might recognize that the numbers within the metrics calculation don't add up with the circles in the plot. The reason for this is that the metrics computation includes the entire test set, while I've limited the visualization to 500 test instances. Visualizing and transitioning the entire test set would result in 10,000 moving circles, which would make the entire chart extremely messy and would probably also crash your browser. However, to have an unbiased chart I've implemented the functionality to receive a fresh set of 500 test instances. Just click the <code>shuffle</code> button in the chart. Also make sure to use the tooltip to get more insights like the actual MNIST image, the predicted probability or the true label 🙂. 
+        Hence, modifying the cutoff value changes the predictions and as a consequence also the confusion matrix and its metrics. Pay close attention to the four metrics on the right hand side while moving the cutoff slider. One last word on the visualization as you might recognize that the numbers within the metrics calculation don't add up with the circles in the plot. The reason for this is that the metrics computation includes the entire test set, while I've limited the visualization to 500 test instances. Visualizing and transitioning the entire test set would result in 10,000 moving circles, which would make the entire chart extremely messy and would probably also crash your browser. However, to have an unbiased chart I've implemented the functionality to receive a fresh set of 500 test instances. Just click the <code>shuffle</code> button in the chart. Also make sure to use the tooltip to get more insights like the actual MNIST image, the predicted probability or the true label 🙂.
     </p>
 </div>
 <div id="chart1" class="col-md-12 col-lg-12 col-xl-12">

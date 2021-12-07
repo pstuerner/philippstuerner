@@ -13,7 +13,7 @@ function createVoronoi() {
 
   var rainbow1 = color.interpolateCubehelixLong(color.cubehelix(-100, 0.75, 0.35), color.cubehelix(80, 1.50, 0.8)),
       rainbow2 = color.interpolateCubehelixLong(color.cubehelix(80, 1.50, 0.8), color.cubehelix(260, 0.75, 0.35));
-  
+
   var n = Math.ceil(width*0.03),
       particles = new Array(n),
       radius = 20;

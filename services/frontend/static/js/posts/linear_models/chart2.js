@@ -23,7 +23,7 @@ function chart2(dataRaw) {
     nodes[1].innerHTML = String.raw`$$ ${rmse.toFixed(2)} $$`;
     nodes[2].innerHTML = String.raw`$$ ${mae.toFixed(2)} $$`;
     nodes[3].innerHTML = String.raw`$$ ${r2.toFixed(2)} $$`;
-    MathJax.typesetPromise(nodes).then(() => {}); 
+    MathJax.typesetPromise(nodes).then(() => {});
   }
 
   function updateMathjaxNewData () {
@@ -39,7 +39,7 @@ function chart2(dataRaw) {
         matXTXinv = latexifyMatrix(math.round(XTXinv,3),3,3,false,false,false),
         XTXinvXTy = math.multiply(math.multiply(XTXinv,XT),y_),
         matXTXinvXTy = latexifyMatrix(math.round(XTXinvXTy,2),3,1,false,false,false);
-    
+
     const nodes = [
       document.getElementById('chart2-theta0'),
       document.getElementById('chart2-theta1'),
@@ -47,7 +47,7 @@ function chart2(dataRaw) {
       document.getElementById('chart2-normal-equation'),
     ];
     MathJax.typesetClear(nodes);
-    
+
     nodes[0].innerHTML = String.raw`\(\theta_0=${theta0_best.toFixed(2)}\)`;
     nodes[1].innerHTML = String.raw`\(\theta_1=${theta1_best.toFixed(2)}\)`;
     nodes[2].innerHTML = String.raw`\(\theta_2=${theta2_best.toFixed(2)}\)`;
@@ -61,7 +61,7 @@ function chart2(dataRaw) {
                   & = ${matXTXinvXTy}
     \end{split}`;
     MathJax.typesetPromise(nodes).then(() => {});
-    
+
     d3.select('#chart2-normal-equation-code').text(
 `>>> import numpy as np
 >>> from sklearn.preprocessing import PolynomialFeatures
@@ -79,7 +79,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
   function updateResiduals () {
     let residualLines = [],
         lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
-    
+
     if (showResiduals) {
       data.forEach(function (d,i) {
         residualLines.push(
@@ -91,7 +91,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
           }
         )
       })
-      
+
       resids
       .selectAll('.residual')
       .data(residualLines)
@@ -153,8 +153,8 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
                           return {x: X.subset(math.index(1,i)), y: _.clamp(d,yExtent[0]-math.abs(yExtent[0]*.5),yExtent[1]+math.abs(yExtent[0]*.5))}
                         })
                     }],
-        lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y)); 
-    
+        lineGen = d3.line().x(d=>xScale(d.x)).y(d=>yScale(d.y));
+
     // Update regression
     regressionLine
     .selectAll('.line')
@@ -179,7 +179,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
             .attr('d', d => lineGen(d.v))
         }
     )
-    
+
   }
 
   function updateSliders () {
@@ -213,7 +213,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
         .value(theta1)
       )
       .attr('id','chart2-theta1-slider');
-    
+
     svgTheta2Slider
       .transition()
       .duration(500)
@@ -265,7 +265,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
         }
     )
   }
-  
+
   let data = _.sortBy(dataRaw.data, [function(o) { return o.X; }]),
       theta0_best = dataRaw.theta0_best,
       theta1_best = dataRaw.theta1_best,
@@ -275,10 +275,10 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
       X = math.matrix([data.map(d=>d.X_b), data.map(d=>d.X), data.map(d=>d.XX)]),
       y = math.matrix([data.map(d=>d.y)]),
       yMean = math.mean(y);
-      
+
   let theta, yHat, yHatRange, residuals, squaredResiduals, mse, rmse, mae, r2,
       showResiduals = false;
-  
+
   // Define margin and size
   let margin = {top: 20, right: 30, bottom: 30, left: 40},
       width = d3.select('#chart2-graph').node().getBoundingClientRect().width - margin.left - margin.right,
@@ -286,11 +286,11 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
       marginSliders = {top: 0, right: 50, bottom: 0, left: 50},
       widthSliders = d3.select('#chart2-theta0-container').node().getBoundingClientRect().width - marginSliders.left - marginSliders.right,
       heightSliders = d3.select('#chart2-theta0-container').node().getBoundingClientRect().height - marginSliders.top - marginSliders.bottom;
-  
+
   // Define the scales
   let xScale = d3.scaleLinear().range([0, width]),
       yScale = d3.scaleLinear().range([height, 0]);
-  
+
   // Define sliders
   let theta0Slider = d3
                     .sliderBottom()
@@ -346,7 +346,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
                       updateRegression()
                       updateResiduals()
                 });
-  
+
   // Create chart
   let svg = d3.select("#chart2-graph")
               .append("svg")
@@ -355,7 +355,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
               .call(responsivefy)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
+
   // Apply clip
   svg
     .append('clipPath')
@@ -363,7 +363,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
     .append('rect')
     .attr('width', width)
     .attr('height', height);
-  
+
   // Create axes
   let xAxis = svg.append("g").attr("transform", `translate(0,${height})`),
       yAxis = svg.append("g");
@@ -412,7 +412,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
   updateResiduals()
   updateScatter()
   updateRegression()
-  
+
   d3.selectAll('.chart2-new-data').on('click', function() {
     d3.json('https://api.philippstuerner.com/data/quadratic?return_theta=true&return_test=false&noise=4').then(function(dataRaw) {
       data = _.sortBy(dataRaw.data, [function(o) { return o.X; }])
@@ -424,7 +424,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
       X = math.matrix([data.map(d=>d.X_b), data.map(d=>d.X), data.map(d=>d.XX)]),
       y = math.matrix([data.map(d=>d.y)]),
       yMean = math.mean(y);
-      
+
       updateSliders()
       updateAxis()
       predict()
@@ -454,5 +454,5 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(2)}, ${theta2_best.toFix
 }
 
 d3.json('https://api.philippstuerner.com/data/quadratic?return_theta=true&return_test=false&noise=4').then(function(dataRaw) {
-    chart2(dataRaw); 
+    chart2(dataRaw);
   });

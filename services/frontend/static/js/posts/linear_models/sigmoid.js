@@ -23,7 +23,7 @@ let xAxisSvg = svgSigmoid.append("g").attr('class', 'axis x').attr("transform", 
     yAxisSvg = svgSigmoid.append("g").attr('class', 'axis y').attr("transform", `translate(${width/2},0)`),
     xAxis = d3.axisBottom().scale(xScale).ticks(16),
     yAxis = d3.axisLeft().scale(yScale).tickValues([0.2,0.4,0.6,0.8,1.0]);
-        
+
 xAxisSvg.call(xAxis);
 yAxisSvg.call(yAxis);
 
@@ -93,10 +93,10 @@ function mousemove() {
         d = x0 - d0.X > d1.X - x0 ? d1 : d0,
         nodes = tooltipText.select('.tooltip-text').nodes(),
         shift = d.X<-3 ? 35 : 0;
-    
+
     focus.select("circle.y").attr("transform", `translate(${xScale(d.X)}, ${yScale(d.y)})`);
     tooltipText.select(".tooltip-container").attr("transform", `translate(${xScale(d.X)}, ${yScale(d.y)-shift})`);
-    
+
     nodes[0].innerHTML = String.raw`\(\sigma(t) = ${(1/(1+Math.pow(Math.E, -d.X))).toFixed(3)}\)`
     MathJax.typesetPromise(nodes).then(() => {});
 }
