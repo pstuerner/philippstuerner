@@ -1,6 +1,8 @@
 node_modules
 venv
 letsencrypt
+Pipfile
+Pipfile.lock
 
 **/*.pyc
 **/*.env
