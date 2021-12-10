@@ -20,7 +20,7 @@ all_posts = [
     {
         "id": "gradient_descent",
         "title": "Gradient Descent",
-        "subtitle": """Have a deep dive into one of the most important optimization algorithms in machine learning.""",
+        "subtitle": "Have a deep dive into one of the most important optimization algorithms in machine learning.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on November 5, 2021""",
@@ -47,6 +47,15 @@ all_posts = [
 @app.get("/", response_class=HTMLResponse)
 @app.get("/index", response_class=HTMLResponse)
 async def index(request: Request):
+    """A function to tell FastAPI how to handle the home and index endpoints.
+
+    Args:
+        request (Request): The request.
+
+    Returns:
+        templates.TemplateResponse: The index.html template formatted with all posts of
+            the above all_posts list.
+    """
     return templates.TemplateResponse(
         "index.html", {"request": request, "posts": all_posts}
     )
@@ -54,9 +63,26 @@ async def index(request: Request):
 
 @app.get("/about", response_class=HTMLResponse)
 async def about(request: Request):
+    """A function to tell FastAPI how to handle the about endpoint.
+
+    Args:
+        request (Request): The request.
+
+    Returns:
+        templates.TemplateResponse: The about.html template.
+    """
     return templates.TemplateResponse("about.html", {"request": request})
 
 
 @app.get("/posts/{post_id}", response_class=HTMLResponse)
 async def post(request: Request, post_id: str):
+    """A function to tell FastAPI how to handle the individual posts.
+
+    Args:
+        request (Request): The request.
+        post_id (str): Unique identifier of the post to correctly map it to its html file.
+
+    Returns:
+        templates.TemplateResponse: The post's corresponding html file.
+    """
     return templates.TemplateResponse(f"{post_id}.html", {"request": request})

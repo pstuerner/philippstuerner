@@ -1,51 +1,74 @@
-function latexifyMatrix (matrix, rows, cols, row_dots=false, col_dots=false, ddot=false) {
+function latexifyMatrix(
+    matrix,
+    rows,
+    cols,
+    row_dots = false,
+    col_dots = false,
+    ddot = false
+) {
     let matrixSmall = [];
 
-    row_dots = !(row_dots===false) ? row_dots -1 : row_dots;
-    col_dots = !(col_dots===false) ? col_dots - 1 : col_dots;
-    // debugger;
-    for (let r=0; r<rows; ++r) {
-      if (cols > 1) {
-        matrixSmall.push(math.subset(math.row(matrix,r),math.index(0,_.range(cols))).valueOf()[0])
-      } else {
-        matrixSmall.push([math.row(matrix,r)])
-      }
+    row_dots = !(row_dots === false) ? row_dots - 1 : row_dots;
+    col_dots = !(col_dots === false) ? col_dots - 1 : col_dots;
+
+    for (let r = 0; r < rows; ++r) {
+        if (cols > 1) {
+            matrixSmall.push(
+                math
+                    .subset(math.row(matrix, r), math.index(0, _.range(cols)))
+                    .valueOf()[0]
+            );
+        } else {
+            matrixSmall.push([math.row(matrix, r)]);
+        }
     }
 
-    matrixSmall = math.matrix(matrixSmall)
+    matrixSmall = math.matrix(matrixSmall);
 
-    if (!(row_dots===false)) {
-      let dot_cell = cols % 2 == 0 ? cols/2 : Math.round(cols/2)-1;
-      for (let c=0;c<cols;++c) {
-        if (!(c==dot_cell)) {
-          matrixSmall._data[row_dots][c] = null
-        } else {
-          matrixSmall._data[row_dots][c] = 999
+    if (!(row_dots === false)) {
+        let dot_cell = cols % 2 == 0 ? cols / 2 : Math.round(cols / 2) - 1;
+        for (let c = 0; c < cols; ++c) {
+            if (!(c == dot_cell)) {
+                matrixSmall._data[row_dots][c] = null;
+            } else {
+                matrixSmall._data[row_dots][c] = 999;
+            }
         }
-      }
     }
 
-    if (!(col_dots===false)) {
-      let dot_cell = rows % 2 == 0 ? rows/2 : Math.round(rows/2)-1;
-      for (let r=0;r<rows;++r) {
-        if (!(r==dot_cell)) {
-          matrixSmall._data[r][col_dots] = null
-        } else {
-          matrixSmall._data[r][col_dots] = -999
+    if (!(col_dots === false)) {
+        let dot_cell = rows % 2 == 0 ? rows / 2 : Math.round(rows / 2) - 1;
+        for (let r = 0; r < rows; ++r) {
+            if (!(r == dot_cell)) {
+                matrixSmall._data[r][col_dots] = null;
+            } else {
+                matrixSmall._data[r][col_dots] = -999;
+            }
         }
-      }
     }
 
     if (ddot) {
-      matrixSmall._data[rows-1][cols-1] = 1530
+        matrixSmall._data[rows - 1][cols - 1] = 1530;
     }
 
-    let matrixStr = math.matrix(matrixSmall).toString()
-    let matrixTex = math.parse(matrixStr).toTex().replaceAll('null','').replace('-999','\\dots').replace('999','\\vdots').replace('1530','\\ddots')
+    let matrixStr = math.matrix(matrixSmall).toString();
+    let matrixTex = math
+        .parse(matrixStr)
+        .toTex()
+        .replaceAll("null", "")
+        .replace("-999", "\\dots")
+        .replace("999", "\\vdots")
+        .replace("1530", "\\ddots");
 
-    return matrixTex
-  }
+    return matrixTex;
+}
 
+/**
+ * @name responsivefy
+ * @description A function that makes D3 charts responsive.
+ * Taken from https://brendansudol.com/writing/responsive-d3
+ * @param {object} svg
+ */
 function responsivefy(svg) {
     // get container + svg aspect ratio
     var container = d3.select(svg.node().parentNode),
@@ -73,8 +96,12 @@ function responsivefy(svg) {
     }
 }
 
+/**
+ * @name arrAvg
+ * @description A function that computes the mean of an array.
+ */
 function arrAvg(arr) {
-    return arr.reduce((a,b) => a + b, 0) / arr.length;
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
 
-export {responsivefy, arrAvg, latexifyMatrix}
+export { responsivefy, arrAvg, latexifyMatrix };

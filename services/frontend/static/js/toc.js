@@ -1,5 +1,7 @@
-window.onload = function() {
-    var parents = document.querySelectorAll('[data-toc]');
+// Based on https://github.com/jgallen23/toc
+
+window.onload = function () {
+    var parents = document.querySelectorAll("[data-toc]");
 
     if (!parents) return 0;
 
@@ -14,27 +16,22 @@ window.onload = function() {
 };
 
 function toc(parent, nth) {
-    var tocNode = document.createElement('ASIDE');
-    var tocContentNode = document.createElement('DIV');
-    var tocHeaderNode = document.createElement('H3');
-    var tocHeaderTextNode = document.createTextNode('Table of content');
+    var tocNode = document.createElement("ASIDE");
+    var tocContentNode = document.createElement("DIV");
+    var tocHeaderNode = document.createElement("H3");
+    var tocHeaderTextNode = document.createTextNode("Table of content");
     // Using Array() to convert from the NodeList results in a object like this: [NodeList(n)],
     // which must be accessed using double index: allHeaders[0][n]. Calling Array(allHeaders)
     // after the variable has been defined take to a different behavior and data can be accessed
     // normally as allHeaders[n].
-    var allHeaders = Array.from(parent.querySelectorAll('.section-heading'));//('H1, H2, H3, H4, H5, H6'));
+    var allHeaders = Array.from(parent.querySelectorAll(".section-heading")); //('H1, H2, H3, H4, H5, H6'));
     var listElArray = [];
-    var span,
-        i,
-        j,
-        list,
-        listEl,
-        text;
+    var span, i, j, list, listEl, text;
 
     // Finding all the <h*> node and making the list element. The listElArray is completed but not hierarchically ordered.
     for (i = 0; i < allHeaders.length; i++) {
-        listEl = document.createElement('LI');
-        span = document.createElement('SPAN');
+        listEl = document.createElement("LI");
+        span = document.createElement("SPAN");
         text = document.createTextNode(allHeaders[i].innerText);
         span.appendChild(text);
         listEl.appendChild(span);
@@ -43,14 +40,17 @@ function toc(parent, nth) {
 
     // Building the hierarchy's array. It shrinks because low level items (e.g. <h3>)
     // are appended to higher ones (e.g. <h2> or <h1> in case no <h2> exist before).
-    for (i = allHeaders.length; i--;) {
-        for (j = i; j--;) {
-            if(allHeaders[i].tagName > allHeaders[j].tagName) {
+    for (i = allHeaders.length; i--; ) {
+        for (j = i; j--; ) {
+            if (allHeaders[i].tagName > allHeaders[j].tagName) {
                 if (listElArray[j].children[1] == undefined) {
-                    list = document.createElement('OL');
+                    list = document.createElement("OL");
                     listElArray[j].appendChild(list);
                 }
-                listElArray[j].children[1].insertBefore(listElArray[i], listElArray[j].children[1].firstChild);
+                listElArray[j].children[1].insertBefore(
+                    listElArray[i],
+                    listElArray[j].children[1].firstChild
+                );
                 listElArray.splice(i, 1);
                 allHeaders.splice(i, 1);
                 break;
@@ -59,7 +59,7 @@ function toc(parent, nth) {
     }
 
     // Filling the tocNode and appending it to the DOM.
-    list = document.createElement('OL');
+    list = document.createElement("OL");
     for (i = 0; i < listElArray.length; i++) {
         list.appendChild(listElArray[i]);
     }
@@ -67,60 +67,55 @@ function toc(parent, nth) {
     tocNode.appendChild(tocHeaderNode);
     tocContentNode.appendChild(list);
     tocNode.appendChild(tocContentNode);
-    tocNode.setAttribute('class', "toc-default");
-    tocNode.setAttribute('id', "toc-" + nth);
+    tocNode.setAttribute("class", "toc-default");
+    tocNode.setAttribute("id", "toc-" + nth);
     parent.insertBefore(tocNode, parent.firstChild);
 }
 
-
-function tocMakeLinks (parent) {
-    var tocLi = parent.firstChild.querySelectorAll('LI');
-    var tocParentId = parent.getAttribute('data-toc-parent-id');
+function tocMakeLinks(parent) {
+    var tocLi = parent.firstChild.querySelectorAll("LI");
+    var tocParentId = parent.getAttribute("data-toc-parent-id");
     var tocParent = document.getElementById(tocParentId);
 
     tocLi.forEach(function (liNode, i) {
-        liNode.firstChild.addEventListener(
-            "click",
-            function () {
-                parent.querySelectorAll('.section-heading')[i].scrollIntoView();
-            }
-        );
+        liNode.firstChild.addEventListener("click", function () {
+            parent.querySelectorAll(".section-heading")[i].scrollIntoView();
+        });
     });
 }
 
 // Allow user to add his/her own classes through data-toc-class attribute
-function tocCustomClass (parent) {
-    var tocClass = parent.getAttribute('data-toc-class');
+function tocCustomClass(parent) {
+    var tocClass = parent.getAttribute("data-toc-class");
 
     if (tocClass) {
-        parent.firstChild.setAttribute('class', "toc-default " + tocClass);
+        parent.firstChild.setAttribute("class", "toc-default " + tocClass);
     }
 }
 
 // Allow user to set his/her own id through data-toc-id attribute
-function tocCustomId (parent) {
-    var tocId = parent.getAttribute('data-toc-id');
+function tocCustomId(parent) {
+    var tocId = parent.getAttribute("data-toc-id");
 
     if (tocId) {
-        parent.firstChild.setAttribute('id', tocId);
+        parent.firstChild.setAttribute("id", tocId);
     }
 }
 
 // Allow user to set his/her own header through data-toc-header attribute
-function tocCustomHeader (parent) {
-    var tocHeader = parent.getAttribute('data-toc-header');
+function tocCustomHeader(parent) {
+    var tocHeader = parent.getAttribute("data-toc-header");
 
     if (tocHeader && tocHeader.toLowerCase() == "none") {
         parent.firstChild.removeChild(parent.firstChild.firstChild);
-    }
-    else if (tocHeader) {
+    } else if (tocHeader) {
         parent.firstChild.firstChild.innerText = tocHeader;
     }
 }
 
 // Allow user to append toc to a different element then the one it is generated for.
-function tocCustomParent (parent) {
-    var tocParentId = parent.getAttribute('data-toc-parent-id');
+function tocCustomParent(parent) {
+    var tocParentId = parent.getAttribute("data-toc-parent-id");
     var tocParent = document.getElementById(tocParentId);
 
     if (tocParent) {

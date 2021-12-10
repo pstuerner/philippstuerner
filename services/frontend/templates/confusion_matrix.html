@@ -3,20 +3,9 @@
 {% block head %}
 {{ super() }}
 <style>
-table, th, td {
-    border-collapse: collapse;
-}
-
-td {
-    min-width: 50px;
-}
-
-td.vertical
-{
-  vertical-align: middle;
-  text-align: center;
-}
-
+table, th, td {border-collapse: collapse;}
+td {min-width: 50px;}
+td.vertical {vertical-align: middle; text-align: center;}
 td.vertical span
 {
   -ms-writing-mode: tb-rl;
@@ -204,7 +193,6 @@ td.vertical span
 </div>
 <div id="chart1" class="col-md-12 col-lg-12 col-xl-12">
     <div class="row">
-        <!-- <div style="text-align: center;"><a class="cutoff-slider"></a></div> -->
         <div id="cutoff-slider" style="height: 30em; position: relative;" class="col-1 p-0"></div>
         <div id="force" style="height: 30em; position: relative;" class="col-8 p-0"></div>
         <div id="metrics" class="col-3 p-0" style="height: 30em;  position: relative; font-size:10pt;">

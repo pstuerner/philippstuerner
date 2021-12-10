@@ -21,6 +21,19 @@ app.add_middleware(
 
 
 def logreg_data(y_idx=2, X_idx=2, return_theta=False, normalize=False, **kwargs):
+    """This is a function to prepare the iris dataset that can be used for logistic regression.
+
+    Args:
+        y_idx (int): The label (iris type) to return.
+        X_idx (int): The feature (petal width, sepal length...) to return.
+        return_theta (bool): Return the best possible intercept and coefficient.
+        normalize (bool): Mean normalize the feature.
+        **kwargs: Arbitrary keyword arguments.
+
+    Returns:
+        dict: A dictionary containing the requested dataset including the corresponding
+            (normalized) feature, label, intercept, coefficient (if requested).
+    """
     X, y = load_iris(return_X_y=True, as_frame=True)
 
     X = X.iloc[:, X_idx]
@@ -43,6 +56,16 @@ def logreg_data(y_idx=2, X_idx=2, return_theta=False, normalize=False, **kwargs)
 
 
 def linear_data(return_theta=True, **kwargs):
+    """This is a function that returns a dataset with an underlying linear structure.
+
+    Args:
+        return_theta (bool): Return the best possible intercept and coefficient.
+        **kwargs: Arbitrary keyword arguments.
+
+    Returns:
+        dict: A dictionary containing the requested dataset including the corresponding
+            intercept and coefficient (if requested).
+    """
     m = 50
     plus_minus = 1 if np.random.random() < 0.5 else -1
     X = np.random.randint(1, 8) * np.random.rand(m, 1)
@@ -66,6 +89,18 @@ def linear_data(return_theta=True, **kwargs):
 
 
 def quadratic_data(return_theta=False, return_test=False, noise=4, **kwargs):
+    """This is a function that returns a dataset with an underlying quadratic structure.
+
+    Args:
+        return_theta (bool): Return the best possible intercept and coefficient.
+        return_test (bool): Return a separate hold-out set.
+        noise (int): Specifies the dataset's underlying noise.
+        **kwargs: Arbitrary keyword arguments.
+
+    Returns:
+        dict: A dictionary containing the requested dataset including the corresponding
+            intercept, coefficient and hold-out set (if requested).
+    """
     m = 100
     flip = -1 if np.random.rand() > 0.5 else 1
 
@@ -105,6 +140,19 @@ def quadratic_data(return_theta=False, return_test=False, noise=4, **kwargs):
 
 
 def poly_data(degrees=30, noise=4, **kwargs):
+    """This is a function that returns multiple quadratic datasets with different amounts
+    of polynomial features.
+
+    Args:
+        degrees (int): How many datasets to create. E.g. degrees=5 creates five datasets with
+            one to five polynomial features.
+        noise (int): Specifies the dataset's underlying noise.
+        **kwargs: Arbitrary keyword arguments.
+
+    Returns:
+        dict: A dictionary containing the requested datasets train and test datasets and the
+            corresponding polynomial features.
+    """
     d = quadratic_data(return_test=True, noise=noise)
     train = pd.DataFrame(d["data_train"])[["i", "X", "y"]]
     test = pd.DataFrame(d["data_test"])[["i", "X", "y"]]
@@ -155,6 +203,23 @@ async def data(
     y_idx: Optional[int] = 0,
     noise: Optional[int] = 0,
 ):
+    """A general function to process data requests from the frontend.
+
+    Args:
+        request (Request): The frontend's request.
+        func (str): A string that maps the request to the actual function.
+        return_theta (bool): Return the best possible intercept and coefficient.
+        return_test (bool): Return a separate hold-out set.
+        degrees (int): How many datasets to create. E.g. degrees=5 creates five datasets with
+            one to five polynomial features.
+        normalize (bool): Mean normalize the feature.
+        y_idx (int): The label (iris type) to return.
+        X_idx (int): The feature (petal width, sepal length...) to return.
+        noise (int): Specifies the dataset's underlying noise.
+
+    Returns:
+        dict: The mapped function's result. Always a dictionary.
+    """
     kwargs = {
         "return_theta": return_theta,
         "return_test": return_test,
@@ -173,4 +238,5 @@ async def data(
 
 @app.get("/")
 async def root(request: Request):
+    """Just a message to return something on the home endpoint"""
     return "This is the home endpoint of my FastAPI 🏠."

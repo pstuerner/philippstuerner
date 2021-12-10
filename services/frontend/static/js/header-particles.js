@@ -1,11 +1,15 @@
-/* https://github.com/d3/d3-timer Copyright 2015 Mike Bostock */
-// "undefined"==typeof requestAnimationFrame&&(requestAnimationFrame="undefined"!=typeof window&&(window.msRequestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||window.oRequestAnimationFrame)||function(e){return setTimeout(e,17)}),function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n(e.timer={})}(this,function(e){"use strict";function n(){r=m=0,c=1/0,t(u())}function t(e){if(!r){var t=e-Date.now();t>24?c>e&&(m&&clearTimeout(m),m=setTimeout(n,t),c=e):(m&&(m=clearTimeout(m),c=1/0),r=requestAnimationFrame(n))}}function i(e,n,i){i=null==i?Date.now():+i,null!=n&&(i+=+n);var o={callback:e,time:i,flush:!1,next:null};a?a.next=o:f=o,a=o,t(i)}function o(e,n,t){t=null==t?Date.now():+t,null!=n&&(t+=+n),l.callback=e,l.time=t}function u(e){e=null==e?Date.now():+e;var n=l;for(l=f;l;)e>=l.time&&(l.flush=l.callback(e-l.time,e)),l=l.next;l=n,e=1/0;for(var t,i=f;i;)i.flush?i=t?t.next=i.next:f=i.next:(i.time<e&&(e=i.time),i=(t=i).next);return a=t,e}var a,m,r,f,l,c=1/0;e.timer=i,e.timerReplace=o,e.timerFlush=u});
+// Taken from https://bl.ocks.org/mbostock/157333662ef11c151080
 
+/**
+ * @name createParticles
+ * @description Main function that runs the d3 visualization.
+ */
 function createParticles() {
-    var width = d3.select('header').node().getBoundingClientRect().width;
-        height = d3.select('header').node().getBoundingClientRect().height;
+    var width = d3.select("header").node().getBoundingClientRect().width;
+    height = d3.select("header").node().getBoundingClientRect().height;
 
-    var canvas = d3.select("#canvas-particles")
+    var canvas = d3
+            .select("#canvas-particles")
             .attr("width", width)
             .attr("height", height)
             .attr("preserveAspectRatio", "xMidYMid meet")
@@ -18,53 +22,62 @@ function createParticles() {
         minDistance = 40,
         maxDistance = 60,
         minDistance2 = minDistance * minDistance,
-        maxDistance2 = maxDistance * maxDistance
+        maxDistance2 = maxDistance * maxDistance;
 
     var tau = 2 * Math.PI,
-        n = Math.ceil(width*0.13),
+        n = Math.ceil(width * 0.13),
         particles = new Array(n);
 
     for (var i = 0; i < n; ++i) {
         particles[i] = {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: 0,
-        vy: 0
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: 0,
+            vy: 0,
         };
     }
 
-    timer.timer(function(elapsed) {
+    timer.timer(function (elapsed) {
         context.save();
-        context.clearRect(0, 0, width*2, height*2);
+        context.clearRect(0, 0, width * 2, height * 2);
 
         for (var i = 0; i < n; ++i) {
-        var p = particles[i];
-        p.x += p.vx; if (p.x < -maxDistance) p.x += width + maxDistance * 2; else if (p.x > width + maxDistance) p.x -= width + maxDistance * 2;
-        p.y += p.vy; if (p.y < -maxDistance) p.y += height + maxDistance * 2; else if (p.y > height + maxDistance) p.y -= height + maxDistance * 2;
-        p.vx += 0.2 * (Math.random() - .5) - 0.01 * p.vx;
-        p.vy += 0.2 * (Math.random() - .5) - 0.01 * p.vy;
-        context.beginPath();
-        context.arc(p.x, p.y, radius, 0, tau);
-        context.fillStyle = '#06d42c';
-        context.fill();
-        }
-
-        for (var i = 0; i < n; ++i) {
-        for (var j = i + 1; j < n; ++j) {
-            var pi = particles[i],
-                pj = particles[j],
-                dx = pi.x - pj.x,
-                dy = pi.y - pj.y,
-                d2 = dx * dx + dy * dy;
-            if (d2 < maxDistance2) {
-            context.globalAlpha = d2 > minDistance2 ? (maxDistance2 - d2) / (maxDistance2 - minDistance2) : 1;
+            var p = particles[i];
+            p.x += p.vx;
+            if (p.x < -maxDistance) p.x += width + maxDistance * 2;
+            else if (p.x > width + maxDistance) p.x -= width + maxDistance * 2;
+            p.y += p.vy;
+            if (p.y < -maxDistance) p.y += height + maxDistance * 2;
+            else if (p.y > height + maxDistance)
+                p.y -= height + maxDistance * 2;
+            p.vx += 0.2 * (Math.random() - 0.5) - 0.01 * p.vx;
+            p.vy += 0.2 * (Math.random() - 0.5) - 0.01 * p.vy;
             context.beginPath();
-            context.moveTo(pi.x, pi.y);
-            context.lineTo(pj.x, pj.y);
-            context.strokeStyle = "#05961f";
-            context.stroke();
-            }
+            context.arc(p.x, p.y, radius, 0, tau);
+            context.fillStyle = "#06d42c";
+            context.fill();
         }
+
+        for (var i = 0; i < n; ++i) {
+            for (var j = i + 1; j < n; ++j) {
+                var pi = particles[i],
+                    pj = particles[j],
+                    dx = pi.x - pj.x,
+                    dy = pi.y - pj.y,
+                    d2 = dx * dx + dy * dy;
+                if (d2 < maxDistance2) {
+                    context.globalAlpha =
+                        d2 > minDistance2
+                            ? (maxDistance2 - d2) /
+                              (maxDistance2 - minDistance2)
+                            : 1;
+                    context.beginPath();
+                    context.moveTo(pi.x, pi.y);
+                    context.lineTo(pj.x, pj.y);
+                    context.strokeStyle = "#05961f";
+                    context.stroke();
+                }
+            }
         }
 
         context.restore();
