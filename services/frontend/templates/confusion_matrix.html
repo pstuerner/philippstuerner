@@ -24,7 +24,7 @@ td.vertical span
 
 {% block post_content %}
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
-    <p><b>tl;dr:</b> the confusion matrix and its metrics are really powerful concepts which is why I've visualized them in an intuitive way using a simple MNIST classifier, d3.js, fancy tooltips and an interactive cutoff slider</p>
+    <p><b>tl;dr:</b> the confusion matrix and its metrics are really powerful concepts which is why I've visualized them in an intuitive way using a simple MNIST classifier, d3.js, fancy tooltips, and an interactive cutoff slider. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/confusion_matrix.html" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
     <hr>
     <p>
         Classification tasks are among the most common problems in data science. Take a look at the following examples and I am sure you will find yourself in one, if not all of them:
@@ -237,6 +237,11 @@ td.vertical span
     </div>
 </div>
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/confusion_matrix/cm.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         Feel free to play around with the cutoff slider. Can you spot any obvious patterns when the cutoff value is close to zero or one? How does it affect the true/false negatives and positives? What's the impact on the right hand side metrics? What's the optimal threshold for a really good F1 score? Give those questions a thought. You can click on the collapsed items below to see what my closing thoughts are.
     </p>

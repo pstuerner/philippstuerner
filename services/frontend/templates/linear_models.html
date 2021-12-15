@@ -51,7 +51,7 @@
 
 {% block post_content %}
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
-    <p><b>tl;dr:</b> although linear models are by far no rocket science they can be incredibly powerful. I've written a couple of D3.js charts that will help you to interactively understand how linear and logistic regression work, what polynomial features are, and why overfitting is so dangerous</p>
+    <p><b>tl;dr:</b> although linear models are by far no rocket science they can be incredibly powerful. I've written a couple of D3.js charts that will help you to interactively understand how linear and logistic regression work, what polynomial features are, and why overfitting is so dangerous. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/linear_models.html" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
     <hr>
     <p>
         Linear models were probably my first exposure to machine learning, though at that time I didn't really know what machine learning even is. I remember a lecture on econometrics in which we predicted a country's gross domestic product (GDP) using a linear regression. The professor couldn't really sell the topic in a sexy way, so I wasn't very enthusiastic about putting a straight line through a scatter plot and declared the lecture as utterly boring 😕. Today, I believe that linear models are among the most beautiful flavors in machine learning. Compared to other machine learning algorithms, linear models are very simple. This has the advantage that you can always reconstruct how the final prediction was made. However, linear models should not be underestimated, as they are incredibly versatile and can solve a wide range of problems.
@@ -123,6 +123,11 @@
 </div>
 
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart1.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         As you can see, \(\theta_0\) simply changes the vertical positioning, while \(\theta_1\) changes the slope of the line. But how to find the line that best approximates the scatter plot? The answer is to find the line to which the distance to all points is the smallest. This can be achieved by using different cost functions that quantify the fit of a line. Among the most common cost functions are:
     </p>
@@ -239,6 +244,11 @@
 </div>
 
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart2.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         First things first: we can see that the scatter plot has the shape of a parabola. This means that unlike the first D3.js chart, our dataset has a quadratic, rather than a linear relationship. \(\theta_2\) pushes and pulls the line inwards and outwards, respectively. For \(\theta_2=0\) we simply get a line. If we increase the absolute value of \(\theta_2\) the line turns into the shape of a parabola. Feel free to play around with the sliders, display the residuals and try to reduce them.
     </p>
@@ -337,6 +347,11 @@
 </div>
 
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart3.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         As mentioned earlier, linear regression is a high bias and low variance model. Simply put, linear regression has little flexibility since it assumes that the dataset can be explained linearly. Polynomial features are a way to reduce the bias of a linear regression model and at the same time increase its variance. In other words, the model becomes more flexible. Let's figure out what this looks like by changing the regression's degrees of freedom. Note: click on the hyperlinks in the text to see each scenario in the chart above.
     </p>
@@ -364,6 +379,11 @@
         Good news first: if you understand how linear regression works you're almost there. This is because under the hood logistic regression is also a linear model that makes a prediction based on the weighted sum of some input features (plus a bias term). The main difference is that the target variable we want to predict is between 0 and 1. The reason for this is simply that we are predicting probabilities and since probabilities are constrained to be in the range of 0 to 1 any other values wouldn't really make sense. To achieve this,  we simply squeeze the outputs of a linear regression into a corridor between zero and one by applying the logistic function. The logistic, often also referred to as sigmoid function, is defined as follows: $$ \sigma(t) = \frac{1}{1+e^{-t}} $$
     </p>
     <div id="sigmoid-chart" style="height: 20em;"></div>
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/sigmoid.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         \(\sigma(t)\) has a distinct S-shape and only outputs values between zero and one. This means that \(\hat{y} = \theta^{T}x\) becomes: $$ \hat{p} = \sigma(\theta^{T}x) $$ Determining whether an instance belongs to the positive or negative class is really easy just by looking at \(\hat{p}\): $$ \hat{y} = \begin{cases} 0 & \text{if } \hat{p} < 0.5 \\ 1 & \text{if } \hat{p} \geq 0.5 \end{cases} $$ Simple, right? The final prediction only depends on whether the probability \(\hat{p}\) is greater than or equal to 0.5. If \(\hat{p}\) is greater than or equal to 0.5 then \(\hat{y}=1\), otherwise \(\hat{y}=0\).
     </p>
@@ -433,6 +453,11 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
 </div>
 
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
+    <hr>
+    <p style="text-align: center;">
+        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart4.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+    </p>
+    <hr>
     <p>
         The continuously increasing blue sigmoid curve indicates the probability with which an instance belongs to the target class. The continuously decreasing red curve indicates the opposite, namely the probability with which an instance does not belong to the target class. This is really intuitive, since the red curve is simply defined as \(1 - \frac{1}{1+e^{-t}}\). The decision boundary is located at the intersection of the two curves. Both model parameters shift the decision boundary on the x-axis. While \(\theta_0\) shifts the whole sigmoid curve to the left and right, \(\theta_1\) changes the slope in the area of the decision boundary. Both parameters push the decision boundary to the right for small values and to the left for large values.
     </p>
