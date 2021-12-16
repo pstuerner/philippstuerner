@@ -4,7 +4,6 @@ letsencrypt
 Pipfile
 Pipfile.lock
 services/frontend/static/files
-services/mongojs/package*
 
 **/*.pyc
 **/*.env
