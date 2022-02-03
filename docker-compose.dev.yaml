@@ -16,7 +16,7 @@ services:
   mongojs:
     build: ./services/mongojs
     ports:
-      - "4567:4567"
+      - "8002:8002"
     env_file:
       - "./services/mongojs/mongojs.env"
     restart: always
