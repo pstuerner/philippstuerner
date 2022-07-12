@@ -1,0 +1,1 @@
+d3.json("https://mongodb.philippstuerner.com/api/conjugator/verbs?items=5").then(function (dataRaw) {console.log(dataRaw)})
