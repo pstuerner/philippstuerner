@@ -1,0 +1,19 @@
+{% extends "post.html" %}
+
+{% block title %}Don Conjugator{% endblock %}
+{% block heading %}Don Conjugator{% endblock %}
+{% block subheading %}Don Conjugator{% endblock %}
+{% block header_img %}donconjugator_header.jpg{% endblock %}
+
+{% block post_content %}
+<div class="col-md-10 col-lg-10 col-xl-8">
+  <p><b>tl;dr:</b> You can find the source code on <a href="" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
+  <hr>
+  <p>
+    Don Conjugator
+  </p>
+{% endblock %}
+
+{% block body_js %}
+<script type="module" src="{{ url_for('static', path='/js/posts/don_conjugator/base.js') }}"></script>
+{% endblock %}
