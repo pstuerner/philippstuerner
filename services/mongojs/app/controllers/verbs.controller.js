@@ -3,11 +3,7 @@ const Verbs = db.verbs;
 
 const MODES_MAPPING = {
   "indicativo": "Indicativo (Indicative)",
-<<<<<<< HEAD
   "subjuntivo": "Subjuntivo (Subjunctive)",
-=======
-  "subjunctivo": "Subjuntivo (Subjunctive)",
->>>>>>> a8e95c6efe50fe5e9b3afc350be86352cb7149c7
   "imperativo": "Imperativo (Imperative)",
   "infinitivo": "Infinitivo (Infinitive)",
   "gerundio": "Gerundio (Gerund)",
@@ -25,11 +21,7 @@ const TEMPS_MAPPING = {
   "condicional": "Condicional (Conditional)",
   "condicional perfecto": "Condicional perfecto (Conditional perfect)",
 
-<<<<<<< HEAD
   "preterito perfecto": "Pretérito perfecto (Present perfect)",
-=======
-  "present perfect": "Pretérito perfecto (Present perfect)",
->>>>>>> a8e95c6efe50fe5e9b3afc350be86352cb7149c7
   "preterito imperfecto 1": "Pretérito imperfecto 1 (Imperfect 1)",
   "preterito pluscuamperfecto 1": "Pretérito pluscuamperfecto 1 (Past perfect 1)",
   "preterito imperfecto 2": "Pretérito imperfecto 2 (Imperfect 2)",
