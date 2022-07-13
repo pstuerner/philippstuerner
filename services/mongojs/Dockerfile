@@ -5,8 +5,8 @@ COPY . .
 
 RUN npm install --production
 
-WORKDIR /app
+WORKDIR .
 
 EXPOSE 8002
 
-CMD [ "node", "main.js" ]
+CMD [ "node", "server.js" ]
