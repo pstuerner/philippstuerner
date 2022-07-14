@@ -41,12 +41,12 @@ exports.findAll = (req, res) => {
   const items = +req.query.items ? +req.query.items : 1000000;
   const mode = req.query.mode;
   let temps = req.query.temps;
-  let select = req.query.select;
+  let select = req.query.select ? req.query.select : "all";
   let query;
   let projection = {"sp": 1, "en": 1};
   let aggregation = [];
 
-  if (select) {
+  if (select != "all") {
 	  aggregation.push({"$match":{"sp":{"$in":select.split(',')}}})
   }
 
