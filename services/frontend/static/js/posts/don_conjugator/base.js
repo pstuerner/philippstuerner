@@ -133,7 +133,7 @@ function updateMode () {
 }
 
 function check (card) {
-    let answers = d3.selectAll('.answer').nodes().map(d=>d.value);
+    let answers = d3.selectAll('.answer').nodes().map(d=>d.value.trim());
     let truth = card['conjugation'].map(function (d) {
         if (['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'].includes(d.split(' ')[0])) {
             return d.split(' ').splice(1).join(' ')
@@ -184,7 +184,6 @@ d3.select('#go-button').on('click', function () {
    let corpus = d3.select('#corpus-select').property('value');
    let temps = d3.selectAll("input[type='checkbox']:checked").nodes().map(d=>d.value).join(',');
    let items = null ? d3.select('#items').property('value') == "all" : +d3.select('#items').property('value');
-//    let select = corpus == "top100" ? TOP100.join(",") : null
    
    cards = [];
    correctCount = 0;
@@ -263,7 +262,8 @@ d3.select("#next-button").on('click', function () {
 })
 
 d3.select('#sp-h3').on('click', function () {
-    d3.select(this).style('border', null).style('color', 'black')
+    d3.select(this).style('border', null).style('color', 'black');
+    $(".answer")[0].focus();
 })
 
 updateMode();
