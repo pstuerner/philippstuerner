@@ -1,4 +1,4 @@
-import { TOP100, TEMPS_IN_MODE, TEMPS_MAPPING, MODES_MAPPING } from "./util.js";
+import { TOP100, TEMPS_IN_MODE, TEMPS_MAPPING, MODES_MAPPING, CORPUS } from "./util.js";
 
 /**
      * @name fadeIn
@@ -31,6 +31,8 @@ let cards = [];
 let card = null;
 let revisit = false;
 let wordCountStart = null;
+let correctCount = 0;
+let wrongCount = 0;
 let errors = [];
 
 function shuffle(array) {
@@ -126,7 +128,8 @@ function updateMode () {
                     }
                 ),
             exit => exit.call(fadeOut, 500)
-        )
+        );
+    $(".answer")[0].focus();
 }
 
 function check (card) {
@@ -181,11 +184,16 @@ d3.select('#go-button').on('click', function () {
    let corpus = d3.select('#corpus-select').property('value');
    let temps = d3.selectAll("input[type='checkbox']:checked").nodes().map(d=>d.value).join(',');
    let items = null ? d3.select('#items').property('value') == "all" : +d3.select('#items').property('value');
-   let select = corpus == "top100" ? TOP100.join(",") : null
+//    let select = corpus == "top100" ? TOP100.join(",") : null
    
    cards = [];
+   correctCount = 0;
+   wrongCount = 0;
+
+   d3.select("#correct-count").text(correctCount);
+   d3.select("#wrong-count").text(wrongCount);
    
-   d3.json(`https://mongodb.philippstuerner.com/api/conjugator/verbs?items=${items}&mode=${mode}&temps=${temps}&select=${select}`).then(function (dataRaw) {
+   d3.json(`https://mongodb.philippstuerner.com/api/conjugator/verbs?items=${items}&mode=${mode}&temps=${temps}&select=${CORPUS[corpus]}`).then(function (dataRaw) {
         dataRaw.forEach(function (verb) {
             temps.split(',').forEach(function (temp) {
                 cards.push({
@@ -221,8 +229,8 @@ d3.select("#next-button").on('click', function () {
     cards.shift(0);
     
     let cardCheck = check(card);
-    let correctCount = +d3.select('#correct-count').text();
-    let wrongCount = +d3.select('#wrong-count').text();
+    // let correctCount = +d3.select('#correct-count').text();
+    // let wrongCount = +d3.select('#wrong-count').text();
 
     if (!cardCheck.correct) {
         wrongCount = wrongCount +1;

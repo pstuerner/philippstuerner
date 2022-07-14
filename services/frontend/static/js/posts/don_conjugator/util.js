@@ -46,4 +46,9 @@ const TEMPS_MAPPING = {
     "pasado": "Pasado (Perfect)"
   };
 
-export { TOP100, TEMPS_IN_MODE, TEMPS_MAPPING, MODES_MAPPING };
+const CORPUS = {
+  "top100": TOP100.join(","),
+  "all": "all"
+}
+
+export { TOP100, TEMPS_IN_MODE, TEMPS_MAPPING, MODES_MAPPING, CORPUS };
