@@ -1,0 +1,79 @@
+{% extends "post.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+.card {
+  background-color: transparent;
+  width: 300px;
+  height: 300px;
+  perspective: 1000px;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card.active .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card img, .card-img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  top:0;left:0;right:0;
+}
+
+.card-img-overlay {
+  transform: rotateY(180deg);
+  background:white;
+  color:black;
+}
+
+.card-text {
+  padding: 0;
+  margin: 0;
+}
+</style>
+{% endblock %}
+
+{% block title %}Don Conjugator{% endblock %}
+{% block heading %}Don Conjugator{% endblock %}
+{% block subheading %}Don Conjugator{% endblock %}
+{% block header_img %}donconjugator_header.jpg{% endblock %}
+
+{% block post_content %}
+<div class="col-md-10 col-lg-10 col-xl-8">
+  <h2 id="mode" style="text-align: center; margin-top: 2em;">{{ mode }}</h2>
+  {% for verb in verbs %}
+  <div class="card bg-dark text-white mx-auto">
+    <div class="card-inner" style="display: flex; align-items: center;">
+      <div>
+        <h4 id="card-temp" class="card-title">{{ verb[0] }}</h5>
+        <h5 id="card-en" class="card-title"></h5>
+      </div>
+      <div class="card-img-overlay">
+        <h5 id="card-sp" class="card-title">{{ verb[1] }}</h5>
+        <div id="card-conjugation"></div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block body_js %}
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script type="module" src="{{ url_for('static', path='/js/posts/don_conjugator/practice.js') }}"></script>
+<script>console.log('HI')</script>
+{% endblock %}

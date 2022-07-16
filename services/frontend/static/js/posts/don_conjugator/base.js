@@ -34,6 +34,7 @@ let wordCountStart = null;
 let correctCount = 0;
 let wrongCount = 0;
 let errors = [];
+let mode = d3.select("#mode-select").property('value');
 
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
@@ -60,8 +61,6 @@ function Counter(array) {
   }
 
 function updateMode () {
-    let mode = d3.select("#mode-select").property('value');
-
     d3.select('#temps-select')
         .selectAll(".form-check")
         .data(TEMPS_IN_MODE[mode])
@@ -94,7 +93,7 @@ function updateMode () {
 
  function play (card) {
     d3.select("#sp-h3").style('color', 'white').style("border", "3px solid black");
-    d3.select("#temp-h3").text(card["temp"]);
+    d3.select("#temp-h3").text(TEMPS_MAPPING[card["temp"]]);
     d3.select("#sp-h3").text(card["sp"]);
     d3.select("#en-h3").text(card["en"]);
     
@@ -152,28 +151,21 @@ function check (card) {
 function summarize (errors) {
     let uniqueErrors = _.uniq(errors);
     let counterErrors = _.countBy(errors, d => d["sp"]);
-
-    d3.select("#errors-container").selectAll(".errors-div")
-        .data(uniqueErrors)
-        .join(
-            enter => enter
-                .append("div")
-                .attr("class", "errors-div")
-                .html(
-                    (d) => `
-                    <div class="row">
-                        <div class="col">${counterErrors[d["sp"]]}x, ${d["temp"]}, ${d["sp"]} -> ${d["en"]}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col">${d["conjugation"].join(", ")}</div>
-                    </div>
-                `
-                )
-
-        )
+    let verbs = [];
+    console.log(counterErrors);
+    uniqueErrors.map(d=>d["errorCount"]=counterErrors[d["sp"]]);
+    uniqueErrors.sort(function(first, second) {
+        return second.errorCount - first.errorCount;
+       });
+    uniqueErrors.forEach(d=>verbs.push(`${d["temp"]};${d["sp"]}`));
+    
+    let url = `localhost:8000/posts/don_conjugator/practice/${mode}/${verbs.join(",")}`;
+    
+    window.open(url, '_blank').focus();
 }
 
 d3.select('#mode-select').on('change', function () {
+    mode = d3.select("#mode-select").property('value');
     updateMode()
 })
 
@@ -186,6 +178,7 @@ d3.select('#go-button').on('click', function () {
    let items = null ? d3.select('#items').property('value') == "all" : +d3.select('#items').property('value');
    
    cards = [];
+   errors = [];
    correctCount = 0;
    wrongCount = 0;
 
@@ -196,7 +189,7 @@ d3.select('#go-button').on('click', function () {
         dataRaw.forEach(function (verb) {
             temps.split(',').forEach(function (temp) {
                 cards.push({
-                    "temp": TEMPS_MAPPING[temp],
+                    "temp": temp,
                     "sp": verb["sp"],
                     "en": verb["en"],
                     "conjugation": verb[MODES_MAPPING[mode]][TEMPS_MAPPING[temp]].map(d => d.trim().replace('  ', ' '))
@@ -228,8 +221,6 @@ d3.select("#next-button").on('click', function () {
     cards.shift(0);
     
     let cardCheck = check(card);
-    // let correctCount = +d3.select('#correct-count').text();
-    // let wrongCount = +d3.select('#wrong-count').text();
 
     if (!cardCheck.correct) {
         wrongCount = wrongCount +1;
@@ -237,6 +228,8 @@ d3.select("#next-button").on('click', function () {
         revisit = true;
         cards.push(card);
         errors.push(card);
+
+        if (errors.length>=9) {summarize(errors)};
         
         d3.select('#verb-table').selectAll('.answer').nodes().forEach(function (d,i) {
             if (d.value.includes(cardCheck.truth[i])) {
