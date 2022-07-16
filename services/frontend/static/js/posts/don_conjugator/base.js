@@ -228,8 +228,6 @@ d3.select("#next-button").on('click', function () {
         revisit = true;
         cards.push(card);
         errors.push(card);
-
-        if (errors.length>=9) {summarize(errors)};
         
         d3.select('#verb-table').selectAll('.answer').nodes().forEach(function (d,i) {
             if (d.value.includes(cardCheck.truth[i])) {
