@@ -159,7 +159,7 @@ function summarize (errors) {
        });
     uniqueErrors.forEach(d=>verbs.push(`${d["temp"]};${d["sp"]}`));
     
-    let url = `localhost:8000/posts/don_conjugator/practice/${mode}/${verbs.join(",")}`;
+    let url = `https://www.philippstuerner.com/posts/don_conjugator/practice/${mode}/${verbs.join(",")}`;
     
     window.open(url, '_blank').focus();
 }
