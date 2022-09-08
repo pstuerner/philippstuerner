@@ -9,6 +9,7 @@ const MODES_MAPPING = {
   "gerundio": "Gerundio (Gerund)",
   "participio": "Participio (Participle)"
 };
+
 const TEMPS_MAPPING = {
   "presente": "Presente (Present)",
   "preterito perfecto compuesto": "Pretérito perfecto compuesto (Present perfect)",
@@ -36,25 +37,14 @@ const TEMPS_MAPPING = {
   "pasado": "Pasado (Perfect)"
 };
 
-// Retrieve a random selection of verbs.
-exports.findAll = (req, res) => {
+exports.random = (req, res) => {
   const items = +req.query.items ? +req.query.items : 1000000;
   const mode = req.query.mode;
   let temps = req.query.temps;
-  let select = req.query.select ? req.query.select : "all";
   let query;
   let projection = {"sp": 1, "en": 1};
-  let aggregation = [];
 
-  if (select != "all") {
-	  aggregation.push({"$match":{"sp":{"$in":select.split(',')}}})
-  }
-
-  if (items) {
-	  aggregation.push({"$sample":{"size": items}})
-  }
-
-  query = Verbs.aggregate(aggregation);
+  query = Verbs.aggregate([{"$sample":{"size": items}}]);
 
   if (mode) {
     if (mode in MODES_MAPPING) {
@@ -81,7 +71,85 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving random verbs."
       });
     });
-};
+}
+
+exports.frequency = (req, res) => {
+  const items = +req.query.items ? +req.query.items : 1000000;
+  const mode = req.query.mode;
+  let temps = req.query.temps;
+  let query;
+  let projection = {"sp": 1, "en": 1};
+
+  if (mode) {
+    if (mode in MODES_MAPPING) {
+      projection[MODES_MAPPING[mode]] = 1;
+      if (temps) {
+        temps = temps.split(',');
+        temps.forEach(
+            function (temp) {
+              if (temp in TEMPS_MAPPING) {
+                projection[`${MODES_MAPPING[mode]}.${TEMPS_MAPPING[temp]}`] = 1
+              }
+            }
+          );
+        delete projection[MODES_MAPPING[mode]];
+      }
+    }
+  }
+
+  query = Verbs.find({}, projection).sort({"i": 1}).limit(items)
+
+  query
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving verbs by frequency."
+      });
+    });
+}
+
+exports.range = (req, res) => {
+  const start = +req.query.start ? +req.query.start : 0;
+  const end = +req.query.end ? +req.query.end : 5;
+  const mode = req.query.mode;
+  let temps = req.query.temps;
+  let query;
+  let projection = {"sp": 1, "en": 1};
+
+  query = Verbs.aggregate([{"$match":{"i":{"$gte": start,"$lt": end}}}]).sort({"i": 1});
+
+  if (mode) {
+    if (mode in MODES_MAPPING) {
+      projection[MODES_MAPPING[mode]] = 1;
+      if (temps) {
+        temps = temps.split(',');
+        temps.forEach(
+            function (temp) {
+              if (temp in TEMPS_MAPPING) {
+                projection[`${MODES_MAPPING[mode]}.${TEMPS_MAPPING[temp]}`] = 1
+              }
+            }
+          );
+        delete projection[MODES_MAPPING[mode]];
+      }
+      query = query.project(projection);
+    }
+  }
+
+  query
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving random verbs."
+      });
+    });
+}

@@ -4,7 +4,9 @@ module.exports = app => {
   var router = require("express").Router();
 
   // Retrieve all verbs
-  router.get("/", verbs.findAll);
+  router.get("/random", verbs.random);
+  router.get("/frequency", verbs.frequency);
+  router.get("/range", verbs.range);
 
   app.use("/api/conjugator/verbs", router);
 };

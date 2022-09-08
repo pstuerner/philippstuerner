@@ -1,11 +1,12 @@
 FROM node:12.18.1
 ENV NODE_ENV=production
 
-COPY . .
-
+WORKDIR .
+COPY package-lock.json .
+COPY package.json .
 RUN npm install --production
 
-WORKDIR .
+COPY . .
 
 EXPOSE 8002
 
