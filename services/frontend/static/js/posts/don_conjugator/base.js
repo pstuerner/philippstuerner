@@ -39,14 +39,10 @@ let mode = d3.select("#mode-select").property('value');
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
   
-    // While there remain elements to shuffle.
     while (currentIndex != 0) {
-  
-      // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
   
-      // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }
@@ -107,7 +103,6 @@ function updateMode () {
                     function (d) {
                         let split = d.split(' ');
                         if (['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'].includes(split[0])) {
-                            // return `<td>${split[0]}</td><td>${split.slice(1).join(' ')}</td>`
                             return `<td>${split[0]}</td><td><input class="form-control answer" type="text"></td>`
                         } else {
                             return `<td><input class="form-control answer" type="text"></td>`
@@ -172,41 +167,66 @@ d3.select('#mode-select').on('change', function () {
 d3.select('#go-button').on('click', function () {
     d3.select("#conjugator-div").style('opacity', 1);
 
-   let mode = d3.select('#mode-select').property('value');
-   let corpus = d3.select('#corpus-select').property('value');
-   let temps = d3.selectAll("input[type='checkbox']:checked").nodes().map(d=>d.value).join(',');
-   let items = null ? d3.select('#items').property('value') == "all" : +d3.select('#items').property('value');
-   
-   cards = [];
-   errors = [];
-   correctCount = 0;
-   wrongCount = 0;
+    let url;
+    let mode = d3.select('#mode-select').property('value');
+    let type = d3.select('#type-select').property('value');
+    let temps = d3.selectAll("input[type='checkbox']:checked").nodes().map(d=>d.value).join(',');
 
-   d3.select("#correct-count").text(correctCount);
-   d3.select("#wrong-count").text(wrongCount);
-   
-   d3.json(`https://mongodb.philippstuerner.com/api/conjugator/verbs?items=${items}&mode=${mode}&temps=${temps}&select=${CORPUS[corpus]}`).then(function (dataRaw) {
-        dataRaw.forEach(function (verb) {
-            temps.split(',').forEach(function (temp) {
-                cards.push({
-                    "temp": temp,
-                    "sp": verb["sp"],
-                    "en": verb["en"],
-                    "conjugation": verb[MODES_MAPPING[mode]][TEMPS_MAPPING[temp]].map(d => d.trim().replace('  ', ' '))
-                })
-            })
-        });
-
-        
-        cards = shuffle(cards)
-        card = cards[0];
-
-        wordCountStart = cards.length;
-        d3.select("#words-left").text(`${wordCountStart} out of ${wordCountStart} verbs left`);
-
-        play(card);
-    });
+    if (temps == "") {
+        alert(`Make sure to select one or more tenses (e.g. presente, futuro, ...).`)
+        return
+    }
     
+    cards = [];
+    errors = [];
+    correctCount = 0;
+    wrongCount = 0;
+
+    d3.select("#correct-count").text(correctCount);
+    d3.select("#wrong-count").text(wrongCount);
+    
+    if (type=="random") {
+        let items = +d3.select('#items').property('value');
+        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/random?items=${items}&mode=${mode}&temps=${temps}`
+    } else if (type=="frequency") {
+        let items = +d3.select('#items').property('value');
+        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/frequency?items=${items}&mode=${mode}&temps=${temps}`
+    } else {
+        let start = +d3.select('#range-start').property('value');
+        let end = +d3.select('#range-end').property('value');
+        if (start >= end) {
+            alert(`Make sure that your start value (${start}) is smaller than your end value (${end}).`)
+            return
+        } else if (start < 0) {
+            alert(`Make sure that your start value (${start}) is greater than 0.`)
+            return
+        }
+        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/range?start=${start}&end=${end}&mode=${mode}&temps=${temps}`
+    }
+
+    d3.json(url).then(function (dataRaw) {
+            dataRaw.forEach(function (verb) {
+                temps.split(',').forEach(function (temp) {
+                    cards.push({
+                        "temp": temp,
+                        "sp": verb["sp"],
+                        "en": verb["en"],
+                        "conjugation": verb[MODES_MAPPING[mode]][TEMPS_MAPPING[temp]].map(d => d.trim().replace('  ', ' '))
+                    })
+                })
+            });
+
+            
+            if (type == "random") {
+                cards = shuffle(cards)
+            }
+            card = cards[0];
+
+            wordCountStart = cards.length;
+            d3.select("#words-left").text(`${wordCountStart} out of ${wordCountStart} verbs left`);
+
+            play(card);
+        });  
 })
 
 d3.select("#next-button").on('click', function () {
@@ -250,11 +270,35 @@ d3.select("#next-button").on('click', function () {
     if (cards.length == 0) {
         summarize(errors);
     }
+
+    document.getElementById("sp-h3").focus();
 })
 
 d3.select('#sp-h3').on('click', function () {
     d3.select(this).style('border', null).style('color', 'black');
     $(".answer")[0].focus();
 })
+
+d3.select('#type-select').on('change', function () {
+    let type = d3.select("#type-select").property('value');
+    
+    if (type == "range") {
+        d3.select("#items").style('display', 'none');
+        d3.select("#range-start").style('display', 'block');
+        d3.select("#range-end").style('display', 'block');
+    } else {
+        d3.select("#items").style('display', 'block');
+        d3.select("#range-start").style('display', 'none');
+        d3.select("#range-end").style('display', 'none');
+    };
+})
+
+d3.select("#items").style('display', 'block');
+d3.select("#range-start").style('display', 'none');
+d3.select("#range-end").style('display', 'none');
+
+$('input').bind('input', function(){
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
 
 updateMode();

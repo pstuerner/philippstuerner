@@ -93,7 +93,20 @@ async def post(request: Request, post_id: str):
     Returns:
         templates.TemplateResponse: The post's corresponding html file.
     """
-    return templates.TemplateResponse(f"{post_id}.html", {"request": request})
+    return templates.TemplateResponse(f"/posts/{post_id}.html", {"request": request})
+
+@app.get("/apps/{app_id}", response_class=HTMLResponse)
+async def post(request: Request, app_id: str):
+    """A function to tell FastAPI how to handle the individual apps.
+
+    Args:
+        request (Request): The request.
+        app_id (str): Unique identifier of the app to correctly map it to its html file.
+
+    Returns:
+        templates.TemplateResponse: The post's corresponding html file.
+    """
+    return templates.TemplateResponse(f"/apps/{app_id}.html", {"request": request})
 
 @app.get("/posts/don_conjugator/practice/{mode}/{verbs}", response_class=HTMLResponse)
 async def post(request: Request, mode: str, verbs: str):

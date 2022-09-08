@@ -28,7 +28,5 @@ d3.selectAll('.card').nodes().forEach(function (d) {
         card.select('#card-en').text(en);
         card.select('#card-temp').text(TEMPS_MAPPING[temp]);
         card.select('#card-conjugation').selectAll("p").data(conjugation).join(enter => enter.append("p").attr("class", "card-text").text(d=>d));
-        // debugger;
-        // console.log(dataRaw)
     })
 });
