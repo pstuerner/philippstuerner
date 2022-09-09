@@ -15,7 +15,7 @@ all_posts = [
         "subtitle": "Web application to practice conjugating spanish verbs.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on July 12, 2022""",
+                    on September 8, 2022""",
     },
     {
         "id": "cmcscanner",
