@@ -10,20 +10,20 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 all_posts = [
     {
+        "id": "cmcscanner",
+        "title": "CMC Scanner",
+        "subtitle": "Small web application to query and compare historical CoinMarketCap snapshots.",
+        "description": """Posted by
+                    <a href="about">Philipp Stuerner</a>
+                    on September 11, 2021""",
+    },
+    {
         "id": "don_conjugator",
         "title": "Don Conjugator",
         "subtitle": "Web application to practice conjugating spanish verbs.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on September 8, 2022""",
-    },
-    {
-        "id": "cmcscanner",
-        "title": "CMC Scanner",
-        "subtitle": "Small web application to query and compare historical CoinMarketCap snapshots.",
-        "description": """Posted by
-                    <a href="about">Philipp Stuerner</a>
-                    on November 27, 2021""",
     },
     {
         "id": "gradient_descent",

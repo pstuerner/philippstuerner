@@ -4,7 +4,7 @@
  * @param {Array} startListings
  * @param {Array} endListings
  */
-function listingsChange(startListings, endListings) {
+ function listingsChange(startListings, endListings) {
     let change = [];
     endListings.forEach((el) => {
         let sl = startListings.filter((o) => o["id"] == el["id"])[0],
@@ -231,9 +231,10 @@ function main(dataRaw) {
 
     // Set date options
     d3.json(
-        "https://mongodb.philippstuerner.com/listings?allTimestamps=true"
+        "https://mongodb.philippstuerner.com/api/cmc/timestamps"
     ).then(function (dataRaw) {
         timestamps = dataRaw;
+        console.log(dataRaw)
         let dateSelection = d3.selectAll(".form-select");
 
         dateSelection
@@ -276,7 +277,7 @@ function main(dataRaw) {
                 .duration(1000)
                 .style("opacity", 1);
             d3.json(
-                `https://mongodb.philippstuerner.com/listings?unixTimestamp=${startDate}`
+                `https://mongodb.philippstuerner.com/api/cmc/listings?unixTimestamp=${startDate}`
             ).then(function (dataRaw) {
                 startListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
@@ -303,7 +304,7 @@ function main(dataRaw) {
                 .duration(1000)
                 .style("opacity", 1);
             d3.json(
-                `https://mongodb.philippstuerner.com/listings?unixTimestamp=${endDate}`
+                `https://mongodb.philippstuerner.com/api/cmc/listings?unixTimestamp=${endDate}`
             ).then(function (dataRaw) {
                 endListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
@@ -367,7 +368,7 @@ function main(dataRaw) {
 
 d3.selectAll(".overlay").transition().duration(1000).style("opacity", 1);
 
-d3.json("https://mongodb.philippstuerner.com/listings?last=2").then(function (
+d3.json("https://mongodb.philippstuerner.com/api/cmc/listings?last=2").then(function (
     dataRaw
 ) {
     main(dataRaw);
