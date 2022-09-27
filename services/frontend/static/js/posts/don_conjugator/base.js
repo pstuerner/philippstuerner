@@ -135,7 +135,7 @@ function check (card) {
             return d
         }
     });
-    console.log(answers.toString().toLowerCase(), truth.toString().toLowerCase())
+    
     if (answers.toString().toLowerCase()  == truth.toString().toLowerCase()) {
         return {correct: true, answers: null, truth: null}
     } else {
