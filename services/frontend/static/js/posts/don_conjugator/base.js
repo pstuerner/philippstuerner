@@ -135,8 +135,8 @@ function check (card) {
             return d
         }
     });
-
-    if (answers.toString()  == truth.toString()) {
+    console.log(answers.toString().toLowerCase(), truth.toString().toLowerCase())
+    if (answers.toString().toLowerCase()  == truth.toString().toLowerCase()) {
         return {correct: true, answers: null, truth: null}
     } else {
         return {correct: false, answers: answers, truth: truth}
@@ -250,7 +250,7 @@ d3.select("#next-button").on('click', function () {
         errors.push(card);
         
         d3.select('#verb-table').selectAll('.answer').nodes().forEach(function (d,i) {
-            if (d.value.includes(cardCheck.truth[i])) {
+            if (d.value.toLowerCase().includes(cardCheck.truth[i])) {
                 d3.select(d).call(fadeIn, 500).style('background-color', 'rgb(144,238,144,0.75)');
             } else {
                 d3.select(d).call(fadeIn, 500).style('background-color', 'rgb(255,204,203,0.75)');

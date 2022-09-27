@@ -109,7 +109,7 @@ async def post(request: Request, app_id: str):
     return templates.TemplateResponse(f"/apps/{app_id}.html", {"request": request})
 
 @app.get("/posts/don_conjugator/practice/{mode}/{verbs}", response_class=HTMLResponse)
-async def post(request: Request, mode: str, verbs: str):
+async def don_conjugator(request: Request, mode: str, verbs: str):
     """A function to tell FastAPI how to handle the individual posts.
 
     Args:

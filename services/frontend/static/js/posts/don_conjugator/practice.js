@@ -21,7 +21,7 @@ d3.selectAll('.card').nodes().forEach(function (d) {
     let temp = card.select('#card-temp').text();
     let sp = card.select('#card-sp').text();
     
-    d3.json(`https://mongodb.philippstuerner.com/api/conjugator/verbs?mode=${mode}&temps=${temp}&select=${sp}`).then(function (dataRaw) {
+    d3.json(`https://mongodb.philippstuerner.com/api/conjugator/verbs/select?mode=${mode}&temp=${temp}&verb=${sp}`).then(function (dataRaw) {
         let conjugation = dataRaw[0][MODES_MAPPING[mode]][TEMPS_MAPPING[temp]];
         let en = dataRaw[0]["en"];
         
