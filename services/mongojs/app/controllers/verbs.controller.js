@@ -153,3 +153,25 @@ exports.range = (req, res) => {
       });
     });
 }
+
+exports.select = (req, res) => {
+  const mode = req.query.mode;
+  let temp = req.query.temp;
+  let verb = req.query.verb;
+  let query;
+  let projection = {"sp": 1, "en": 1};
+  projection[`${MODES_MAPPING[mode]}.${TEMPS_MAPPING[temp]}`] = 1
+  
+  query = Verbs.find({"sp": verb}, projection);
+
+  query
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};

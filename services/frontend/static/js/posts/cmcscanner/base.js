@@ -234,7 +234,6 @@ function main(dataRaw) {
         "https://mongodb.philippstuerner.com/api/cmc/timestamps"
     ).then(function (dataRaw) {
         timestamps = dataRaw;
-        console.log(dataRaw)
         let dateSelection = d3.selectAll(".form-select");
 
         dateSelection
