@@ -10,17 +10,25 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 all_posts = [
     {
+        "id": "donquijote",
+        "title": "Don Quijote",
+        "subtitle": "Telegram based application to practice Spanish vocabularies.",
+        "description": """Posted by
+                    <a href="about">Philipp Stuerner</a>
+                    on October 19, 2022""",
+    },
+    {
         "id": "cmcscanner",
         "title": "CMC Scanner",
         "subtitle": "Small web application to query and compare historical CoinMarketCap snapshots.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on September 11, 2021""",
+                    on September 11, 2022""",
     },
     {
         "id": "don_conjugator",
         "title": "Don Conjugator",
-        "subtitle": "Web application to practice conjugating spanish verbs.",
+        "subtitle": "Web application to practice conjugating Spanish verbs.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on September 8, 2022""",

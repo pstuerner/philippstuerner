@@ -1,0 +1,178 @@
+{% extends "post.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/css/ionicons.min.css">
+<style>
+  figure {
+    width: auto;
+    max-height: 80vh;
+    margin: 0 auto;
+    float: left;
+    /* padding: 10px; */
+    position: relative;
+    cursor: pointer;
+  }
+  figure:before,
+  figure:after {
+    position: absolute;
+  }
+  figure:before {
+    /* top: 103.5px; */
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+    background-color: rgba(204, 209, 217, 0.3);
+    font-family: 'Ionicons';
+    content: '\f215';
+    text-align: center;
+    line-height: 45px;
+    font-size: 19px;
+    color: #F5F7FA;
+  }
+  figure:after {
+    content: 'gif';
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    text-align: center;
+    top: 20px;
+    right: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 3px;
+    color: #656D78;
+    background-color: white;
+    text-transform: uppercase;
+  }
+  figure.play:before {
+    display: none;
+  }
+  figure.play:after {
+    color: #fff;
+    background-color: #8CC152;
+  }
+  .enter {
+    fill: green;
+  }
+
+  .update {
+    fill: #333;
+  }
+
+  .exit {
+    fill: brown;
+  }
+</style>
+{% endblock %}
+
+{% block title %}Don Conjugator{% endblock %}
+{% block heading %}Don Conjugator{% endblock %}
+{% block subheading %}Cervantes approved vocabulary trainer to improve your Spanish{% endblock %}
+{% block header_img %}donquijote_header.png{% endblock %}
+
+{% block post_content %}
+<div class="col-md-10 col-lg-10 col-xl-8">
+  <div class="row">
+    <p><b>tl;dr:</b> I’ve developed a Telegram bot to help me practice Spanish vocabularies. You can use the bot as well, simply download the Telegram app, search for @donquijote_ps_bot, send /start and begin learning. Continue reading if you’re interested in how I got the vocabulary data and how I’ve set up the bot itself. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/tree/master/services/frontend/static/js/posts/don_conjugator" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
+    <hr>
+  </div>
+  <h3>Introduction</h3>
+  <p>
+    So why would I bother coding my own vocabulary trainer? I mean the world is full of learning applications and definitely there are plenty of ways to improve your Spanish. However, most vocabulary trainers have one or more flaws that always bothered me, which is why I wanted to come up with my own solution.
+  </p>
+  <p>
+    A vocabulary trainer should be simple, like a WhatsApp chat. Fancy features like entertaining games or global ranking lists are nice to have but not really necessary for the learning experience itself. Furthermore, it’s either expensive to buy already existing lists of vocabularies or a lot of work to embed your own lists word by word.
+  </p>
+  <p>
+    With DonQuijote I tried to solve these issues. I probably would have developed the bot with WhatsApp, however Telegram’s bot management is a lot better. The vocabulary list comes from a frequency dictionary and contains the 5000 most used words in the Spanish corpus. I’ll explain in more detail how I retrieved the words and how I’ve deployed the bot itself. 
+  </p>
+  <h3>The Vocabulary</h3>
+  <p>
+    As always, high quality raw data turned out to be one of the toughest parts of this project. There are plenty of “most important Spanish words” lists online, however, most of the time they lack quality and it’s not guaranteed that the included words are significant at all. In fact, the significance of words turns out to be really important since it’s not really about how many words you know, but rather which words you know.
+  </p>
+  <p>
+    Apparently, complete fluency is in the 10,000 word range, however, you're not required to know all of these words to have a conversation. This is where so called frequency dictionaries come in handy, since they provide a list of words according to how frequently they appear in the respective language. Hence, I bought the frequency dictionary composed by Mark Davies, who is a professor of linguistics at the Brigham Young University. You can find the book on <a href="https://www.amazon.de/Frequency-Dictionary-Spanish-Routledge-Dictionaries/dp/1138686549" target="_blank">Amazon</a>, including a free reading sample where you can find more information about how he defines “frequency”. In the end, the book contains a list of 5000 Spanish words, ordered from most to least frequent. Here’s a list of the 100 most frequently used Spanish words.
+  </p>
+  <p>
+    I bought and downloaded the book as a PDF and wrote a small Python script to extract all words from the text body. Afterwards I  applied some simple string and regex formatting to split the raw data into its respective English and Spanish parts. Finally, I’ve ingested all the preprocessed vocabularies into a MongoDB so I can query and consume them later on.
+  </p>
+  <!-- <div class="row">
+    <div class="justify-content-center" style="display: flex;">
+      <figure>
+        <img src="{{ url_for('static', path='/videos/dq_intro.png') }}" style="max-width: auto; height: 80vh;" alt="Static Image" data-alt="{{ url_for('static', path='/videos/dq_intro.gif') }}">
+      </figure>
+    </div>
+  </div>
+  <div class="row">
+    <div class="justify-content-center" style="display: flex;">
+      <figure>
+        <img src="{{ url_for('static', path='/videos/dq_settings.png') }}" style="max-width: auto; height: 80vh;" alt="Static Image" data-alt="{{ url_for('static', path='/videos/dq_settings.gif') }}">
+      </figure>
+    </div>
+  </div>
+  <div class="row">
+    <div class="justify-content-center" style="display: flex;">
+      <figure>
+        <img src="{{ url_for('static', path='/videos/dq_play.png') }}" style="max-width: auto; height: 80vh;" alt="Static Image" data-alt="{{ url_for('static', path='/videos/dq_play.gif') }}">
+      </figure>
+    </div>
+  </div> -->
+  <div class="row">
+    <div id="vocabs-sp" class="justify-content-center" style="display: flex; width: 100%; height: 30vh;"></div>
+  </div>
+  <div class="row">
+    <div id="vocabs-en" class="justify-content-center" style="display: flex; width: 100%; height: 30vh;"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body_js %}
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script type="module" src="{{ url_for('static', path='/js/posts/donquijote/main.js') }}"></script>
+<script>
+var getGif = function() {
+  var gif = [];
+  $('img').each(function() {
+    var data = $(this).data('alt');
+    gif.push(data);
+  });
+  return gif;
+}
+var gif = getGif();
+
+// Preload all the GIF.
+var image = [];
+ 
+$.each(gif, function(index) {
+  image[index]     = new Image();
+  image[index].src = gif[index];
+});
+
+$('figure').on('click', function() {
+ 
+ var $this   = $(this),
+         $index  = $this.index(),
+          
+         $img    = $this.children('img')
+         $imgSrc = $img.attr('src'),
+         $imgAlt = $img.attr('data-alt'),
+         $imgExt = $imgAlt.split('.');
+          
+ if($imgExt[1] === 'gif') {
+     $img.attr('src', $img.data('alt')).attr('data-alt', $imgSrc);
+ } else {
+     $img.attr('src', $imgAlt).attr('data-alt', $img.data('alt'));
+ }
+
+ $this.toggleClass('play');
+
+});
+</script>
+{% endblock %}
