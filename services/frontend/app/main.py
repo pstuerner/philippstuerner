@@ -12,10 +12,10 @@ all_posts = [
     {
         "id": "donquijote",
         "title": "Don Quijote",
-        "subtitle": "Telegram based application to practice Spanish vocabularies.",
+        "subtitle": "Telegram based application to practice Spanish vocabulary.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on October 19, 2022""",
+                    on December 17, 2022""",
     },
     {
         "id": "cmcscanner",
