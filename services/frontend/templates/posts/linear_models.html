@@ -39,8 +39,8 @@
     }
 
     .legend rect {
-        fill:white;
-        opacity:0.9;
+        fill: white;
+        opacity: 0.9;
     }
 </style>
 {% endblock %}
@@ -51,21 +51,52 @@
 
 {% block post_content %}
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
-    <p><b>tl;dr:</b> although linear models are by far no rocket science they can be incredibly powerful. I've written a couple of D3.js charts that will help you to interactively understand how linear and logistic regression work, what polynomial features are, and why overfitting is so dangerous. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/linear_models.html" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
+    <p><b>tl;dr:</b> although linear models are by far no rocket science they can be incredibly powerful. I've written a
+        couple of D3.js charts that will help you to interactively understand how linear and logistic regression work,
+        what polynomial features are, and why overfitting is so dangerous. You can find the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/linear_models.html"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
     <hr>
     <p>
-        Linear models were probably my first exposure to machine learning, though at that time I didn't really know what machine learning even is. I remember a lecture on econometrics in which we predicted a country's gross domestic product (GDP) using a linear regression. The professor couldn't really sell the topic in a sexy way, so I wasn't very enthusiastic about putting a straight line through a scatter plot and declared the lecture as utterly boring 😕. Today, I believe that linear models are among the most beautiful flavors in machine learning. Compared to other machine learning algorithms, linear models are very simple. This has the advantage that you can always reconstruct how the final prediction was made. However, linear models should not be underestimated, as they are incredibly versatile and can solve a wide range of problems.
+        Linear models were probably my first exposure to machine learning, though at that time I didn't really know what
+        machine learning even is. I remember a lecture on econometrics in which we predicted a country's gross domestic
+        product (GDP) using a linear regression. The professor couldn't really sell the topic in a sexy way, so I wasn't
+        very enthusiastic about putting a straight line through a scatter plot and declared the lecture as utterly
+        boring 😕. Today, I believe that linear models are among the most beautiful flavors in machine learning.
+        Compared to other machine learning algorithms, linear models are very simple. This has the advantage that you
+        can always reconstruct how the final prediction was made. However, linear models should not be underestimated,
+        as they are incredibly versatile and can solve a wide range of problems.
     </p>
     <p>
-        In the following, we first deal with the simplest form of a linear model, namely an univariate linear regression. We then find out how to model nonlinear relationships by including polynomial features into the linear regression model. Furthermore, we see from the discrepancy between train and test errors that polynomial regressions and their degrees of freedom are a great extension, but should be used with caution. Finally, we find out that linear models are not only useful for solving regression but also classification problems. Let's get right to it.
+        In the following, we first deal with the simplest form of a linear model, namely an univariate linear
+        regression. We then find out how to model nonlinear relationships by including polynomial features into the
+        linear regression model. Furthermore, we see from the discrepancy between train and test errors that polynomial
+        regressions and their degrees of freedom are a great extension, but should be used with caution. Finally, we
+        find out that linear models are not only useful for solving regression but also classification problems. Let's
+        get right to it.
     </p>
     <div id="toc-parent"></div>
     <h1 class="section-heading">Univariate linear regression</h1>
     <p>
-        Univariate linear regression involves modeling or predicting the numerical value of one variable based on the data of another variable. What will be the gross domestic product in the next year if the production numbers remain the same? What is the weight of this person at a height of 1.80m? Do people who spend more time on social media generally feel more insecure? If we try to explain the result of a dependent variable (GDP, weight, feeling of insecurity) on the basis of an explanatory variable (production numbers, height, time spent on social media) we are dealing with a univariate linear regression.
+        Univariate linear regression involves modeling or predicting the numerical value of one variable based on the
+        data of another variable. What will be the gross domestic product in the next year if the production numbers
+        remain the same? What is the weight of this person at a height of 1.80m? Do people who spend more time on social
+        media generally feel more insecure? If we try to explain the result of a dependent variable (GDP, weight,
+        feeling of insecurity) on the basis of an explanatory variable (production numbers, height, time spent on social
+        media) we are dealing with a univariate linear regression.
     </p>
     <p>
-        The heart of a (univariate) linear regression is the following equation: $$\hat{y}=\theta^{T}X$$ For which \(\hat{y}\) is the predicted value of the dependent variable (e.g. GDP). \(\theta\) is the model's parameter vector, which, in the univariate case, consist of the bias term \(\theta_0\) and the weight of the explanatory variable \(\theta_1\) (e.g. production numbers). \(X\) is the model's design matrix, which includes all explanatory variables. Remember that to properly embed the bias term you have to make sure that the first column of the design matrix is made up of ones. Now, the thing is, this is much easier to understand when you can visually see what's going on and manipulate the parameters yourself. Feel free to play around with the \(\theta_0\) and \(\theta_1\) sliders in the D3.js chart below. Watch how the line moves and repeat the process with different datasets. If you want to know what the perfect line for the underlying dataset looks like click on the "Best fit" button. If you're bored of the current dataset just create a new one by clicking on "New data". Ignore the residuals slider and metrics for now, we'll get to them in a moment.
+        The heart of a (univariate) linear regression is the following equation: $$\hat{y}=\theta^{T}X$$ For which
+        \(\hat{y}\) is the predicted value of the dependent variable (e.g. GDP). \(\theta\) is the model's parameter
+        vector, which, in the univariate case, consist of the bias term \(\theta_0\) and the weight of the explanatory
+        variable \(\theta_1\) (e.g. production numbers). \(X\) is the model's design matrix, which includes all
+        explanatory variables. Remember that to properly embed the bias term you have to make sure that the first column
+        of the design matrix is made up of ones. Now, the thing is, this is much easier to understand when you can
+        visually see what's going on and manipulate the parameters yourself. Feel free to play around with the
+        \(\theta_0\) and \(\theta_1\) sliders in the D3.js chart below. Watch how the line moves and repeat the process
+        with different datasets. If you want to know what the perfect line for the underlying dataset looks like click
+        on the "Best fit" button. If you're bored of the current dataset just create a new one by clicking on "New
+        data". Ignore the residuals slider and metrics for now, we'll get to them in a moment.
     </p>
 </div>
 
@@ -73,30 +104,28 @@
     <div class="row" style="height: 22em;">
         <div id="chart1-graph" style="height: 100%;" class="col-9 p-0"></div>
         <div id="chart1-cost-functions" class="col-3 p-0" style="height: 100%; position: relative; font-size:12pt;">
-            <div class="card-deck vertical-center text-center" style="width: 100%;">
-                <div class="card" style="overflow-x: hidden;">
-                    <div class="card-body" style="padding: 0.5rem;">
-                      <h5 class="card-title">\(\textrm{R}^2\)</h5>
-                      <p class="card-text" id="chart1-r2"></p>
-                    </div>
+            <div class="card" style="overflow-x: hidden; text-align: center;">
+                <div class="card-body" style="padding: 0.5rem;">
+                    <h5 class="card-title">\(\textrm{R}^2\)</h5>
+                    <p class="card-text" id="chart1-r2"></p>
                 </div>
-                <div class="card" style="overflow-x: hidden;">
-                  <div class="card-body" style="padding: 0.5rem;">
+            </div>
+            <div class="card" style="overflow-x: hidden; text-align: center;">
+                <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MSE</h5>
                     <p class="card-text" id="chart1-mse">This</p>
-                  </div>
                 </div>
-                <div class="card" style="overflow-x: hidden;">
-                  <div class="card-body" style="padding: 0.5rem;">
+            </div>
+            <div class="card" style="overflow-x: hidden; text-align: center;">
+                <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">RMSE</h5>
                     <p class="card-text" id="chart1-rmse">This</p>
-                  </div>
                 </div>
-                <div class="card" style="overflow-x: hidden;">
-                  <div class="card-body" style="padding: 0.5rem;">
+            </div>
+            <div class="card" style="overflow-x: hidden; text-align: center;">
+                <div class="card-body" style="padding: 0.5rem;">
                     <h5 class="card-title">MAE</h5>
                     <p class="card-text" id="chart1-mae"></p>
-                  </div>
                 </div>
             </div>
         </div>
@@ -110,12 +139,12 @@
             <div style="text-align: center;">\(\theta_1\)</div>
             <div id="chart1-theta1-container" style="height: 4em;"></div>
         </div>
-        <div class="col-12 p-1" style="text-align: center;" >
+        <div class="col-12 p-1" style="text-align: center;">
             <button class="chart1-new-data btn btn-primary">New data</button>
             <button class="btn btn-primary" id="chart1-best-fit" style="margin-right: 1em;">Best fit</button>
             <form style="display: inline-block;">
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="chart1-residuals-check" value=""> Residuals
+                    <input type="checkbox" id="chart1-residuals-check" value=""> Residuals
                 </label>
             </form>
         </div>
@@ -125,67 +154,131 @@
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
     <hr>
     <p style="text-align: center;">
-        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart1.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+        💡 Check out the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart1.js"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!
     </p>
     <hr>
     <p>
-        As you can see, \(\theta_0\) simply changes the vertical positioning, while \(\theta_1\) changes the slope of the line. But how to find the line that best approximates the scatter plot? The answer is to find the line to which the distance to all points is the smallest. This can be achieved by using different cost functions that quantify the fit of a line. Among the most common cost functions are:
+        As you can see, \(\theta_0\) simply changes the vertical positioning, while \(\theta_1\) changes the slope of
+        the line. But how to find the line that best approximates the scatter plot? The answer is to find the line to
+        which the distance to all points is the smallest. This can be achieved by using different cost functions that
+        quantify the fit of a line. Among the most common cost functions are:
     </p>
     <ul>
         <li>
             <p>
-                <b>Mean Squared Error:</b> The mean squared deviation of all true \(y\) values from the line $$ \textrm{MSE}=\frac{1}{n}\sum_{i=1}^{n}{(y_i-\hat{y}_i)^2} $$
+                <b>Mean Squared Error:</b> The mean squared deviation of all true \(y\) values from the line $$
+                \textrm{MSE}=\frac{1}{n}\sum_{i=1}^{n}{(y_i-\hat{y}_i)^2} $$
             </p>
         </li>
         <li>
             <p>
-                <b>Root Mean Squared Error:</b> The square root of the mean squared deviation of all true \(y\) values from the line $$ \textrm{RMSE}=\sqrt{\frac{1}{n}\sum_{i=1}^{n}{(y_i-\hat{y}_i)^2}} $$
+                <b>Root Mean Squared Error:</b> The square root of the mean squared deviation of all true \(y\) values
+                from the line $$ \textrm{RMSE}=\sqrt{\frac{1}{n}\sum_{i=1}^{n}{(y_i-\hat{y}_i)^2}} $$
             </p>
         </li>
         <li>
             <p>
-                <b>Mean Absolute Error:</b> The mean absolute deviation of all true \(y\) values from the line $$ \textrm{MAE}=\frac{1}{n}\sum_{i=1}^{n}{\left| y_i-\hat{y}_i \right|} $$
+                <b>Mean Absolute Error:</b> The mean absolute deviation of all true \(y\) values from the line $$
+                \textrm{MAE}=\frac{1}{n}\sum_{i=1}^{n}{\left| y_i-\hat{y}_i \right|} $$
             </p>
         </li>
     </ul>
     <p>
-        At this point the residuals slider provides a suitable visualization. As soon as you activate the slider you see the distance between each true \(y\) value and the line. This deviation is also called residual. If you change \(\theta_0\) and \(\theta_1\), the residuals grow and shrink, respectively, and the resulting cost functions improve or become worse. You can observe that after you press the "Best fit" button the residuals are as small as possible and MSE, RMSE and MAE take their best possible values. Any further changes to the \(\theta_0\) and \(\theta_1\) sliders will increase the residuals and worsen the fit of the line.
+        At this point the residuals slider provides a suitable visualization. As soon as you activate the slider you see
+        the distance between each true \(y\) value and the line. This deviation is also called residual. If you change
+        \(\theta_0\) and \(\theta_1\), the residuals grow and shrink, respectively, and the resulting cost functions
+        improve or become worse. You can observe that after you press the "Best fit" button the residuals are as small
+        as possible and MSE, RMSE and MAE take their best possible values. Any further changes to the \(\theta_0\) and
+        \(\theta_1\) sliders will increase the residuals and worsen the fit of the line.
     </p>
     <p>
-        In contrast to MSE, RMSE and MAE, it is not true for \(\textrm{R}^2\) that smaller values are better. \(\textrm{R}^2\) describes which part of the variance is described by the model. R-squared is therefore a value between 0 and 1 for which larger values are better. Thus, an \(\textrm{R}^2\) value of 1 means that the model can perfectly explain the data. Very high \(\textrm{R}^2\) values should be viewed skeptically, as they are an indication of overfitting, which will be discussed in more detail later. Don't be surprised if \(\textrm{R}^2\) takes a negative value in one of the following charts. \(\textrm{R}^2 < 0\) doesn't indicate that the model is wrong, but rather that the model is extremely poor. This is because a negative \(\textrm{R}^2\) implies that the model is not capable of explaining more variance than a horizontal line.
-    </p>
-    <p>
-        For above's dataset, the best possible line is obtained with <span id='chart1-theta0'></span> and <span id='chart1-theta1'></span>. There are several ways to determine these values. Probably one of the most common approaches is gradient descent, which is a generic optimization algorithm that is the best choice for solving a variety of problems. However, gradient descent is quite extensive and I thought that it's best to explain the algorithm in an entire post. If you're not familiar with gradient descent yet make sure to have a look <a href="https://web.philippstuerner.com/posts/gradient_descent" target="_blank">here</a>. Luckily, for some problems, gradient descent is not the only way to find the optimal solution. Let me introduce an alternative approach of finding the best possible set of parameters: the normal equation.
-    </p>
-    <p>
-        The normal equation, unlike gradient descent, which is an iterative process, determines the best possible model parameters using a mathematical equation: $$ \hat{\theta} = (X^{T}X)^{-1}X^{T}y $$ For which \(\hat{\theta}\) is the value of \(\theta\) that minimizes the cost function, \(X\) is a matrix containing all values of the descriptive variable, and \(y\) is a vector containing the dependent variable. The normal equation is a so-called closed-form solution, which is an amazing concept, since \(X\), \(y\) and some algebra is all we need to find the best possible model parameters \(\hat{\theta}\). Calculating \(\hat{\theta}\) by hand looks like this:
-    </p>
-    <p id='normal-equation' style="overflow-x: auto;"></p>
-    <p>
-        😨 no one has time for that. Plus, all the computational steps (transposing, inverting, multiplying) are tedious and error-prone. This is why, instead, we let Python do the hard work for us. Here is the same calculation as above, only much faster since we use Numpy:
-    </p>
-    <pre><code id='normal-equation-code' class="language-python"></code></pre>
-    <p>
-        Both, the code example and the matrix notation, are dynamic and adapt to the dataset displayed in the D3.js chart above 😎. Give it a try: click on the "New data" button below and you should see that the computations of the matrix and numpy notations change. The resulting \(\hat{\theta}\) values should be the same. You can check if everything is correct by returning to the D3.js chart above. Click the "Best fit" button and check if the values for the \(\theta_0\) and \(\theta_1\) sliders match the results.
-    </p>
-    <div class="text-center">
-        <button class="chart1-new-data btn btn-primary">New data</button>
-    </div>
-    <p>
-        In general, that's all you need to know about univariate linear regression. For the multivariate case, that is, when multiple explanatory variables enter the equation, the approach is very similar. In the next section you will see that although the equations and matrices are larger and more comprehensive, the underlying procedure is the same.
-    </p>
+        In contrast to MSE, RMSE and MAE, it is not true for \(\textrm{R}^2\) that smaller values are better.
+        \(\textrm{R}^2\) describes which part of the variance is described by the model. R-squared is therefore a value
+        between 0 and 1 for which larger values are better. Thus, an \(\textrm{R}^2\) value of 1 means that the model
+        can perfectly explain the data. Very high \(\textrm{R}^2\) values should be viewed skeptically, as they are an
+        indication of overfitting, which will be discussed in more detail later. Don't be surprised if \(\textrm{R}^2\)
+        takes a negative value in one of the following charts. \(\textrm{R}^2 < 0\) doesn't indicate that the model is
+            wrong, but rather that the model is extremely poor. This is because a negative \(\textrm{R}^2\) implies that
+            the model is not capable of explaining more variance than a horizontal line. </p>
+            <p>
+                For above's dataset, the best possible line is obtained with <span id='chart1-theta0'></span> and <span
+                    id='chart1-theta1'></span>. There are several ways to determine these values. Probably one of the
+                most common approaches is gradient descent, which is a generic optimization algorithm that is the best
+                choice for solving a variety of problems. However, gradient descent is quite extensive and I thought
+                that it's best to explain the algorithm in an entire post. If you're not familiar with gradient descent
+                yet make sure to have a look <a href="https://web.philippstuerner.com/posts/gradient_descent"
+                    target="_blank">here</a>. Luckily, for some problems, gradient descent is not the only way to find
+                the optimal solution. Let me introduce an alternative approach of finding the best possible set of
+                parameters: the normal equation.
+            </p>
+            <p>
+                The normal equation, unlike gradient descent, which is an iterative process, determines the best
+                possible model parameters using a mathematical equation: $$ \hat{\theta} = (X^{T}X)^{-1}X^{T}y $$ For
+                which \(\hat{\theta}\) is the value of \(\theta\) that minimizes the cost function, \(X\) is a matrix
+                containing all values of the descriptive variable, and \(y\) is a vector containing the dependent
+                variable. The normal equation is a so-called closed-form solution, which is an amazing concept, since
+                \(X\), \(y\) and some algebra is all we need to find the best possible model parameters
+                \(\hat{\theta}\). Calculating \(\hat{\theta}\) by hand looks like this:
+            </p>
+            <p id='normal-equation' style="overflow-x: auto;"></p>
+            <p>
+                😨 no one has time for that. Plus, all the computational steps (transposing, inverting, multiplying) are
+                tedious and error-prone. This is why, instead, we let Python do the hard work for us. Here is the same
+                calculation as above, only much faster since we use Numpy:
+            </p>
+            <pre><code id='normal-equation-code' class="language-python"></code></pre>
+            <p>
+                Both, the code example and the matrix notation, are dynamic and adapt to the dataset displayed in the
+                D3.js chart above 😎. Give it a try: click on the "New data" button below and you should see that the
+                computations of the matrix and numpy notations change. The resulting \(\hat{\theta}\) values should be
+                the same. You can check if everything is correct by returning to the D3.js chart above. Click the "Best
+                fit" button and check if the values for the \(\theta_0\) and \(\theta_1\) sliders match the results.
+            </p>
+            <div class="text-center">
+                <button class="chart1-new-data btn btn-primary">New data</button>
+            </div>
+            <p>
+                In general, that's all you need to know about univariate linear regression. For the multivariate case,
+                that is, when multiple explanatory variables enter the equation, the approach is very similar. In the
+                next section you will see that although the equations and matrices are larger and more comprehensive,
+                the underlying procedure is the same.
+            </p>
 
 
-    <h1 class="section-heading">Polynomial regression</h1>
-    <p>
-        The above is all nice and great, but there's one big problem that you've probably already noticed. Every time you click on "New dataset" in the chart above, scikit-learn's <a href="https://scikit-learn.org/0.16/modules/generated/sklearn.datasets.make_regression.html#sklearn.datasets.make_regression" target="_blank"><code>make_regression</code></a> function creates a new dataset with a clear linear relationship between the dependent and explanatory variables. I do this on purpose because linear regression is a high bias model, which means that certain conditions must apply to the dataset. Unfortunately, not all relationships in life are linear, which is why you cannot simpy throw a linear regression on everything. So does this mean that linear regression is only applicable if the underlying dataset also has a linear structure 😢? No, it does not! At this point I'd like to introduce polynomial features, as they allow us to model a non-linear relationship in a linear way.
-    </p>
-    <p>
-        A polynomial feature is nothing more than an additional feature created from an existing feature. Let's say we have a dataset that has the shape of a parabola. It makes no sense to model the dataset using a simple linear regression. This is because the relationship is not linear but quadratic. To improve the fit of our line we extend the model by a polynomial feature which is just the squared value of our already existing feature. An additional feature means there is a further model parameter \(\theta_2\) which we'll have to optimize. As before, we need nothing more than the normal equation to determine the best possible parameters \(\theta_0\), \(\theta_1\) and \(\theta_2\). This is because \(\hat{\theta} = (X^{T}X)^{-1}X^{T}y\) works with one, ten or hundred features — it makes no difference. However, if your number of features is very large (e.g. more than 100,000), you should consider using gradient descent. This is because the normal equation inverts \(X^{T}X\), which can be quite computationally expensive with a large number of features.
-    </p>
-    <p>
-        In the following D3.js chart you can explore how a polynomial regression behaves. \(\theta_0\) and \(\theta_1\) have the same behavior as above: they change the vertical positioning and slope of the line. But what does \(\theta_2\) do? Find out by adjusting the sliders and creating new datasets. Also observe how the metrics change when you display the best fit.
-    </p>
+            <h1 class="section-heading">Polynomial regression</h1>
+            <p>
+                The above is all nice and great, but there's one big problem that you've probably already noticed. Every
+                time you click on "New dataset" in the chart above, scikit-learn's <a
+                    href="https://scikit-learn.org/0.16/modules/generated/sklearn.datasets.make_regression.html#sklearn.datasets.make_regression"
+                    target="_blank"><code>make_regression</code></a> function creates a new dataset with a clear linear
+                relationship between the dependent and explanatory variables. I do this on purpose because linear
+                regression is a high bias model, which means that certain conditions must apply to the dataset.
+                Unfortunately, not all relationships in life are linear, which is why you cannot simpy throw a linear
+                regression on everything. So does this mean that linear regression is only applicable if the underlying
+                dataset also has a linear structure 😢? No, it does not! At this point I'd like to introduce polynomial
+                features, as they allow us to model a non-linear relationship in a linear way.
+            </p>
+            <p>
+                A polynomial feature is nothing more than an additional feature created from an existing feature. Let's
+                say we have a dataset that has the shape of a parabola. It makes no sense to model the dataset using a
+                simple linear regression. This is because the relationship is not linear but quadratic. To improve the
+                fit of our line we extend the model by a polynomial feature which is just the squared value of our
+                already existing feature. An additional feature means there is a further model parameter \(\theta_2\)
+                which we'll have to optimize. As before, we need nothing more than the normal equation to determine the
+                best possible parameters \(\theta_0\), \(\theta_1\) and \(\theta_2\). This is because \(\hat{\theta} =
+                (X^{T}X)^{-1}X^{T}y\) works with one, ten or hundred features — it makes no difference. However, if your
+                number of features is very large (e.g. more than 100,000), you should consider using gradient descent.
+                This is because the normal equation inverts \(X^{T}X\), which can be quite computationally expensive
+                with a large number of features.
+            </p>
+            <p>
+                In the following D3.js chart you can explore how a polynomial regression behaves. \(\theta_0\) and
+                \(\theta_1\) have the same behavior as above: they change the vertical positioning and slope of the
+                line. But what does \(\theta_2\) do? Find out by adjusting the sliders and creating new datasets. Also
+                observe how the metrics change when you display the best fit.
+            </p>
 </div>
 
 <div id="chart2" class="col-md-10 col-lg-10 col-xl-10">
@@ -200,20 +293,20 @@
             </div>
             <div class="card" style="overflow-x: hidden; text-align: center;">
                 <div class="card-body" style="padding: 0.5rem;">
-                <h5 class="card-title">MSE</h5>
-                <p class="card-text" id="chart2-mse">This</p>
+                    <h5 class="card-title">MSE</h5>
+                    <p class="card-text" id="chart2-mse">This</p>
                 </div>
             </div>
             <div class="card" style="overflow-x: hidden; text-align: center;">
                 <div class="card-body" style="padding: 0.5rem;">
-                <h5 class="card-title">RMSE</h5>
-                <p class="card-text" id="chart2-rmse">This</p>
+                    <h5 class="card-title">RMSE</h5>
+                    <p class="card-text" id="chart2-rmse">This</p>
                 </div>
             </div>
             <div class="card" style="overflow-x: hidden; text-align: center;">
                 <div class="card-body" style="padding: 0.5rem;">
-                <h5 class="card-title">MAE</h5>
-                <p class="card-text" id="chart2-mae"></p>
+                    <h5 class="card-title">MAE</h5>
+                    <p class="card-text" id="chart2-mae"></p>
                 </div>
             </div>
         </div>
@@ -231,12 +324,12 @@
             <div style="text-align: center;">\(\theta_2\)</div>
             <div id="chart2-theta2-container" style="height: 4em;"></div>
         </div>
-        <div class="col-12 p-1" style="text-align: center;" >
+        <div class="col-12 p-1" style="text-align: center;">
             <button class="chart2-new-data btn btn-primary">New data</button>
             <button class="btn btn-primary" id="chart2-best-fit" style="margin-right: 1em;">Best fit</button>
             <form style="display: inline-block;">
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="chart2-residuals-check" value=""> Residuals
+                    <input type="checkbox" id="chart2-residuals-check" value=""> Residuals
                 </label>
             </form>
         </div>
@@ -246,36 +339,63 @@
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
     <hr>
     <p style="text-align: center;">
-        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart2.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+        💡 Check out the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart2.js"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!
     </p>
     <hr>
     <p>
-        First things first: we can see that the scatter plot has the shape of a parabola. This means that unlike the first D3.js chart, our dataset has a quadratic, rather than a linear relationship. \(\theta_2\) pushes and pulls the line inwards and outwards, respectively. For \(\theta_2=0\) we simply get a line. If we increase the absolute value of \(\theta_2\) the line turns into the shape of a parabola. Feel free to play around with the sliders, display the residuals and try to reduce them.
+        First things first: we can see that the scatter plot has the shape of a parabola. This means that unlike the
+        first D3.js chart, our dataset has a quadratic, rather than a linear relationship. \(\theta_2\) pushes and pulls
+        the line inwards and outwards, respectively. For \(\theta_2=0\) we simply get a line. If we increase the
+        absolute value of \(\theta_2\) the line turns into the shape of a parabola. Feel free to play around with the
+        sliders, display the residuals and try to reduce them.
     </p>
     <p>
-        Polynomial features show how versatile linear regression models are, since small changes are already enough to create a whole new predictor. The calculation of the optimal model parameters is very similar to the univariate version and differs only by the additional model parameter \(\theta_2\) and the newly added polynomial feature.
+        Polynomial features show how versatile linear regression models are, since small changes are already enough to
+        create a whole new predictor. The calculation of the optimal model parameters is very similar to the univariate
+        version and differs only by the additional model parameter \(\theta_2\) and the newly added polynomial feature.
     </p>
     <p>
-        For your current dataset the best fitting line is achieved with <span id='chart2-theta0'></span>, <span id='chart2-theta1'></span>, and <span id='chart2-theta2'></span>. Once again, let's take a look at the matrix and Numpy notations so we can get an idea about how to retrieve these optimal values. Pay attention to how scikit-learn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html" target="_blank">PolynomialFeatures</a> transformer makes computing the polynomial features easy as pie.
+        For your current dataset the best fitting line is achieved with <span id='chart2-theta0'></span>, <span
+            id='chart2-theta1'></span>, and <span id='chart2-theta2'></span>. Once again, let's take a look at the
+        matrix and Numpy notations so we can get an idea about how to retrieve these optimal values. Pay attention to
+        how scikit-learn's <a
+            href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html"
+            target="_blank">PolynomialFeatures</a> transformer makes computing the polynomial features easy as pie.
     </p>
-    <p id='chart2-normal-equation' style="overflow-x: auto;" ></p>
+    <p id='chart2-normal-equation' style="overflow-x: auto;"></p>
     <pre><code id='chart2-normal-equation-code' class="language-python"></code></pre>
     <div class="text-center">
         <button class="chart2-new-data btn btn-primary">New data</button>
     </div>
     <p>
-        That's all I have to say about polynomial regressions. To be honest, it sounds a lot fancier than it actually is. Basically, you're just extending some existing features to make the model more flexible. Still, I find it fascinating that linear models can be used to explain quadratic or cubic relationships.
+        That's all I have to say about polynomial regressions. To be honest, it sounds a lot fancier than it actually
+        is. Basically, you're just extending some existing features to make the model more flexible. Still, I find it
+        fascinating that linear models can be used to explain quadratic or cubic relationships.
     </p>
     <p>
-        At this point, a somewhat naive but valid question would be: why don't we just keep adding polynomial features to our model until we have a perfect model?  Couldn't we then explain every dataset perfectly? To some extent, this statement is true. By continuously adding polynomial features we are able to explain larger parts of the variance. This means that our prediction model gets better. Up until we are able to perfectly reproduce the dataset. Unfortunately, this approach doesn't help us much and is actually one of the best known pitfalls in machine learning.
+        At this point, a somewhat naive but valid question would be: why don't we just keep adding polynomial features
+        to our model until we have a perfect model? Couldn't we then explain every dataset perfectly? To some extent,
+        this statement is true. By continuously adding polynomial features we are able to explain larger parts of the
+        variance. This means that our prediction model gets better. Up until we are able to perfectly reproduce the
+        dataset. Unfortunately, this approach doesn't help us much and is actually one of the best known pitfalls in
+        machine learning.
     </p>
 
     <h1 class="section-heading">Over- and underfitting</h1>
     <p>
-        Machine learning is full of tradeoffs, they are around every corner and you can hardly make a decision without balancing your options. Among all those tradeoffs, over-/underfitting is definitely one of the best-known. Despite that it still happens all the time 💩. For some reason overfitting is so obvious, yet so tempting.
+        Machine learning is full of tradeoffs, they are around every corner and you can hardly make a decision without
+        balancing your options. Among all those tradeoffs, over-/underfitting is definitely one of the best-known.
+        Despite that it still happens all the time 💩. For some reason overfitting is so obvious, yet so tempting.
     </p>
     <p>
-        You can explore the topic yourself in the following D3.js chart. The left-hand slider changes the degrees of freedom of a polynomial regression, which is trained using the training dataset (scatter plot in the left-hand figure). Next, we use the trained model to make predictions on the test dataset in the figure on the right side. You can adjust the dataset's underlying noise with the second slider. Play around with the settings and observe how the regression line behaves in both charts. The training and test metrics provide interesting insights into the cross-dataset performance of the model.
+        You can explore the topic yourself in the following D3.js chart. The left-hand slider changes the degrees of
+        freedom of a polynomial regression, which is trained using the training dataset (scatter plot in the left-hand
+        figure). Next, we use the trained model to make predictions on the test dataset in the figure on the right side.
+        You can adjust the dataset's underlying noise with the second slider. Play around with the settings and observe
+        how the regression line behaves in both charts. The training and test metrics provide interesting insights into
+        the cross-dataset performance of the model.
     </p>
 </div>
 
@@ -294,46 +414,46 @@
         <div style="position: relative; text-align: center;" class="col-5 p-0">
             <table style="width: 80%; margin-left: auto; margin-right: auto;">
                 <thead>
-                  <tr>
-                    <th colspan="4"><b>Train</b></th>
-                  </tr>
+                    <tr>
+                        <th colspan="4"><b>Train</b></th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>$$\textrm{MAE}$$</td>
-                    <td>$$\textrm{MSE}$$</td>
-                    <td>$$\textrm{RMSE}$$</td>
-                    <td>$$\textrm{R}^2$$</td>
-                  </tr>
-                  <tr>
-                    <td id="chart3-train-mae"></td>
-                    <td id="chart3-train-mse"></td>
-                    <td id="chart3-train-rmse"></td>
-                    <td id="chart3-train-r2"></td>
-                  </tr>
+                    <tr>
+                        <td>$$\textrm{MAE}$$</td>
+                        <td>$$\textrm{MSE}$$</td>
+                        <td>$$\textrm{RMSE}$$</td>
+                        <td>$$\textrm{R}^2$$</td>
+                    </tr>
+                    <tr>
+                        <td id="chart3-train-mae"></td>
+                        <td id="chart3-train-mse"></td>
+                        <td id="chart3-train-rmse"></td>
+                        <td id="chart3-train-r2"></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div style="position: relative; text-align: center;" class="col-5 p-0">
             <table style="width: 80%; margin-left: auto; margin-right: auto;">
                 <thead>
-                  <tr>
-                    <th colspan="4"><b>Test</b></th>
-                  </tr>
+                    <tr>
+                        <th colspan="4"><b>Test</b></th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>$$\textrm{MAE}$$</td>
-                    <td>$$\textrm{MSE}$$</td>
-                    <td>$$\textrm{RMSE}$$</td>
-                    <td>$$\textrm{R}^2$$</td>
-                  </tr>
-                  <tr>
-                    <td id="chart3-test-mae"></td>
-                    <td id="chart3-test-mse"></td>
-                    <td id="chart3-test-rmse"></td>
-                    <td id="chart3-test-r2"></td>
-                  </tr>
+                    <tr>
+                        <td>$$\textrm{MAE}$$</td>
+                        <td>$$\textrm{MSE}$$</td>
+                        <td>$$\textrm{RMSE}$$</td>
+                        <td>$$\textrm{R}^2$$</td>
+                    </tr>
+                    <tr>
+                        <td id="chart3-test-mae"></td>
+                        <td id="chart3-test-mse"></td>
+                        <td id="chart3-test-rmse"></td>
+                        <td id="chart3-test-r2"></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -349,75 +469,173 @@
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
     <hr>
     <p style="text-align: center;">
-        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart3.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+        💡 Check out the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart3.js"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!
     </p>
     <hr>
     <p>
-        As mentioned earlier, linear regression is a high bias and low variance model. Simply put, linear regression has little flexibility since it assumes that the dataset can be explained linearly. Polynomial features are a way to reduce the bias of a linear regression model and at the same time increase its variance. In other words, the model becomes more flexible. Let's figure out what this looks like by changing the regression's degrees of freedom. Note: click on the hyperlinks in the text to see each scenario in the chart above.
+        As mentioned earlier, linear regression is a high bias and low variance model. Simply put, linear regression has
+        little flexibility since it assumes that the dataset can be explained linearly. Polynomial features are a way to
+        reduce the bias of a linear regression model and at the same time increase its variance. In other words, the
+        model becomes more flexible. Let's figure out what this looks like by changing the regression's degrees of
+        freedom. Note: click on the hyperlinks in the text to see each scenario in the chart above.
     </p>
     <p>
-        For <a class="chart3-options" id="chart3-degrees-1-noise-7" href="#chart3"><code>degree = 1</code></a> we get a straight line, which makes sense since this is just a linear regression. The train and test metrics are quite bad and fairly similar. Similarly bad metrics on both train and test are a good indication of underfitting. Our model is too simple, or in other words, we model both datasets equally poorly. This is obvious, since we are trying to approximate a quadratic scatterplot using a linear function. If we increase the degrees of freedom to <a class="chart3-options" id="chart3-degrees-2-noise-7" href="#chart3"><code>degree = 2</code></a>, the model performance improves dramatically — on both datasets!
+        For <a class="chart3-options" id="chart3-degrees-1-noise-7" href="#chart3"><code>degree = 1</code></a> we get a
+        straight line, which makes sense since this is just a linear regression. The train and test metrics are quite
+        bad and fairly similar. Similarly bad metrics on both train and test are a good indication of underfitting. Our
+        model is too simple, or in other words, we model both datasets equally poorly. This is obvious, since we are
+        trying to approximate a quadratic scatterplot using a linear function. If we increase the degrees of freedom to
+        <a class="chart3-options" id="chart3-degrees-2-noise-7" href="#chart3"><code>degree = 2</code></a>, the model
+        performance improves dramatically — on both datasets!
     <p>
-        Better metrics on train than test are generally a good thing. It speaks against underfitting, however we cannot exclude that our model is already overfitting. If we increase the degrees of freedom to <a class="chart3-options" id="chart3-degrees-3-noise-7" href="#chart3"><code>degree = 3</code></a>, <a class="chart3-options" id="chart3-degrees-4-noise-7" href="#chart3"><code>degree = 4</code></a> and <a class="chart3-options" id="chart3-degrees-5-noise-7" href="#chart3"><code>degree = 5</code></a> we see minimal to no improvement in all metrics. This is a strong indication that we are close to overfitting and will only continue to make things worse. Let’s increase the degrees of freedom to <a class="chart3-options" id="chart3-degrees-10-noise-7" href="#chart3"><code>degree = 10</code></a> and observe what happens to the performance metrics.
+        Better metrics on train than test are generally a good thing. It speaks against underfitting, however we cannot
+        exclude that our model is already overfitting. If we increase the degrees of freedom to <a
+            class="chart3-options" id="chart3-degrees-3-noise-7" href="#chart3"><code>degree = 3</code></a>, <a
+            class="chart3-options" id="chart3-degrees-4-noise-7" href="#chart3"><code>degree = 4</code></a> and <a
+            class="chart3-options" id="chart3-degrees-5-noise-7" href="#chart3"><code>degree = 5</code></a> we see
+        minimal to no improvement in all metrics. This is a strong indication that we are close to overfitting and will
+        only continue to make things worse. Let’s increase the degrees of freedom to <a class="chart3-options"
+            id="chart3-degrees-10-noise-7" href="#chart3"><code>degree = 10</code></a> and observe what happens to the
+        performance metrics.
     <p>
-        Surprise 🤡 our train metrics keep improving while we're continuing to mess up performance on test set. That's overfitting at its best. We can continue this effect by increasing the degrees of freedom to <a class="chart3-options" id="chart3-degrees-15-noise-7" href="#chart3"><code>degree = 15</code></a> or <a class="chart3-options" id="chart3-degrees-20-noise-7" href="#chart3"><code>degree = 20</code></a>. The training performance will continuously improve, while our predictions on unseen data will get even worse.
+        Surprise 🤡 our train metrics keep improving while we're continuing to mess up performance on test set. That's
+        overfitting at its best. We can continue this effect by increasing the degrees of freedom to <a
+            class="chart3-options" id="chart3-degrees-15-noise-7" href="#chart3"><code>degree = 15</code></a> or <a
+            class="chart3-options" id="chart3-degrees-20-noise-7" href="#chart3"><code>degree = 20</code></a>. The
+        training performance will continuously improve, while our predictions on unseen data will get even worse.
     </p>
     <p>
-        But what about the noise slider? Noise adds another layer of complexity on top, since it amplifies the just explained problem of overfitting. For example, have a look at the following polynomial regression with <a class="chart3-options" id="chart3-degrees-15-noise-0" href="#chart3"><code>degree = 15</code> on a dataset with <code>noise = 0</code></a>. This is a perfectly clean dataset without any variation or noise, so everything learned on train can be applied to test. That's the reason why there's no difference between train and test metrics, despite the high number of polynomial features. Let's keep the degrees of freedom at <a class="chart3-options" id="chart3-degrees-15-noise-15" href="#chart3"><code>degree = 15</code>, but work on a dataset with <code>noise = 15</code></a> to see what impact underlying noise has on high polynomial regressions.
+        But what about the noise slider? Noise adds another layer of complexity on top, since it amplifies the just
+        explained problem of overfitting. For example, have a look at the following polynomial regression with <a
+            class="chart3-options" id="chart3-degrees-15-noise-0" href="#chart3"><code>degree = 15</code> on a dataset
+            with <code>noise = 0</code></a>. This is a perfectly clean dataset without any variation or noise, so
+        everything learned on train can be applied to test. That's the reason why there's no difference between train
+        and test metrics, despite the high number of polynomial features. Let's keep the degrees of freedom at <a
+            class="chart3-options" id="chart3-degrees-15-noise-15" href="#chart3"><code>degree = 15</code>, but work on
+            a dataset with <code>noise = 15</code></a> to see what impact underlying noise has on high polynomial
+        regressions.
     </p>
     <p>
-        As expected, there is a high discrepancy between our train and test metrics. The reason for this is that high degrees of freedom allow the polynomial regression to pick up the entire noise in the training dataset. The result is a model that's pretty good at resembling all the patterns and noise in the training data but cannot generalize to any unseen data.
+        As expected, there is a high discrepancy between our train and test metrics. The reason for this is that high
+        degrees of freedom allow the polynomial regression to pick up the entire noise in the training dataset. The
+        result is a model that's pretty good at resembling all the patterns and noise in the training data but cannot
+        generalize to any unseen data.
     </p>
     <p>
-        I hope this takes out the complexity of the entire over-/underfitting tradeoff. It's really not a big deal and not too hard to understand if you have some visual assistance. This concludes my take on linear regression models! There's one more thing I'd like to explain, since everything I've covered above is just one part of what linear models are capable of. All of the above can be used to train a model that predicts continous values such as stock prices, temperatures, country's GDPs or heights. These so-called regression problems are a major part of machine learning, however, not all tasks boil down to predicting a continous number. Just think about recommender systems, spam filters or detecting whether a picture includes a cat or a dog. Let's have a look at classification problems and how the so-called logistic function enables a simple linear regression model to predict probabilities.
+        I hope this takes out the complexity of the entire over-/underfitting tradeoff. It's really not a big deal and
+        not too hard to understand if you have some visual assistance. This concludes my take on linear regression
+        models! There's one more thing I'd like to explain, since everything I've covered above is just one part of what
+        linear models are capable of. All of the above can be used to train a model that predicts continous values such
+        as stock prices, temperatures, country's GDPs or heights. These so-called regression problems are a major part
+        of machine learning, however, not all tasks boil down to predicting a continous number. Just think about
+        recommender systems, spam filters or detecting whether a picture includes a cat or a dog. Let's have a look at
+        classification problems and how the so-called logistic function enables a simple linear regression model to
+        predict probabilities.
     </p>
     <h1 class="section-heading">Logistic Regression</h1>
     <p>
-        In contrast to a linear or polynomial regression, logistic regression doesn't predict a continous value. The goal is to predict a discrete value like whether or not an instance belongs to a certain class. This is called classification and, along with regression, is one of the most common tasks in machine learning. In the following, we explore a binary classification problem in greater detail. Binary classification problems deal with the question whether an instance belongs to a positive (1) or negative (0) class. For example, a model that predicts whether a flower is a sunflower (positive class, 1) or a rose (negative class 0).
+        In contrast to a linear or polynomial regression, logistic regression doesn't predict a continous value. The
+        goal is to predict a discrete value like whether or not an instance belongs to a certain class. This is called
+        classification and, along with regression, is one of the most common tasks in machine learning. In the
+        following, we explore a binary classification problem in greater detail. Binary classification problems deal
+        with the question whether an instance belongs to a positive (1) or negative (0) class. For example, a model that
+        predicts whether a flower is a sunflower (positive class, 1) or a rose (negative class 0).
     </p>
     <p>
-        Good news first: if you understand how linear regression works you're almost there. This is because under the hood logistic regression is also a linear model that makes a prediction based on the weighted sum of some input features (plus a bias term). The main difference is that the target variable we want to predict is between 0 and 1. The reason for this is simply that we are predicting probabilities and since probabilities are constrained to be in the range of 0 to 1 any other values wouldn't really make sense. To achieve this,  we simply squeeze the outputs of a linear regression into a corridor between zero and one by applying the logistic function. The logistic, often also referred to as sigmoid function, is defined as follows: $$ \sigma(t) = \frac{1}{1+e^{-t}} $$
+        Good news first: if you understand how linear regression works you're almost there. This is because under the
+        hood logistic regression is also a linear model that makes a prediction based on the weighted sum of some input
+        features (plus a bias term). The main difference is that the target variable we want to predict is between 0 and
+        1. The reason for this is simply that we are predicting probabilities and since probabilities are constrained to
+        be in the range of 0 to 1 any other values wouldn't really make sense. To achieve this, we simply squeeze the
+        outputs of a linear regression into a corridor between zero and one by applying the logistic function. The
+        logistic, often also referred to as sigmoid function, is defined as follows: $$ \sigma(t) = \frac{1}{1+e^{-t}}
+        $$
     </p>
     <div id="sigmoid-chart" style="height: 20em;"></div>
     <hr>
     <p style="text-align: center;">
-        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/sigmoid.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+        💡 Check out the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/sigmoid.js"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!
     </p>
     <hr>
     <p>
-        \(\sigma(t)\) has a distinct S-shape and only outputs values between zero and one. This means that \(\hat{y} = \theta^{T}x\) becomes: $$ \hat{p} = \sigma(\theta^{T}x) $$ Determining whether an instance belongs to the positive or negative class is really easy just by looking at \(\hat{p}\): $$ \hat{y} = \begin{cases} 0 & \text{if } \hat{p} < 0.5 \\ 1 & \text{if } \hat{p} \geq 0.5 \end{cases} $$ Simple, right? The final prediction only depends on whether the probability \(\hat{p}\) is greater than or equal to 0.5. If \(\hat{p}\) is greater than or equal to 0.5 then \(\hat{y}=1\), otherwise \(\hat{y}=0\).
-    </p>
-    <p>
-        As with linear regression, the perfect sigmoid curve can be found by minimizing a cost function using gradient descent. We could use the same cost function as before, however, generally speaking <a href="https://i.imgur.com/GOhfk6k.png" target="_blank">one does not simply regress a binary outcome applying ordinary least squares</a>. The reason therefore is that weird things, such as predicted probabilities smaller or larger than zero and one, can happen when optimizing logistic regression using least squares. Let's think about the main objective of a classifier to get an idea of how a better suited loss function could look like.
-    </p>
-    <p>
-        Simply put, everything a classification task is about is to express how close a classifier's output is to the correct output. We can achieve this by using a loss function that prefers the correct class labels of the training examples to be more likely. This is also called maximum likelihood estimation and everything it does is to choose a set of model parameters that maximize the log probability of the true \(y\) labels in the training data given the observations \(X\). The resulting cost function is the negative log likelihood, often also referred to as the cross-entropy loss:
-    </p>
-    <p style="overflow-x: auto;">
-        $$ -\frac{1}{m} \sum_{i=1}^{m}[y^{(i)}\log{(\hat{p}^{(i)})}+(1-y^{(i)})\log{(1-\hat{p}^{(i)})}] $$
-    </p>
-    <p>
-        As you can see, wrong predictions are penalized while correct ones are rewarded. This is because \(y^{(i)}\log{(\hat{p}^{(i)})}\) is large (bad) if the instance belongs to the positive class, but the model predicts a low probability. Similarly, for instances belonging to the negative class, \((1-y^{(i)})\log{(1-\hat{p}^{(i)})}\) becomes large (bad) if a high probability is predicted. Unfortunately, there is no known closed-form equation for the above cost function, which means that we cannot determine the perfect model parameters like above when we used \(\hat{\theta}=(X^{T}X)^{-1}X^{T}y\). The good news is that the cost function is convex and gradient descent is therefore guaranteed to reach the global minimum. Enough theory, let's construct a small example to see how it works.
-    </p>
-    <pre><code class="language-python">>>> import numpy as np
+        \(\sigma(t)\) has a distinct S-shape and only outputs values between zero and one. This means that \(\hat{y} =
+        \theta^{T}x\) becomes: $$ \hat{p} = \sigma(\theta^{T}x) $$ Determining whether an instance belongs to the
+        positive or negative class is really easy just by looking at \(\hat{p}\): $$ \hat{y} = \begin{cases} 0 &
+        \text{if } \hat{p} < 0.5 \\ 1 & \text{if } \hat{p} \geq 0.5 \end{cases} $$ Simple, right? The final prediction
+            only depends on whether the probability \(\hat{p}\) is greater than or equal to 0.5. If \(\hat{p}\) is
+            greater than or equal to 0.5 then \(\hat{y}=1\), otherwise \(\hat{y}=0\). </p>
+            <p>
+                As with linear regression, the perfect sigmoid curve can be found by minimizing a cost function using
+                gradient descent. We could use the same cost function as before, however, generally speaking <a
+                    href="https://i.imgur.com/GOhfk6k.png" target="_blank">one does not simply regress a binary outcome
+                    applying ordinary least squares</a>. The reason therefore is that weird things, such as predicted
+                probabilities smaller or larger than zero and one, can happen when optimizing logistic regression using
+                least squares. Let's think about the main objective of a classifier to get an idea of how a better
+                suited loss function could look like.
+            </p>
+            <p>
+                Simply put, everything a classification task is about is to express how close a classifier's output is
+                to the correct output. We can achieve this by using a loss function that prefers the correct class
+                labels of the training examples to be more likely. This is also called maximum likelihood estimation and
+                everything it does is to choose a set of model parameters that maximize the log probability of the true
+                \(y\) labels in the training data given the observations \(X\). The resulting cost function is the
+                negative log likelihood, often also referred to as the cross-entropy loss:
+            </p>
+            <p style="overflow-x: auto;">
+                $$ -\frac{1}{m} \sum_{i=1}^{m}[y^{(i)}\log{(\hat{p}^{(i)})}+(1-y^{(i)})\log{(1-\hat{p}^{(i)})}] $$
+            </p>
+            <p>
+                As you can see, wrong predictions are penalized while correct ones are rewarded. This is because
+                \(y^{(i)}\log{(\hat{p}^{(i)})}\) is large (bad) if the instance belongs to the positive class, but the
+                model predicts a low probability. Similarly, for instances belonging to the negative class,
+                \((1-y^{(i)})\log{(1-\hat{p}^{(i)})}\) becomes large (bad) if a high probability is predicted.
+                Unfortunately, there is no known closed-form equation for the above cost function, which means that we
+                cannot determine the perfect model parameters like above when we used
+                \(\hat{\theta}=(X^{T}X)^{-1}X^{T}y\). The good news is that the cost function is convex and gradient
+                descent is therefore guaranteed to reach the global minimum. Enough theory, let's construct a small
+                example to see how it works.
+            </p>
+            <pre><code class="language-python">>>> import numpy as np
 >>> import pandas as pd
 >>> from sklearn import datasets
 >>> X, y = datasets.load_iris(return_X_y=True, as_frame=True)</code></pre>
-    <p>
-        We use sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html" target="_blank"><code>datasets.load_iris()</code></a> method to load the iris dataset, which is a common and simple dataset for multi-class classification of iris species. The dataset contains three different species of irises (setosa, versicolour, and virginica), as well as their petal and sepal widths and lengths. Basically, it is a dataset of three flowers of the same species (labels) with different measurements (features).
-    </p>
-    <p>
-        We'd like to keep things as simple as possible, which is why we restrict the problem to predicting a single target with one feature. This allows me to plot the entire binary classification task in a single graph with the feature \(X\) on the horizontal axis, the target \(y\) on the vertical axis, and the sigmoid decision boundary in the chart. Furthermore, I've implemented additional functionalities that allow you to train a classifier based on different target-feature combinations. For example, if you select "petal width" and "virginica" in the dropdowns below, what happens under the hood is the following:
-    </p>
-    <pre><code class="language-python">>>> X = X[["petal width (cm)"]]
+            <p>
+                We use sklearn's <a
+                    href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html"
+                    target="_blank"><code>datasets.load_iris()</code></a> method to load the iris dataset, which is a
+                common and simple dataset for multi-class classification of iris species. The dataset contains three
+                different species of irises (setosa, versicolour, and virginica), as well as their petal and sepal
+                widths and lengths. Basically, it is a dataset of three flowers of the same species (labels) with
+                different measurements (features).
+            </p>
+            <p>
+                We'd like to keep things as simple as possible, which is why we restrict the problem to predicting a
+                single target with one feature. This allows me to plot the entire binary classification task in a single
+                graph with the feature \(X\) on the horizontal axis, the target \(y\) on the vertical axis, and the
+                sigmoid decision boundary in the chart. Furthermore, I've implemented additional functionalities that
+                allow you to train a classifier based on different target-feature combinations. For example, if you
+                select "petal width" and "virginica" in the dropdowns below, what happens under the hood is the
+                following:
+            </p>
+            <pre><code class="language-python">>>> X = X[["petal width (cm)"]]
 >>> y = y = (y==2).astype(int)
 >>> X.to_numpy()
 array([[0.2], [0.2], [0.2], [0.2], [0.2], [0.4], [0.3],[0.2], ...]
 >>> y.to_numpy()
 array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
-    <p>
-        Feel free to play around with the dropdown options and the model parameters in the following D3.js chart. Furthermore, click the "Converge" button to find the best possible model parameters for the selected target and feature values. Under the hood, clicking the "Converge" button starts gradient descent in the background, which iteratively evaluates the gradient, combines it with a learning rate and updates the current values of \(\theta_0\) and \(\theta_1\). In this case, gradient descent stops iterating as soon as the loss reduction drops below a certain tolerance, which I have set to \(1\mathrm{e}{-6}\).
-    </p>
+            <p>
+                Feel free to play around with the dropdown options and the model parameters in the following D3.js
+                chart. Furthermore, click the "Converge" button to find the best possible model parameters for the
+                selected target and feature values. Under the hood, clicking the "Converge" button starts gradient
+                descent in the background, which iteratively evaluates the gradient, combines it with a learning rate
+                and updates the current values of \(\theta_0\) and \(\theta_1\). In this case, gradient descent stops
+                iterating as soon as the loss reduction drops below a certain tolerance, which I have set to
+                \(1\mathrm{e}{-6}\).
+            </p>
 </div>
 
 <div id="chart4" class="col-md-12 col-lg-12 col-xl-12">
@@ -433,9 +651,9 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
             <div style="text-align: center;">\(\theta_1\)</div>
             <div id="chart4-theta1-container" style="height: 4em;"></div>
         </div>
-        <div class="col-6" style="text-align: center;" >
+        <div class="col-6" style="text-align: center;">
             <div class="input-group">
-                <button style="margin-right: 1em;" class="btn btn-primary" id="chart4-converge-button" >Converge</button>
+                <button style="margin-right: 1em;" class="btn btn-primary" id="chart4-converge-button">Converge</button>
                 <select id="chart4-feature-selection" style="margin-right: 1em;" class="form-select data-update">
                     <option value="0">sepal length</option>
                     <option value="1">sepal width</option>
@@ -455,50 +673,94 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
     <hr>
     <p style="text-align: center;">
-        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart4.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+        💡 Check out the source code on <a
+            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart4.js"
+            target="_blank">GitHub <i class="fab fa-github"></i></a>!
     </p>
     <hr>
     <p>
-        The continuously increasing blue sigmoid curve indicates the probability with which an instance belongs to the target class. The continuously decreasing red curve indicates the opposite, namely the probability with which an instance does not belong to the target class. This is really intuitive, since the red curve is simply defined as \(1 - \frac{1}{1+e^{-t}}\). The decision boundary is located at the intersection of the two curves. Both model parameters shift the decision boundary on the x-axis. While \(\theta_0\) shifts the whole sigmoid curve to the left and right, \(\theta_1\) changes the slope in the area of the decision boundary. Both parameters push the decision boundary to the right for small values and to the left for large values.
+        The continuously increasing blue sigmoid curve indicates the probability with which an instance belongs to the
+        target class. The continuously decreasing red curve indicates the opposite, namely the probability with which an
+        instance does not belong to the target class. This is really intuitive, since the red curve is simply defined as
+        \(1 - \frac{1}{1+e^{-t}}\). The decision boundary is located at the intersection of the two curves. Both model
+        parameters shift the decision boundary on the x-axis. While \(\theta_0\) shifts the whole sigmoid curve to the
+        left and right, \(\theta_1\) changes the slope in the area of the decision boundary. Both parameters push the
+        decision boundary to the right for small values and to the left for large values.
     </p>
     <p>
-        The scatter plot reflects the raw data's \(X\) and \(y\) values. A quick look at the y-axis reveals that we're dealing with a binary classification problem, since all the scatter points are either located at \(y=0\) or \(y=1\). Hence, a data point at \(y=0\) indicates that it <b>doesn't belong</b> to the target class, while \(y=1\) indicates that it <b>does belong</b> to the target class. The position on the x-axis simply reflects the data points feature value, e.g. the pedal width or sepal length in centimetres. A scatter point's color indicates if the model's prediction is correct (green) or wrong (red). As mentioned before, the final prediction depends on the probability \(\hat{p} = \sigma(\theta^{T}x)\) in the way that if \(\hat{p} \geq 0.5\) the models predicts \(\hat{y}=1\) and \(\hat{y}=0\) if \(\hat{p} < 0.5\). Visually this corresponds to projecting each data point onto the blue sigmoid curve and evaluating the corresponding \(y\) value. Give it a try! I've implemented a tool tip in the chart above so you can actually see the projection and get a feeling for the model's predicted probabilities. Simply hover over any of the red and green scatter points to activate the tooltip.
-    </p>
-    <p>
-        The nice thing about binary classification problems is that the model's predictions can be assigned to one of four different buckets:
-    </p>
-    <ul>
-        <li>
-            Correctly classifying a positive target. In the chart above this corresponds to a green dot at \(y=1\). The prediction is correct since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a true positive.
-        </li>
-        <li>
-            Incorrectly classifying a positive target. In the chart above this corresponds to a red dot at \(y=1\). The prediction is false since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a false negative.
-        </li>
-        <li>
-            Correctly classifying a negative target. In the chart above this corresponds to a green dot at \(y=0\). The prediction is correct since the point's projection on the blue sigmoid curve is less than \(0.5\). This is also known as a true negative.
-        </li>
-        <li>
-            Incorrectly classifying a negative target. In the chart above this corresponds to a red dot at \(y=0\). The prediction is false since the point's projection on the blue sigmoid curve is greater equal than \(0.5\). This is also known as a false positive.
-        </li>
-    </ul>
-    <p>
-        Don't worry if you have no experience with false positives, true negatives and all the other metrics yet. I've already worked on <a href="https://web.philippstuerner.com/posts/confusion_matrix" target="_blank">another post</a> that covers all the important aspects in an easy to understand and visual way.
-    </p>
-    <p>
-        Probably you've already recognized that some target-feature combinations are easier to separate than others. For example, training a versicolor classifier based on the flower's petal widths results in a really weird, almost linear, sigmoid shape. The resulting classifier predicts zero for all data points. This might look wrong, however, in that case these are just the best model parameters to separate all the ones from the zeroes. Other combinations, such as petal width as the feature and virginica as the target, are easier to separate and result in a more visually appealing sigmoid shape. This is, once again, a reminder that you must be really careful about imbalanced datasets, the right choice of your loss function, and choosing an appropriate learning algorithm for the underlying task.
-    </p>
+        The scatter plot reflects the raw data's \(X\) and \(y\) values. A quick look at the y-axis reveals that we're
+        dealing with a binary classification problem, since all the scatter points are either located at \(y=0\) or
+        \(y=1\). Hence, a data point at \(y=0\) indicates that it <b>doesn't belong</b> to the target class, while
+        \(y=1\) indicates that it <b>does belong</b> to the target class. The position on the x-axis simply reflects the
+        data points feature value, e.g. the pedal width or sepal length in centimetres. A scatter point's color
+        indicates if the model's prediction is correct (green) or wrong (red). As mentioned before, the final prediction
+        depends on the probability \(\hat{p} = \sigma(\theta^{T}x)\) in the way that if \(\hat{p} \geq 0.5\) the models
+        predicts \(\hat{y}=1\) and \(\hat{y}=0\) if \(\hat{p} < 0.5\). Visually this corresponds to projecting each data
+            point onto the blue sigmoid curve and evaluating the corresponding \(y\) value. Give it a try! I've
+            implemented a tool tip in the chart above so you can actually see the projection and get a feeling for the
+            model's predicted probabilities. Simply hover over any of the red and green scatter points to activate the
+            tooltip. </p>
+            <p>
+                The nice thing about binary classification problems is that the model's predictions can be assigned to
+                one of four different buckets:
+            </p>
+            <ul>
+                <li>
+                    Correctly classifying a positive target. In the chart above this corresponds to a green dot at
+                    \(y=1\). The prediction is correct since the point's projection on the blue sigmoid curve is greater
+                    equal than \(0.5\). This is also known as a true positive.
+                </li>
+                <li>
+                    Incorrectly classifying a positive target. In the chart above this corresponds to a red dot at
+                    \(y=1\). The prediction is false since the point's projection on the blue sigmoid curve is less than
+                    \(0.5\). This is also known as a false negative.
+                </li>
+                <li>
+                    Correctly classifying a negative target. In the chart above this corresponds to a green dot at
+                    \(y=0\). The prediction is correct since the point's projection on the blue sigmoid curve is less
+                    than \(0.5\). This is also known as a true negative.
+                </li>
+                <li>
+                    Incorrectly classifying a negative target. In the chart above this corresponds to a red dot at
+                    \(y=0\). The prediction is false since the point's projection on the blue sigmoid curve is greater
+                    equal than \(0.5\). This is also known as a false positive.
+                </li>
+            </ul>
+            <p>
+                Don't worry if you have no experience with false positives, true negatives and all the other metrics
+                yet. I've already worked on <a href="https://web.philippstuerner.com/posts/confusion_matrix"
+                    target="_blank">another post</a> that covers all the important aspects in an easy to understand and
+                visual way.
+            </p>
+            <p>
+                Probably you've already recognized that some target-feature combinations are easier to separate than
+                others. For example, training a versicolor classifier based on the flower's petal widths results in a
+                really weird, almost linear, sigmoid shape. The resulting classifier predicts zero for all data points.
+                This might look wrong, however, in that case these are just the best model parameters to separate all
+                the ones from the zeroes. Other combinations, such as petal width as the feature and virginica as the
+                target, are easier to separate and result in a more visually appealing sigmoid shape. This is, once
+                again, a reminder that you must be really careful about imbalanced datasets, the right choice of your
+                loss function, and choosing an appropriate learning algorithm for the underlying task.
+            </p>
 
-    <h1 class="section-heading">Conclusion</h1>
-    <p>
-        That's it 💥 thank you for reading! I hope you enjoyed the examples and the ability to interactively adjust the parameters. Don't hesitate to <a href="mailto:philipp.stuerner@web.de">write me</a> if you encounter any bugs or have any suggestions.
-    </p>
+            <h1 class="section-heading">Conclusion</h1>
+            <p>
+                That's it 💥 thank you for reading! I hope you enjoyed the examples and the ability to interactively
+                adjust the parameters. Don't hesitate to <a href="mailto:philipp.stuerner@web.de">write me</a> if you
+                encounter any bugs or have any suggestions.
+            </p>
 
-    <hr>
-    <p style="font-size: 0.7rem">
-        Notes:<br>
-        Example, code snippets and math notations partly base on the fourth chapter of Aurélien Géron's excellent book <a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/" target="_blank">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd Edition</a><br>
-        <a href="https://web.stanford.edu/~jurafsky/slp3/5.pdf", target="_blank">Chapter 5 of Speech and Language Processing</a> by Daniel Jurafsky & James H. Martin has helped me a lot on the logistic regression parts
-    </p>
+            <hr>
+            <p style="font-size: 0.7rem">
+                Notes:<br>
+                Example, code snippets and math notations partly base on the fourth chapter of Aurélien Géron's
+                excellent book <a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/"
+                    target="_blank">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd
+                    Edition</a><br>
+                <a href="https://web.stanford.edu/~jurafsky/slp3/5.pdf" , target="_blank">Chapter 5 of Speech and
+                    Language Processing</a> by Daniel Jurafsky & James H. Martin has helped me a lot on the logistic
+                regression parts
+            </p>
 
 </div>
 {% endblock %}
@@ -509,8 +771,12 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://unpkg.com/d3-simple-slider@1.10.4/dist/d3-simple-slider.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.1/math.js" integrity="sha512-AfRcJIj922x/jSJpQLnry0DYIBg6EGCtwk/MiQ6QvDlzb7kNFxH8EdqXLkaXXY3YHQS9FrSb8H7LzuLn0CZQ1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.1/math.js"
+    integrity="sha512-AfRcJIj922x/jSJpQLnry0DYIBg6EGCtwk/MiQ6QvDlzb7kNFxH8EdqXLkaXXY3YHQS9FrSb8H7LzuLn0CZQ1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"
+    integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="module" src="{{ url_for('static', path='/js/mobile-users.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/linear_models/chart1.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/linear_models/chart2.js') }}"></script>

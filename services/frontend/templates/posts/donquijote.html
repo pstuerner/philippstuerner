@@ -170,16 +170,22 @@
   <p>
     The core of DonQuijote's functionality is its ability to help users learn new vocabulary words. To do this, the bot uses a spaced repetition system (SRS) to present users with words that they need to review. Depending on how well a user remembers a word, the bot will ask again in different time intervals to help the user memorize the word for good. This process is an effective way to help users learn and retain new vocabulary over the long term.
   </p>
-  <div class="accordion accordion-flush" id="accordionFlushExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-headingOne">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-          What is Spaced Repetition System (SRS)?
-        </button>
-      </h2>
-      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-        <div class="accordion-body">Spaced repetition system (SRS) is a learning technique that involves reviewing information at increasing intervals of time. The goal of SRS is to help users retain new information over the long term by presenting it to them at optimal intervals for review. This can be an effective way to improve learning and retention, especially when combined with other effective learning strategies.</div>
-      </div>
+  <div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne" style="background-color: transparent;">
+            <h5 class="mb-0">
+                <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    What is Spaced Repetition System (SRS)?
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              Spaced repetition system (SRS) is a learning technique that involves reviewing information at increasing intervals of time. The goal of SRS is to help users retain new information over the long term by presenting it to them at optimal intervals for review. This can be an effective way to improve learning and retention, especially when combined with other effective learning strategies.
+            </div>
+        </div>
     </div>
   </div>
   <div class="row mb-5 mt-5">
@@ -247,26 +253,29 @@
     fallbacks=[CommandHandler("cancel", cancel)],
     conversation_timeout=300,
 )</code></pre>
-  <div class="accordion accordion-flush" id="accordionFlushExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-headingOne">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-          More information
-        </button>
-      </h2>
-      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-        <div class="accordion-body">
-          <p>
-            The <code>ConversationHandler</code> is a class in the <code>telegram.ext</code> module of the <code>python-telegram-bot</code> library that allows you to define a conversation flow with multiple states. It takes several arguments:
-          </p>
-          <ul>
-            <li><code>entry_points</code>: This is a list of Handler objects that specify the ways a conversation with this handler can be initiated. In this case, the conversation can be initiated by the <code>/play</code> command.</li>
-            <li><code>states</code>: This is a dictionary of states, where each key is an integer representing a state and each value is a list of Handler objects that specify the actions that can be taken in that state. In this case, there is only one state, state <code>0</code>, and it has two possible actions: a <code>MessageHandler</code> that listens for any text message that is not a command, and a <code>CommandHandler</code> that listens for the <code>/counts</code> command.</li>
-            <li><code>fallbacks</code>: This is a list of Handler objects that specify the actions that should be taken if the user's input does not match any of the handlers in the current state. In this case, the <code>/cancel</code> command can be used to cancel the conversation at any time.</li>
-            <li><code>conversation_timeout</code>: This is an optional argument that specifies the number of seconds the bot should wait for input from the user before the conversation times out. In this case, the timeout is set to <code>300</code> seconds (5 minutes).</li>
-          </ul>
-          </div>
-      </div>
+  <div id="accordionTwo">
+    <div class="card">
+        <div class="card-header" id="accordionTwoheadingOne" style="background-color: transparent;">
+            <h5 class="mb-0">
+                <button class="accordion-button collapsed" data-toggle="collapse" data-target="#accordionTwocollapseOne"
+                    aria-expanded="true" aria-controls="accordionTwocollapseOne">
+                    More information
+                </button>
+            </h5>
+        </div>
+        <div id="accordionTwocollapseOne" class="collapse" aria-labelledby="accordionTwoheadingOne" data-parent="#accordionTwo">
+            <div class="card-body">
+              <p>
+                The <code>ConversationHandler</code> is a class in the <code>telegram.ext</code> module of the <code>python-telegram-bot</code> library that allows you to define a conversation flow with multiple states. It takes several arguments:
+              </p>
+              <ul>
+                <li><code>entry_points</code>: This is a list of Handler objects that specify the ways a conversation with this handler can be initiated. In this case, the conversation can be initiated by the <code>/play</code> command.</li>
+                <li><code>states</code>: This is a dictionary of states, where each key is an integer representing a state and each value is a list of Handler objects that specify the actions that can be taken in that state. In this case, there is only one state, state <code>0</code>, and it has two possible actions: a <code>MessageHandler</code> that listens for any text message that is not a command, and a <code>CommandHandler</code> that listens for the <code>/counts</code> command.</li>
+                <li><code>fallbacks</code>: This is a list of Handler objects that specify the actions that should be taken if the user's input does not match any of the handlers in the current state. In this case, the <code>/cancel</code> command can be used to cancel the conversation at any time.</li>
+                <li><code>conversation_timeout</code>: This is an optional argument that specifies the number of seconds the bot should wait for input from the user before the conversation times out. In this case, the timeout is set to <code>300</code> seconds (5 minutes).</li>
+              </ul>
+            </div>
+        </div>
     </div>
   </div>
   <p>

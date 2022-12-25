@@ -245,38 +245,55 @@ td.vertical span
     <p>
         Feel free to play around with the cutoff slider. Can you spot any obvious patterns when the cutoff value is close to zero or one? How does it affect the true/false negatives and positives? What's the impact on the right hand side metrics? What's the optimal threshold for a really good F1 score? Give those questions a thought. You can click on the collapsed items below to see what my closing thoughts are.
     </p>
-    <div class="accordion accordion-flush" id="accordionFlushExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="flush-headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-              The conservative cutoff
-            </button>
-          </h2>
-          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">The larger the threshold, the more certain the algorithm must be to predict a five. The algorithm becomes more conservative which leads to many false negatives, few false positives, high precision and low recall.</div>
-          </div>
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne" style="background-color: transparent;">
+                <h5 class="mb-0">
+                    <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        The conservative cutoff
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    The larger the threshold, the more certain the algorithm must be to predict a five. The algorithm becomes more conservative which leads to many false negatives, few false positives, high precision and low recall.
+                </div>
+            </div>
         </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="flush-headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-              The aggressive cutoff
-            </button>
-          </h2>
-          <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">The smaller the threshold, the more uncertain the algorithm can be to predict a five. The algorithm becomes more aggressive which leads to many false positives, few false negatives, high recall and low precision.</div>
-          </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo" style="background-color: transparent;">
+                <h5 class="mb-0">
+                    <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="false" aria-controls="collapseTwo">
+                        The aggressive cutoff
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    The smaller the threshold, the more uncertain the algorithm can be to predict a five. The algorithm becomes more aggressive which leads to many false positives, few false negatives, high recall and low precision.
+                </div>
+            </div>
         </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="flush-headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-              The sweet spot
-            </button>
-          </h2>
-          <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">A high F1 score is somewhere in the middle.</div>
-          </div>
+        <div class="card">
+            <div class="card-header" id="headingThree" style="background-color: transparent;">
+                <h5 class="mb-0">
+                    <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree"
+                        aria-expanded="false" aria-controls="collapseThree">
+                        The sweet spot
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    A high F1 score is somewhere in the middle.
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 {% endblock %}
 
