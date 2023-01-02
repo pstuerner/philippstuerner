@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
 require("./app/routes/verbs.routes")(app);
 require("./app/routes/cmc.routes")(app);
 require("./app/routes/books.routes")(app);
+require("./app/routes/sinverguenza.routes")(app);
 
 // set port, listen for requests
 const PORT = 8002;
