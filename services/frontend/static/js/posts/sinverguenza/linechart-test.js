@@ -89,7 +89,7 @@ function createIndicators (indicators, offset = 0) {
 }
 
 d3.select('#show-companies').on('click', function () {
-  d3.json(`http://localhost:8001/sinverguenza/assets`, {
+  d3.json(`https://api.philippstuerner.com/sinverguenza/assets`, {
     method:"POST",
     body: JSON.stringify(filters),
     headers: {
@@ -110,7 +110,7 @@ d3.select('#show-companies').on('click', function () {
       loadMoreDiv.style("display", null)
     }
     
-    d3.json(`http://localhost:8001/sinverguenza/timeseries`, {
+    d3.json(`https://api.philippstuerner.com/sinverguenza/timeseries`, {
       method:"POST",
       body: JSON.stringify({"symbols":symbols.slice(0,5)}),
       headers: {
@@ -126,7 +126,7 @@ d3.select('#show-companies').on('click', function () {
 
 
 loadMoreButton.on("click", function () {
-  d3.json(`http://localhost:8001/sinverguenza/timeseries`, {
+  d3.json(`https://api.philippstuerner.com/sinverguenza/timeseries`, {
       method:"POST",
       body: JSON.stringify({"symbols":symbols.slice(lineChartsLoaded,lineChartsLoaded + 5)}),
       headers: {
