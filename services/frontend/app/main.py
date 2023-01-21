@@ -10,6 +10,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 all_posts = [
     {
+        "id": "sinverguenza",
+        "title": "Sinvergüenza",
+        "subtitle": "Stocks monitoring suite",
+        "description": """Posted by
+                    <a href="about">Philipp Stuerner</a>
+                    on Januar 21, 2022""",
+    },
+    {
         "id": "donquijote",
         "title": "Don Quijote",
         "subtitle": "Telegram based application to practice Spanish vocabulary.",
