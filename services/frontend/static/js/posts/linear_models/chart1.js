@@ -494,7 +494,7 @@ array([${theta0_best.toFixed(2)}, ${[theta1_best.toFixed(2)]}])`
 
     d3.selectAll(".chart1-new-data").on("click", function () {
         d3.json(
-            "https://api.philippstuerner.com/data/linear?return_theta=true"
+            "https://api.philippstuerner.com/linear_models/data/linear?return_theta=true"
         ).then(function (dataRaw) {
             data = _.sortBy(dataRaw.data, [
                 function (o) {
