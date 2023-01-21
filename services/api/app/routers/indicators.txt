@@ -1,0 +1,54 @@
+IC/OC: in chart / out chart
+OL/ML: one line / multiple lines
+
+Volume
+Money Flow Index (MFI) - OC/ML
+Accumulation/Distribution Index (ADI) - OC/ML
+On-Balance Volume (OBV) - OC/OL
+Chaikin Money Flow (CMF) - OC/ML
+Force Index (FI) - OC/ML
+Ease of Movement (EoM, EMV) - OC/ML
+Volume-price Trend (VPT) - OC/ML (?)
+Negative Volume Index (NVI) - OC/ML
+Volume Weighted Average Price (VWAP) - IC/ML
+
+Volatility
+Average True Range (ATR) - OC/OL
+Bollinger Bands (BB) - IC/ML
+Keltner Channel (KC) - IC/ML
+Donchian Channel (DC) - IC/ML
+Ulcer Index (UI) - OC/ML
+
+Trend
+Simple Moving Average (SMA) - IC/OL
+Exponential Moving Average (EMA) - IC/OL
+Weighted Moving Average (WMA) - IC/OL
+Moving Average Convergence Divergence (MACD) - OC/ML
+Average Directional Movement Index (ADX) - OC/ML
+Vortex Indicator (VI) - OC/ML
+Trix (TRIX) - OC/OL
+Mass Index (MI) - OC/OL
+Commodity Channel Index (CCI) - OC/ML
+Detrended Price Oscillator (DPO) - OC/OL
+KST Oscillator (KST) - OC/ML
+Ichimoku Kinkō Hyō (Ichimoku) - IC/ML
+Parabolic Stop And Reverse (Parabolic SAR) - IC/ML
+Schaff Trend Cycle (STC)
+
+Momentum
+Relative Strength Index (RSI) - OC/ML
+Stochastic RSI (SRSI) - OC/ML
+True strength index (TSI) - OC/ML
+Ultimate Oscillator (UO) - OC/OL
+Stochastic Oscillator (SR) - OC/ML
+Williams %R (WR) - OC/ML
+Awesome Oscillator (AO) - OC/OL
+Kaufman's Adaptive Moving Average (KAMA) - IC/ML
+Rate of Change (ROC) - OC/ML
+Percentage Price Oscillator (PPO) - OC/ML
+Percentage Volume Oscillator (PVO) - OC/ML
+
+Others
+Daily Return (DR) - OC/OL
+Daily Log Return (DLR) - OC/OL
+Cumulative Return (CR) (?)
