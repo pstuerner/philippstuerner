@@ -413,7 +413,7 @@ function chart3(data) {
 
     d3.select("#chart3-fresh-data").on("click", function () {
         d3.json(
-            "https://api.philippstuerner.com/data/linear?return_theta=true"
+            "https://api.philippstuerner.com/linear_models/data/linear?return_theta=true"
         ).then(function (data) {
             updateControls(data);
             updateChart(data.data);
@@ -421,7 +421,7 @@ function chart3(data) {
     });
 }
 
-d3.json("https://api.philippstuerner.com/data/linear?return_theta=true").then(
+d3.json("https://api.philippstuerner.com/linear_models/data/linear?return_theta=true").then(
     function (data) {
         chart3(data);
     }

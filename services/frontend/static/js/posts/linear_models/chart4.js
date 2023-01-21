@@ -540,7 +540,7 @@ function chart4(dataRaw) {
         let xIdx = +d3.select("#chart4-feature-selection").property("value"),
             yIdx = +d3.select("#chart4-target-selection").property("value");
         d3.json(
-            `https://api.philippstuerner.com/data/logreg_data?X_idx=${xIdx}&y_idx=${yIdx}&return_theta=true&normalize=false`
+            `https://api.philippstuerner.com/linear_models/data/logreg_data?X_idx=${xIdx}&y_idx=${yIdx}&return_theta=true&normalize=false`
         ).then(function (dataUpdate) {
             clearInterval(timer);
             d3.select("#chart4-converge-button").text("Converge");
@@ -553,7 +553,7 @@ function chart4(dataRaw) {
 }
 
 d3.json(
-    "https://api.philippstuerner.com/data/logreg_data?X_idx=2&y_idx=2&return_theta=true&normalize=false"
+    "https://api.philippstuerner.com/linear_models/data/logreg_data?X_idx=2&y_idx=2&return_theta=true&normalize=false"
 ).then(function (dataRaw) {
     chart4(dataRaw);
 });
