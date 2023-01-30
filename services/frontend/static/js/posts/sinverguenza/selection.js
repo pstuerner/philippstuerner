@@ -167,7 +167,7 @@ $("#options-parent").select2().on("select2:select", function (event) {
     var selectedOptions = d3.select('#options-table');
     
     if (selectedOptions.select(`#${itemName}`).empty()) {
-        d3.json(`https://api.philippstuerner.com/sinverguenza/option/${itemName}`).then(
+        d3.json(`http://localhost:8001/sinverguenza/option/${itemName}`).then(
             function (data) {
                 if (data.type == "str") {
                     selectedOptions
@@ -328,6 +328,20 @@ const indicatorsTr = {
             <td class="col-2">window_dev</d>
             <td class="col-10"><input data-kwarg="window_dev" class="indicator-spinner" type="number" value="2" data-decimals="0" min="1" max="5" step="1"/></td>
         </tr>
+    `,
+    MACD: `
+        <tr>
+            <td class="col-2">window_slow</d>
+            <td class="col-10"><input data-kwarg="window_slow" class="indicator-spinner" type="number" value="26" data-decimals="0" min="1" max="64" step="1"/></td>
+        </tr>
+        <tr>
+            <td class="col-2">window_fast</d>
+            <td class="col-10"><input data-kwarg="window_fast" class="indicator-spinner" type="number" value="12" data-decimals="0" min="1" max="32" step="1"/></td>
+        </tr>
+        <tr>
+            <td class="col-2">window_sign</d>
+            <td class="col-10"><input data-kwarg="window_sign" class="indicator-spinner" type="number" value="9" data-decimals="0" min="1" max="16" step="1"/></td>
+        </tr>
     `
 }
 var indicatorCount = 0;
@@ -365,14 +379,14 @@ $("#indicators-select").select2().on("select2:select", function (event) {
         var id = d3.select(this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode).attr("id");
 
         window.indicators[id][kwarg] = val
-        console.log(window.indicators)
     });
 
     d3.select(`#${indicator}_${indicatorCount} .remove-indicators-child`).on('click', function() {
         var id = d3.select(this.parentNode.parentNode.parentNode).attr("id");
 
         d3.select(this.parentNode.parentNode.parentNode).remove();
-        delete window.indicators[id]
+        delete window.indicators[id];
+        window.lineCharts.forEach(d=>d.chart.removeY(id))
     });
 
     $('#indicators-select').val(null).trigger('change');

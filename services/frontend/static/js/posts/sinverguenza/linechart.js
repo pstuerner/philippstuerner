@@ -1,18 +1,4 @@
-// parse the date and close values
 const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S");
-
-// function tweenDashIn() {
-//     const l = this.getTotalLength(),
-//         i = d3.interpolateString("0," + l, l + "," + l);
-//     return function(t) { return i(t) };
-//   }
-
-// function transitionIn(path) {
-//     path.transition()
-//         .duration(1500)
-//         .attrTween("stroke-dasharray", tweenDashIn)
-//         .on("end", () => { d3.select(this).call(transitionIn); });
-//   }
 
 function tweenDash() {
     var l = this.getTotalLength();
@@ -27,7 +13,7 @@ function transition(path) {
   }
 
 const lineStyles = {
-    Close: {
+    "Close_Adj Close": {
         'stroke': 'steelblue',
         'stroke-dasharray': '',
         'stroke-width': 2
@@ -58,6 +44,21 @@ const lineStyles = {
         'stroke-width': 2
     },
     WMAIndicator_mavg: {
+        'stroke': 'blue',
+        'stroke-dasharray': '',
+        'stroke-width': 2
+    },
+    MACD_line: {
+        'stroke': 'blue',
+        'stroke-dasharray': '',
+        'stroke-width': 2
+    },
+    MACD_signal: {
+        'stroke': 'blue',
+        'stroke-dasharray': '',
+        'stroke-width': 2
+    },
+    MACD_diff: {
         'stroke': 'blue',
         'stroke-dasharray': '',
         'stroke-width': 2
@@ -97,12 +98,12 @@ export function lineChart() {
         .x(d => xScale(xValue(d)))
         .y(d => yScale(yValue(d)));
 
-    var updateData, updateTitle, updateWidth, updateHeight, addPath, updatePath, removePath, updateX, updateY, yJoin;
+    var updateData, updateTitle, updateWidth, updateHeight, updateX, updateY, yJoin;
 
     function chart(selection) {
         selection.each(function () {
             xExtent = d3.extent(X, d=>parseDate(d));
-            yExtent = d3.extent(Y.map(d=>d3.extent(d.timeseries)).flat(Infinity))
+            yExtent = d3.extent(Y.map(d=>d3.extent(d.timeseries, d=>yValue(d))).flat(Infinity))
             
             xScale.range([0, width]).domain(xExtent);
             xScaleZoom.range([0, width]).domain(xExtent);
@@ -128,8 +129,7 @@ export function lineChart() {
             var lines = svg.append("g").attr("clip-path", "url(#clip)")
           
             var zoom = d3.zoom()
-                .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
-                // .extent([[0, 0], [width, height]])
+                .scaleExtent([.5, 20])
                 .on("zoom", zoomChart);
           
             svg.append("rect")
@@ -153,13 +153,28 @@ export function lineChart() {
                 .attr("x", (width + margin.left + margin.right) / 2)
                 .attr("y", 0)
                 .attr("text-anchor", "middle"); 
-            yJoin = Y.map(item => {
-                let newTimeseries = item.timeseries.map((value, index) => ({date: X[index], value: value})).filter(d=>d.value!==null);
-                return {id: item.id, timeseries: newTimeseries, color: item.color};
-            });
             
+            // lines.selectAll(".line")
+            //     .data(Y, d=>d.id)
+            //     .join(
+            //         enter => enter
+            //             .append("g")
+            //             .attr("class", "line")
+            //             .append("path")
+            //             .attr("d", d => line(d.timeseries))
+            //             .style('fill', 'none')
+            //             .style('stroke', d => lineStyles[d.id]['stroke'])
+            //             .style('stroke-dasharray', d => lineStyles[d.id]['stroke-dasharray'])
+            //             .style('stroke-width', d => lineStyles[d.id]['stroke-width'])
+            //             .call(transition),
+            //         update => update.select("path").attr("d", d => line(d.timeseries)),
+            //         exit => {
+            //             exit.transition().duration(500).select("path").style("stroke", "white")
+            //             exit.transition().delay(500).remove();
+            //         }
+            //     )
             lines.selectAll(".line")
-                .data(yJoin, d=>d.id)
+                .data(Y, d=>[d.id,d.kwargs])
                 .join(
                     enter => enter
                         .append("g")
@@ -167,21 +182,24 @@ export function lineChart() {
                         .append("path")
                         .attr("d", d => line(d.timeseries))
                         .style('fill', 'none')
-                        .style('stroke', d => lineStyles[d.id]['stroke'])
-                        .style('stroke-dasharray', d => lineStyles[d.id]['stroke-dasharray'])
-                        .style('stroke-width', d => lineStyles[d.id]['stroke-width'])
-                        .call(transition),
-                    update => update.select("path").attr("d", d => line(d.timeseries)),
+                        .style('stroke', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke'])
+                        .style('stroke-width', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-width'])
+                        .call(transition)
+                        .style('stroke-dasharray', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-dasharray']),
+                        update => update
+                            .select("path")
+                            .transition()
+                            .duration(1000)
+                            .attr("d", d=>line(d.timeseries))
+                            .attr("stroke-dasharray", null)
+                            .style('stroke-dasharray', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-dasharray']),
                     exit => {
                         exit.transition().duration(500).select("path").style("stroke", "white")
                         exit.transition().delay(500).remove();
                     }
                 )
             
-            updateData = function(value) {                
-                data.forEach((item,index) => {
-                    Object.assign(item, value[index]);
-                  });
+            updateData = function() {         
             };
 
             updateX = function() {
@@ -200,16 +218,9 @@ export function lineChart() {
 
             updateY = function() {
                 yExtent = d3.extent(Y.map(d=>d3.extent(d.timeseries)).flat(Infinity))
-                // yScale.range([height, 0]).domain(yExtent);
-                // yAxisG.transition().duration(1500).call(yAxis);
-                
-                yJoin = Y.map(item => {
-                    let newTimeseries = item.timeseries.map((value, index) => ({date: X[index], value: value})).filter(d=>d.value!==null);
-                    return {id: item.id, timeseries: newTimeseries, color: item.color};
-                });
                 
                 lines.selectAll(".line")
-                .data(yJoin, d=>d.id)
+                .data(Y, d=>[d.id,d.kwargs])
                 .join(
                     enter => enter
                         .append("g")
@@ -217,11 +228,17 @@ export function lineChart() {
                         .append("path")
                         .attr("d", d => line(d.timeseries))
                         .style('fill', 'none')
-                        .style('stroke', d => lineStyles[d.id.replace(/\(.*?\)/g, "")]['stroke'])
-                        .style('stroke-width', d => lineStyles[d.id.replace(/\(.*?\)/g, "")]['stroke-width'])
+                        .style('stroke', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke'])
+                        .style('stroke-width', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-width'])
                         .call(transition)
-                        .style('stroke-dasharray', d => lineStyles[d.id.replace(/\(.*?\)/g, "")]['stroke-dasharray']),
-                    update => update.select("path").attr("d", d=>line(d.timeseries)),  
+                        .style('stroke-dasharray', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-dasharray']),
+                    update => update
+                        .select("path")
+                        .transition()
+                        .duration(1000)
+                        .attr("d", d=>line(d.timeseries))
+                        .attr("stroke-dasharray", null)
+                        .style('stroke-dasharray', d => lineStyles[d.id.split("_")[0] + "_" + d.key]['stroke-dasharray']),  
                     exit => {
                         exit.transition().duration(500).select("path").style("stroke", "white")
                         exit.transition().delay(500).remove();
@@ -237,25 +254,6 @@ export function lineChart() {
 
             updateTitle = function() {
                 headline.text(title)
-            }
-
-            addPath = function() {
-                data.push(path);
-                updateData();
-            }
-
-            updatePath = function (name, values) {
-                data.forEach(obj => {
-                    if (obj.name === name) {
-                      obj.values = values;
-                    }
-                });
-                updateData()
-            }
-
-            removePath = function () {
-                data.splice(data.findIndex(d => d.id === removeId), 1);
-                updateData()
             }
         });
     }
@@ -283,44 +281,70 @@ export function lineChart() {
 
     chart.data = function(value) {
     	if (!arguments.length) return data;
-        if (data.length == 0) {data = value}
+        value.forEach(function (d) {
+            let indexData = data.findIndex(item => item.id === d.id);
+
+            if (indexData == -1) {
+                data.push({id: d.id, data: d.data, kwargs:d.kwargs})
+            } else {
+                data[indexData] = {id: d.id, data: d.data, kwargs:d.kwargs}
+            }
+        })
     	if (typeof updateData === 'function') updateData(value);
     	return chart;
 	};
 
     chart.X = function(value) {
     	if (!arguments.length) return X;
-    	X = data.map(d=>d[value]);
+        let index = data.findIndex(item => item.id === value.data);
+    	X = data[index].data.map(d=>d[value.key]);
     	if (typeof updateX === 'function') updateX();
     	return chart;
 	};
 
-
     chart.Y = function(value) {
+        if (!arguments.length) return Y;
+        return chart
+    }
+
+    chart.addY = function(value) {
     	if (!arguments.length) return Y;
-        Y = Y.concat(value.map(x=>({id:x.id,timeseries:data.map(d=>d[x.timeseries]),color:x.color})));
-        // Y = value.map(x=>({id:x.id,timeseries:data.map(d=>d[x.timeseries]),color:x.color}));
+        value.forEach(function (d) {
+            let indexData = data.findIndex(item => item.id === d.data);
+            
+            let indexY, keys, timeseries;
+
+            if (JSON.stringify(d.keys) === JSON.stringify(["all"])) {
+                keys = Object.keys(data[indexData].data[0]);
+            } else {
+                keys = d.keys;
+            }
+            console.log(Y)
+            keys.forEach(function (key) {
+                indexY = Y.findIndex(item => item.id === d.id && item.key === key);
+                timeseries = data[indexData].data.map(item=>item[key]).map((v, index) => ({date: X[index], value: v})).filter(x=>x.value!==null);
+                
+                if (indexY == -1) {
+                    Y.push({id:d.id, key: key, kwargs: data[indexData].kwargs, timeseries:timeseries})
+                } else {
+                    Y[indexY] = {id:d.id, key: key, kwargs: data[indexData].kwargs, timeseries:timeseries}
+                }
+            })
+        })
     	if (typeof updateY === 'function') updateY();
     	return chart;
 	};
 
-    chart.addPath = function(value) {
-    	if (!arguments.length) return path;
-    	path = value;
-    	if (typeof addPath === 'function') addPath();
-    	return chart;
-	};
-
-    chart.updatePath = function(name, values) {
-    	if (typeof updatePath === 'function') updatePath(name, values);
-    	return chart;
-	};
-
-
-    chart.removePath = function(value) {
-    	if (!arguments.length) return removeId;
-    	removeId = value;
-    	if (typeof removePath === 'function') removePath();
+    chart.removeY = function(value) {
+    	if (!arguments.length) return Y;
+        
+        for (let i = 0; i < data.length; i++) {
+            let newObj = Object.assign({}, ...Object.keys(data[i]).filter(k => !k.startsWith(value)).map(k => ({[k]: data[i][k]})));
+            data[i] = newObj;
+        }
+        Y = Y.filter(item => !item.id.startsWith(value));
+        
+    	if (typeof updateY === 'function') updateY();
     	return chart;
 	};
     
