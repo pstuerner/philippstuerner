@@ -334,22 +334,6 @@ async def timeseries(indicators: Indicators):
     return r
 
 
-
-@router.get("/temp")
-async def temp(request: Request):
-    r = db.assets.find_one({"symbol":"AAPL"},{"_id":0})
-    
-    for k,v in r.items():
-        if k in mongodb_fields_ignore:
-            continue
-        if type(v) == str:
-            print(f"{k}: Union[List[str], None] = None")
-        elif type(v) in [bson.int64.Int64, float, int]:
-            print(f"{k}: Union[List[Union[float,str]], None] = None")
-        else:
-            pass
-    return {}
-
 @router.get("/")
 async def root(request: Request):
     """Just a message to return something on the home endpoint"""

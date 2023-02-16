@@ -231,7 +231,7 @@ function main(dataRaw) {
 
     // Set date options
     d3.json(
-        "https://mongodb.philippstuerner.com/api/cmc/timestamps"
+        "https://api.philippstuerner.com/cmcscanner/timestamps"
     ).then(function (dataRaw) {
         timestamps = dataRaw;
         let dateSelection = d3.selectAll(".form-select");
@@ -276,7 +276,7 @@ function main(dataRaw) {
                 .duration(1000)
                 .style("opacity", 1);
             d3.json(
-                `https://mongodb.philippstuerner.com/api/cmc/listings?unixTimestamp=${startDate}`
+                `https://api.philippstuerner.com/cmcscanner/listings?unixTimestamp=${startDate}`
             ).then(function (dataRaw) {
                 startListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
@@ -303,7 +303,7 @@ function main(dataRaw) {
                 .duration(1000)
                 .style("opacity", 1);
             d3.json(
-                `https://mongodb.philippstuerner.com/api/cmc/listings?unixTimestamp=${endDate}`
+                `https://api.philippstuerner.com/cmcscanner/listings?unixTimestamp=${endDate}`
             ).then(function (dataRaw) {
                 endListings = dataRaw.listings;
                 changeListings = listingsChange(startListings, endListings);
@@ -367,7 +367,7 @@ function main(dataRaw) {
 
 d3.selectAll(".overlay").transition().duration(1000).style("opacity", 1);
 
-d3.json("https://mongodb.philippstuerner.com/api/cmc/listings?last=2").then(function (
+d3.json("https://api.philippstuerner.com/cmcscanner/listings?last=2").then(function (
     dataRaw
 ) {
     main(dataRaw);
