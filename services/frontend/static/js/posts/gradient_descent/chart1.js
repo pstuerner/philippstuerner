@@ -422,7 +422,6 @@ function chart1(data) {
 
 d3.json("https://api.philippstuerner.com/linear_models/data/linear?return_theta=true").then(
     function (data) {
-        console.log(data.constructor.name);
         chart1(data);
     }
 );
