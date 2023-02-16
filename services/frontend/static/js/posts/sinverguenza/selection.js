@@ -1,3 +1,9 @@
+import * as d3 from 'd3';
+import Plotly from 'plotly.js-dist';
+import { sliderBottom } from 'd3-simple-slider';
+
+const gridExtent = ["MACD"];
+
 const options = [
     '52WeekChange',
     'SandP52WeekChange',
@@ -167,7 +173,7 @@ $("#options-parent").select2().on("select2:select", function (event) {
     var selectedOptions = d3.select('#options-table');
     
     if (selectedOptions.select(`#${itemName}`).empty()) {
-        d3.json(`http://localhost:8001/sinverguenza/option/${itemName}`).then(
+        d3.json(`https://api.philippstuerner.com/sinverguenza/option/${itemName}`).then(
             function (data) {
                 if (data.type == "str") {
                     selectedOptions
@@ -254,8 +260,7 @@ $("#options-parent").select2().on("select2:select", function (event) {
                                 `translate(${marginSliders.left},${heightSliders / 2})`
                             );
 
-                        var slider = d3
-                            .sliderBottom()
+                        var slider = sliderBottom()
                             .width(widthSliders)
                             .tickFormat(d3.format(".2"))
                             .ticks(5)
@@ -297,7 +302,9 @@ $("#options-parent").select2().on("select2:select", function (event) {
                 }    
             }
         );
-    }
+    };
+
+    $('#options-parent').val(null).trigger('change');
 });
 
 const indicatorsTr = {
@@ -386,7 +393,37 @@ $("#indicators-select").select2().on("select2:select", function (event) {
 
         d3.select(this.parentNode.parentNode.parentNode).remove();
         delete window.indicators[id];
-        window.lineCharts.forEach(d=>d.chart.removeY(id))
+        window.charts.forEach(function (chart) {
+            var indices = chart.data.map((dictionary, index) => {
+                return dictionary.meta.id === id ? index : -1;
+              }).filter(index => index !== -1);
+            var indicator = id.split('_')[0];
+            var axis = chart.data[indices[0]].meta.axis;
+            
+            Plotly.deleteTraces(chart.info.symbol, indices);
+            
+            if (gridExtent.includes(indicator)) {
+                var existingAxes = Object
+                    .keys(chart.layout)
+                    .filter(key => key.startsWith('yaxis') && key != `yaxis${axis}`)
+                    .map(key => key === "yaxis" ? "yaxis" : `yaxis${parseInt(key.match(/\d+/)[0])}`);
+                
+                var rows = chart.layout.grid.rows;
+                var height = chart.layout.height;
+                rows -= 1;
+                
+                var subplotHeight = (height - height / 2) / (rows - 1);
+                chart.layout.grid.rows = rows;
+
+                for (let i = 0; i < existingAxes.length; i++) {
+                    let begin = i === 0 ? height / 2 : height - (i + 1) * subplotHeight;
+                    let end = begin + subplotHeight;
+                    chart.layout[existingAxes[i]]["domain"] = [begin, end]
+                }
+
+                Plotly.relayout(chart.info.symbol, chart.layout);
+            }
+        })
     });
 
     $('#indicators-select').val(null).trigger('change');

@@ -12,7 +12,7 @@ all_posts = [
     {
         "id": "sinverguenza",
         "title": "Sinvergüenza",
-        "subtitle": "Stocks monitoring suite",
+        "subtitle": "Stock screener built on top of the Yahoo Finance API using Plotly.js, D3.js, and MongoDB.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
                     on Januar 21, 2022""",
