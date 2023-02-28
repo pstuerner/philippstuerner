@@ -555,7 +555,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(
 
     d3.selectAll(".chart2-new-data").on("click", function () {
         d3.json(
-            "https://api.philippstuerner.com/data/quadratic?return_theta=true&return_test=false&noise=4"
+            "https://api.philippstuerner.com/linear_models/data/quadratic?return_theta=true&return_test=false&noise=4"
         ).then(function (dataRaw) {
             data = _.sortBy(dataRaw.data, [
                 function (o) {
@@ -604,7 +604,7 @@ array([${theta0_best.toFixed(2)}, ${theta1_best.toFixed(
 }
 
 d3.json(
-    "https://api.philippstuerner.com/data/quadratic?return_theta=true&return_test=false&noise=4"
+    "https://api.philippstuerner.com/linear_models/data/quadratic?return_theta=true&return_test=false&noise=4"
 ).then(function (dataRaw) {
     chart2(dataRaw);
 });

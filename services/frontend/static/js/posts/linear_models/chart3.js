@@ -337,7 +337,7 @@ function chart3(dataRaw) {
             .handle(d3.symbol().type(d3.symbolCircle).size(200)())
             .on("end.slider", (val) => {
                 d3.json(
-                    `https://api.philippstuerner.com/data/poly_data?degrees=20&noise=${+val}`
+                    `https://api.philippstuerner.com/linear_models/data/poly_data?degrees=20&noise=${+val}`
                 ).then(function (dataUpdate) {
                     dataRaw = dataUpdate;
                     dataInit();
@@ -350,7 +350,7 @@ function chart3(dataRaw) {
             .on("onchange.slider", (val) => {
                 if (noiseChangeAllow) {
                     d3.json(
-                        `https://api.philippstuerner.com/data/poly_data?degrees=20&noise=${+val}`
+                        `https://api.philippstuerner.com/linear_models/data/poly_data?degrees=20&noise=${+val}`
                     ).then(function (dataUpdate) {
                         dataRaw = dataUpdate;
                         dataInit();
@@ -497,7 +497,7 @@ function chart3(dataRaw) {
 }
 
 d3.json(
-    "https://api.philippstuerner.com/data/poly_data?degrees=20&noise=5"
+    "https://api.philippstuerner.com/linear_models/data/poly_data?degrees=20&noise=5"
 ).then(function (dataRaw) {
     chart3(dataRaw);
 });

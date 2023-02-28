@@ -922,14 +922,13 @@ array([
 {% block body_js %}
 {{ super() }}
 <script src="{{ url_for('static', path='/js/toc.js') }}"></script>
-<script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-3d/build/d3-3d.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://unpkg.com/d3-simple-slider@1.10.4/dist/d3-simple-slider.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"
     integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script type="module" src="{{ url_for('static', path='/js/mobile-users.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart1.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart2.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='/js/posts/gradient_descent/chart3.js') }}"></script>

@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter, Request
 
 from ta.volatility import BollingerBands
-from ta.trend import SMAIndicator, EMAIndicator, WMAIndicator
+from ta.trend import SMAIndicator, EMAIndicator, WMAIndicator, MACD
 
 
 router = APIRouter()
@@ -215,7 +215,6 @@ class Timeseries(BaseModel):
 
 
 class Indicators(BaseModel):
-    symbol: str
     timeseries: List[Dict]
     indicators: Dict[str, Dict[str, int]]
 
@@ -271,29 +270,35 @@ async def timeseries(timeseries: Timeseries):
 
 def compute_MAVGIndicator(indicator: Union[SMAIndicator, EMAIndicator, WMAIndicator], **kwargs):
     i = indicator(**kwargs)
-    i_name = f"{i.__class__.__name__}({','.join([str(v) for k,v in kwargs.items() if k != 'close'])})"
     
     if i.__class__ == EMAIndicator:
-        print(kwargs)
-        return i.ema_indicator().rename(f"{i_name}_mavg")
+        return i.ema_indicator().rename(f"mavg")
     elif i.__class__ == SMAIndicator:
-        return i.sma_indicator().rename(f"{i_name}_mavg")
+        return i.sma_indicator().rename(f"mavg")
     elif i.__class__ == WMAIndicator:
-        return i.wma().rename(f"{i_name}_mavg")
+        return i.wma().rename(f"mavg")
 
 def compute_BollingerBands(indicator: BollingerBands, **kwargs):
     i = indicator(**kwargs)
-    i_name = f"{i.__class__.__name__}({','.join([str(v) for k,v in kwargs.items() if k != 'close'])})"
     
     return [
-        i.bollinger_mavg().rename(f"{i_name}_mavg"),
-        i.bollinger_hband().rename(f"{i_name}_hband"),
-        i.bollinger_lband().rename(f"{i_name}_lband")
+        i.bollinger_mavg().rename(f"mavg"),
+        i.bollinger_hband().rename(f"hband"),
+        i.bollinger_lband().rename(f"lband")
+    ]
+
+def compute_MACD(indicator: BollingerBands, **kwargs):
+    i = indicator(**kwargs)
+    
+    return [
+        i.macd().rename(f"line"),
+        i.macd_signal().rename(f"signal"),
+        i.macd_diff().rename(f"diff")
     ]
 
 indicator_mapping = {
     BollingerBands: compute_BollingerBands,
-
+    MACD: compute_MACD,
     SMAIndicator: compute_MAVGIndicator,
     EMAIndicator: compute_MAVGIndicator,
     WMAIndicator: compute_MAVGIndicator,
@@ -305,40 +310,29 @@ async def timeseries(indicators: Indicators):
     body = indicators.dict()
     indicators = body.get("indicators", "{}")
     timeseries = body.get("timeseries", "{}")
-    symbol = body.get("symbol", "")
+    
     r = []
 
     for indicator, kwargs in indicators.items():
+        d = {"id": indicator, "kwargs": dict(kwargs), "timeseries": []}
         df = pd.DataFrame.from_dict(timeseries)
         kwargs["close"] = df["Adj Close"]
-        res = indicator_mapping[eval(indicator.split("_")[0])](eval(indicator.split("_")[0]), **kwargs)
+        
+        res = indicator_mapping[eval(indicator.split("_")[0])](
+                indicator = eval(indicator.split("_")[0]),
+                **kwargs
+            )
+        
         
         if type(res) == pd.Series:
-            r.append(res)
+            r.append({**d, **{"data": [res]}})
         else:
-            r += res
+            r.append({**d, **{"data": res}})
+        
+        r[-1]["data"] = pd.concat(r[-1]["data"], axis=1).replace([np.inf, -np.inf], np.nan).to_json(orient="records")
     
-    unique_names = dict.fromkeys([series.name for series in r])
-    unique_series = [series for name, series in zip(unique_names, r) if name]
+    return r
 
-    return pd.concat(unique_series, axis=1).replace([np.inf, -np.inf], np.nan).to_json(orient="records")
-
-
-
-@router.get("/temp")
-async def temp(request: Request):
-    r = db.assets.find_one({"symbol":"AAPL"},{"_id":0})
-    
-    for k,v in r.items():
-        if k in mongodb_fields_ignore:
-            continue
-        if type(v) == str:
-            print(f"{k}: Union[List[str], None] = None")
-        elif type(v) in [bson.int64.Int64, float, int]:
-            print(f"{k}: Union[List[Union[float,str]], None] = None")
-        else:
-            pass
-    return {}
 
 @router.get("/")
 async def root(request: Request):

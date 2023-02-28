@@ -1,0 +1,151 @@
+{% extends "post.html" %}
+
+{% block head %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+  .btn {
+    padding: 0
+  }
+  .select2-container--default .select2-results>.select2-results__options {
+    max-height: 400px;
+  }
+  
+  .js-plotly-plot {
+    padding-bottom: 1rem !important;
+    padding-top: 1rem !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="masthead" style="background-image: black; height: calc(20rem + 57px); width: 100%;">
+  <div id="altered-world-container" style="background-color: black; position: absolute; width: 100%; height: 100%; left: 0; top: 0;"></div>
+  <div class="center" style="z-index: 1;">
+      <div class="site-heading">
+          <h1 style="color: white;">Sinvergüenza</h1>
+          <span class="subheading" style="color: white;">Stock Monitoring</span>
+      </div>
+  </div>
+</header>
+
+<button onclick="topFunction()" id="to-top-button" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+<article data-toc data-toc-id="main-toc" data-toc-class="toc-custom" data-toc-parent-id="toc-parent" class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-10 col-xl-10">
+            <div class="row" style="text-align: justify;">
+              <p style="margin-top: 2rem;">
+                <b>tl;dr:</b> I've built my own database of nearly 3000 stock symbols including their fundamental data and entire historical timeseries. Then I used Plotly.js and D3.js to make everything accessible as a web application and added functionalities to filter the entire stock base and add technical indicators on top. Check out <b><a href="{{ url_for('static', path='/videos/sinverguenza.gif') }}" target="_blank">this</a></b> small video to find out how to navigate the web app.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-10 col-lg-10 col-xl-10">
+            <h3>Introduction</h3>
+            <p>
+              Sinvergüenza (simbeɾɣwenθa), what a beautiful and overly complicated word, right? Spanish words that include "ü" such as pingüino, vergüenza or ambigüedad always made me feel a bit more like home, since umlauts are a common thing in the German language. Despite my rare fetish for this kind of Spanish vocabulary the word "sinvergüenza" translates to shameless and it's kind of a really good title for the web application you're just looking at. Why that? Because I'm shamelessly using the Yahoo Finance API to build my own database of nearly 3000 stocks, including technical data like financial ratios, their entire historical timeseries, and more general information like the company name or their address.
+            </p>
+            <h3>The goal</h3>
+            <p>
+              The objective of this project is to develop a stock screener that allows to filter and analyze stocks based on fundamental and technical criteria. Hence, you have two main dropdowns to play around with: filters and indicators. Filters allow you to select a subset of all approximately 3000 companies based on fundamental data such as their industry, financial ratios or more general information such as the number of full time employees. Indicators allows you to enrich the price chart with common helpers such as moving averages or trend indicators. You can add, remove, and modify as many indicators as you wish.
+            </p>
+            <h3>🚧 Work In Progress 🚧</h3>
+            <p>
+              This is still a work in progress! The filter options are a bit messy and some of them won't work. However, important filters such as the industry or common financial ratios such as the quick ratio already allow you to apply basic filters to the entire database. The number of indicators is still small and I'm gradually working on integrating more of them. I'm developing this in my free time, so give me some time 🙂. The data is not up to date. I've fetched a one-time dump of all historical timeseries and I still have to wrap everything in a Docker container to automate the data ingestion process so that the daily price data is always up to date. Besides that it's a pretty useful and fully functioning stock screener! Feel free to play around with it and let me know if it helped you or if you encountered any problems.
+            </p>
+          </div>
+          <div class="col-md-10 col-lg-10 col-xl-10">
+            <h3>The application</h3>
+            <div class="row">
+              <div class="col-12" style="display: flex; align-items: center; justify-content: center; height: 4em;">
+                <select id="options-parent"></select>
+              </div>
+            </div>
+            <div class="row">
+              <table id="options-table"class="table table-auto table-bordered" ></table>
+              <!-- style="table-layout: fixed" -->
+            </div>
+            <div class="row">
+              <div class="col-6 mx-auto" style="height: 2em;">
+                <button id="show-companies" class="btn btn-primary d-block mx-auto" style="width: 100%; height: 100%;">Apply Filters</button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12" style="display: flex; align-items: center; justify-content: center; height: 4em;">
+                <select id="indicators-select">
+                  <option value="SMAIndicator">Simple Moving Average (SMA)</option>
+                  <option value="EMAIndicator">Exponential Moving Average (EMA)</option>
+                  <option value="WMAIndicator">Weighted Moving Average (WMA)</option>
+                  <option value="BollingerBands">Bollinger Bands (BB)</option>
+                  <option value="MACD">Moving Average Convergence Divergence (MACD)</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <table id="indicators-table"class="table table-auto table-bordered" ></table>
+            </div>
+            <div class="row">
+              <div class="col-6 mx-auto" style="height: 2em;">
+                <button id="apply-indicators" class="btn btn-primary d-block mx-auto" style="width: 100%; height: 100%;">Apply Indicators</button>
+              </div>
+            </div>
+          </div>
+            
+          <div class="col-md-10 col-lg-10 col-xl-10">
+            <!-- <div class="row">
+              <div class="col-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="times-checkbox" multiple>
+                  <label class="form-check-label" for="times-checkbox">
+                    Times
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <input id="times-spinner" type="number" value="0.5" data-decimals="2" min="0.01" max="0.99" step="0.01"/>
+              </div>
+            </div> -->
+            
+          
+            
+            
+            <div id="charts-container" class="row" style="text-align: justify;"></div>
+            <div id="test" class="col-12" style="text-align: justify;"></div>
+            <div class="row">
+              <div id="load-more-div" class="col-6 mx-auto" style="height: 2em; display: none;">
+                <button id="load-more" class="btn btn-primary d-block mx-auto" style="width: 100%; height: 100%;">Load more</button>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+    </div>
+</article>
+{% endblock %}
+
+{% block title %}Sinvergüenza{% endblock %}
+
+{% block body_js %}
+{{ super() }}
+<script src="https://unpkg.com/d3-simple-slider@1.10.4/dist/d3-simple-slider.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#options-parent').select2({placeholder: "Choose your filter options", val: "", allowClear: true, width: "50%"});
+    $('#options-parent').val(null).trigger('change');
+});
+$(document).ready(function() {
+    $('#indicators-select').select2({placeholder: "Choose your indicators", val: "", allowClear: true, width: "50%"});
+    $('#indicators-select').val(null).trigger('change');
+});
+</script>
+<script src="{{ url_for('static', path='/js/posts/sinverguenza/bootstrap-input-spinner.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script type="module" src="{{ url_for('static', path='/js/posts/sinverguenza/dist/bundle.js') }}"></script>
+
+<script>
+  $("input[type='number']").inputSpinner()
+</script>
+{% endblock %}
