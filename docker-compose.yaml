@@ -74,21 +74,21 @@ services:
       - 'traefik.http.routers.api.entrypoints=websecure'
     env_file:
       - "./services/api/api.env"
-
-  mongojs:
-    build: ./services/mongojs
-    container_name: "mongojs"
-    restart: always
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
-    labels:
-      - 'traefik.http.routers.mongojs.rule=Host(`mongodb.philippstuerner.com`)'
-      - 'traefik.http.routers.mongojs.tls=true'
-      - 'traefik.http.routers.mongojs.entrypoints=websecure'
-    env_file:
-      - "./services/mongojs/mongojs.env"
+  
+  pi:
+   build: ./services/pi
+   container_name: "pi"
+   restart: always
+   security_opt:
+     - no-new-privileges:true
+   volumes:
+     - '/var/run/docker.sock:/var/run/docker.sock'
+   labels:
+     - 'traefik.http.routers.mongojs.rule=Host(`pi.philippstuerner.com`)'
+     - 'traefik.http.routers.mongojs.tls=true'
+     - 'traefik.http.routers.mongojs.entrypoints=websecure'
+   env_file:
+     - "./services/pi/pi.env"
 
 volumes:
   traefik-public-certificates:
