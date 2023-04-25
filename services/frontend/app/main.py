@@ -10,12 +10,20 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 all_posts = [
     {
+        "id": "gai_animals",
+        "title": "Generative AI — Animals",
+        "subtitle": "An interactive world map built with D3.js and Vue.js full of Generative AI using Stable Diffusion and ChatGPT.",
+        "description": """Posted by
+                    <a href="about">Philipp Stuerner</a>
+                    on April 23, 2023""",
+    },
+    {
         "id": "sinverguenza",
         "title": "Sinvergüenza",
         "subtitle": "Stock screener built on top of the Yahoo Finance API using Plotly.js, D3.js, and MongoDB.",
         "description": """Posted by
                     <a href="about">Philipp Stuerner</a>
-                    on Januar 21, 2022""",
+                    on Januar 21, 2023""",
     },
     {
         "id": "donquijote",
