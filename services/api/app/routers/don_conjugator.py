@@ -136,8 +136,8 @@ async def select(
 ):
     projection = {"sp": 1, "en": 1, "_id": 0}
     projection[f'{MODES_MAPPING[mode]}.{TEMPS_MAPPING[temp]}'] = 1
-    
-    return db.verbs.find_one({"sp": verb}, projection)
+    print(projection)
+    return list(db.verbs.find({"sp": verb}, projection))
 
 
 @router.get("/")
