@@ -185,12 +185,12 @@ d3.select('#go-button').on('click', function () {
     d3.select("#correct-count").text(correctCount);
     d3.select("#wrong-count").text(wrongCount);
     
-    if (type=="random") {
+    if (type == "random") {
         let items = +d3.select('#items').property('value');
-        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/random?items=${items}&mode=${mode}&temps=${temps}`
+        url = `https://api.philippstuerner.com/don_conjugator/random?items=${items}&mode=${mode}&temps=${temps}`
     } else if (type=="frequency") {
         let items = +d3.select('#items').property('value');
-        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/frequency?items=${items}&mode=${mode}&temps=${temps}`
+        url = `https://api.philippstuerner.com/don_conjugator/frequency?items=${items}&mode=${mode}&temps=${temps}`
     } else {
         let start = +d3.select('#range-start').property('value');
         let end = +d3.select('#range-end').property('value');
@@ -201,7 +201,7 @@ d3.select('#go-button').on('click', function () {
             alert(`Make sure that your start value (${start}) is greater than 0.`)
             return
         }
-        url = `https://mongodb.philippstuerner.com/api/conjugator/verbs/range?start=${start}&end=${end}&mode=${mode}&temps=${temps}`
+        url = `https://api.philippstuerner.com/don_conjugator/range?start=${start}&end=${end}&mode=${mode}&temps=${temps}`
     }
 
     d3.json(url).then(function (dataRaw) {
