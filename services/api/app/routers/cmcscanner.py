@@ -20,10 +20,9 @@ async def timestamps():
 
 
 @router.get("/listings")
-async def timestamps(unix_timestamp: Optional[int] = None, last: Optional[int] = None):
-    print(unix_timestamp,last)
-    if unix_timestamp:
-        query = db.listings.find_one({"timestamp": {"$gte": dt.utcfromtimestamp(unix_timestamp).isoformat() + 'Z'}}, {"_id": 0})
+async def timestamps(unixTimestamp: Optional[int] = None, last: Optional[int] = None):
+    if unixTimestamp:
+        query = db.listings.find_one({"timestamp": {"$gte": dt.utcfromtimestamp(unixTimestamp/1000)}}, {"_id": 0})
     elif last:
         query = list(db.listings.find({}, {"_id":0}).sort("timestamp", -1).limit(last))
     else:
