@@ -19,8 +19,6 @@ services:
       - '--certificatesresolvers.digitalcoean.acme.dnschallenge=true'
       - '--certificatesresolvers.digitalocean.acme.dnschallenge.provider=digitalocean'
       - '--certificatesresolvers.digitalocean.acme.storage=/letsencrypt/acme.json'
-      # - '--certificatesResolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53'
-      #- '--certificatesresolvers.digitalocean.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory'
     ports:
       - "80:80"
       - "443:443"
@@ -48,7 +46,8 @@ services:
       - 'traefik.http.middlewares.authtraefik.basicauth.users=admin:removed'
 
   frontend:
-    build: ./services/frontend/
+    platform: linux/x86_64
+    image: pstuerner/frontend
     container_name: "frontend"
     restart: always
     security_opt:
@@ -84,12 +83,12 @@ services:
    volumes:
      - '/var/run/docker.sock:/var/run/docker.sock'
    labels:
-     - 'traefik.http.routers.mongojs.rule=Host(`pi.philippstuerner.com`)'
-     - 'traefik.http.routers.mongojs.tls=true'
-     - 'traefik.http.routers.mongojs.entrypoints=websecure'
+     - 'traefik.http.routers.pi.rule=Host(`pi.philippstuerner.com`)'
+     - 'traefik.http.routers.pi.tls=true'
+     - 'traefik.http.routers.pi.entrypoints=websecure'
    env_file:
      - "./services/pi/pi.env"
-
+    
 volumes:
   traefik-public-certificates:
 
