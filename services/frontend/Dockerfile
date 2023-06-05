@@ -1,5 +1,8 @@
+# build for amd64
+# docker buildx build --platform linux/amd64 -t frontend .
+
 # Use an official Node.js image as the base
-FROM node:14 as build-stage
+FROM amd64/node as build-stage
 
 # Set the working directory
 WORKDIR /app
