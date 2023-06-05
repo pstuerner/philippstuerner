@@ -14,7 +14,7 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
-                <p><b>tl;dr:</b> the confusion matrix and its metrics are really powerful concepts which is why I've visualized them in an intuitive way using a simple MNIST classifier, d3.js, fancy tooltips, and an interactive cutoff slider. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/confusion_matrix.html" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
+                <p><b>tl;dr:</b> the confusion matrix and its metrics are really powerful concepts which is why I've visualized them in an intuitive way using a simple MNIST classifier, d3.js, fancy tooltips, and an interactive cutoff slider. You can find the source code on <a href="https://github.com/pstuerner/philippstuerner/tree/master/services/frontend/src/components/posts/confusion_matrix" target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
                 <hr>
                 <p>
                     Classification tasks are among the most common problems in data science. Take a look at the following examples and I am sure you will find yourself in one, if not all of them:
@@ -187,7 +187,7 @@
                 <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
                     <hr>
                     <p style="text-align: center;">
-                        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/confusion_matrix/cm.js" target="_blank">GitHub <i class="fab fa-github"></i></a>!
+                        💡 Check out the source code on <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/confusion_matrix/Chart1.vue" target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
                     <p>

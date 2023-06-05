@@ -128,6 +128,7 @@
 import { useMeta } from 'vue-meta'
 import { onMounted, getCurrentInstance } from "vue";
 import * as d3 from 'd3';
+import _ from 'lodash';
 import ToTopButton from '../../ToTopButton.vue';
 
 export default {
@@ -388,7 +389,7 @@ export default {
               });
             uniqueErrors.forEach(d=>verbs.push(`${d["temp"]};${d["sp"]}`));
             
-            let url = `localhost:8080/posts/don_conjugator/practice/${mode}/${verbs.join(",")}`;
+            let url = `https://philippstuerner.com/posts/don_conjugator/practice/${mode}/${verbs.join(",")}`;
             
             window.open(url, '_blank').focus();
         }

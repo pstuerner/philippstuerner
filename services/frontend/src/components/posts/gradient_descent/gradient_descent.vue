@@ -19,7 +19,7 @@
                         works and how different variations, like stochastic or mini-batch gradient descent, compare to each
                         other. You
                         can find the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/gradient_descent.html"
+                            href="https://github.com/pstuerner/philippstuerner/tree/master/services/frontend/src/components/posts/gradient_descent"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
                     <hr>
                     <p>
@@ -116,7 +116,7 @@
                         variable \(y\). Our goal is to find a linear model that describes the underlying data best and can
                         be used for
                         future predictions. If you’re not familiar with linear models yet make sure to read through <a
-                            href="#" target="_blank">one of my other dashboards</a> that covers all kinds of linear models
+                            href="https://philippstuerner.com/posts/linear_models" target="_blank">one of my other dashboards</a> that covers all kinds of linear models
                         in greater detail. The
                         following interactive chart should give you an idea about what kind of problem we’re dealing with
                         and which
@@ -130,7 +130,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/gradient_descent/chart1.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/gradient_descent/Chart1.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -245,7 +245,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/gradient_descent/chart2.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/gradient_descent/Chart2.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -323,7 +323,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/gradient_descent/chart3.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/gradient_descent/Chart3.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -391,7 +391,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/gradient_descent/chart4.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/gradient_descent/Chart4.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -681,7 +681,7 @@ array([
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/gradient_descent/chart5.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/gradient_descent/Chart5.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>

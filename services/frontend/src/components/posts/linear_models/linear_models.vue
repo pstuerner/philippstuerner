@@ -19,7 +19,7 @@
                         couple of D3.js charts that will help you to interactively understand how linear and logistic
                         regression work,
                         what polynomial features are, and why overfitting is so dangerous. You can find the source code on
-                        <a href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/templates/linear_models.html"
+                        <a href="https://github.com/pstuerner/philippstuerner/tree/master/services/frontend/src/components/posts/linear_models"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!</p>
                     <hr>
                     <p>
@@ -98,7 +98,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart1.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/linear_models/Chart1.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -172,7 +172,7 @@
                         choice for solving a variety of problems. However, gradient descent is quite extensive and I thought
                         that it's best to explain the algorithm in an entire post. If you're not familiar with gradient
                         descent
-                        yet make sure to have a look <a href="https://web.philippstuerner.com/posts/gradient_descent"
+                        yet make sure to have a look <a href="https://philippstuerner.com/posts/gradient_descent"
                             target="_blank">here</a>. Luckily, for some problems, gradient descent is not the only way to
                         find
                         the optimal solution. Let me introduce an alternative approach of finding the best possible set of
@@ -278,7 +278,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart2.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/linear_models/Chart2.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -368,7 +368,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart3.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/linear_models/Chart3.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -505,7 +505,7 @@
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/sigmoid.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/linear_models/Sigmoid.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -611,7 +611,7 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
                     <hr>
                     <p style="text-align: center;">
                         💡 Check out the source code on <a
-                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/static/js/posts/linear_models/chart4.js"
+                            href="https://github.com/pstuerner/philippstuerner/blob/master/services/frontend/src/components/posts/linear_models/Chart4.vue"
                             target="_blank">GitHub <i class="fab fa-github"></i></a>!
                     </p>
                     <hr>
@@ -686,7 +686,7 @@ array([0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, ...]</code></pre>
                     </ul>
                     <p>
                         Don't worry if you have no experience with false positives, true negatives and all the other metrics
-                        yet. I've already worked on <a href="https://web.philippstuerner.com/posts/confusion_matrix"
+                        yet. I've already worked on <a href="https://philippstuerner.com/posts/confusion_matrix"
                             target="_blank">another post</a> that covers all the important aspects in an easy to understand
                         and
                         visual way.
