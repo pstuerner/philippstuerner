@@ -6,7 +6,7 @@
         <div class="col-md-10 col-lg-8 col-xl-7">
           <!-- Post preview-->
           <div v-for="post in blogPosts" :key="post.slug" class="post-preview">
-              <router-link :to="`/posts/${post.slug}`">
+              <router-link :to="`${post.path}`">
                 <h2 class="post-title">{{ post.title }}</h2>
                 <h3 class="post-subtitle">{{ post.subtitle }}</h3>
               </router-link>
@@ -25,53 +25,59 @@ import Banner from './Banner.vue';
 
 export default {
   data() {
+    let dateObj = new Date();
+
+    let year = dateObj.getUTCFullYear(),
+        month = dateObj.getUTCMonth() + 1,
+        day = dateObj.getUTCDate();
+
     return {
       blogPosts: [
         {
-          slug: 'artwork',
-          title: 'An Artwork A Day',
-          subtitle: "Combining OpenAI's GPT3.5 and DALL-E to generate art every day.",
+          path: `/posts/everydays/${year}/${month}/${day}/day`,
+          title: 'Everydays 📆⏰',
+          subtitle: "Combining OpenAI's GPT3.5 and Stable Diffusion to generate an interesting post every day.",
           date: 'May 19, 2023'
         },
         {
-          slug: "gai_animals",
-          title: "Generative AI — Animals",
-          subtitle: "An interactive world map built with D3.js and Vue.js full of Generative AI using Stable Diffusion and ChatGPT.",
+          path: "/posts/gai_animals",
+          title: "Animals 🐼🦁🦩",
+          subtitle: "An interactive world map full of generative AI using Stable Diffusion and OpenAI's GPT.",
           date: 'April 23, 2023',
         },
         {
-          slug: "don_quijote",
-          title: "Don Quijote",
+          path: "/posts/don_quijote",
+          title: "Don Quijote 🐴💨🇪🇸",
           subtitle: "Telegram based application to practice Spanish vocabulary.",
           date: 'December 17, 2022',
         },
         {
-          slug: "cmc_scanner",
-          title: "CMC Scanner",
+          path: "/posts/cmc_scanner",
+          title: "CMC Scanner 🔑🔎",
           subtitle: "Small web application to query and compare historical CoinMarketCap snapshots.",
           date: 'September 11, 2022',
         },
         {
-          slug: "don_conjugator",
-          title: "Don Conjugator",
+          path: "/posts/don_conjugator",
+          title: "Don Conjugator 💬🗣️",
           subtitle: "Web application to practice conjugating Spanish verbs.",
           date: 'September 8, 2022',
         },
         {
-          slug: "gradient_descent",
-          title: "Gradient Descent",
+          path: "/posts/gradient_descent",
+          title: "Gradient Descent 📉",
           subtitle: "Have a deep dive into one of the most important optimization algorithms in machine learning.",
           date: 'November 5, 2021',
         },
         {
-          slug: "linear_models",
-          title: "Linear Models",
+          path: "/posts/linear_models",
+          title: "Linear Models 📏📐",
           subtitle: "In-depth analysis of linear regression and classification models.",
           date: 'September 20, 2021',
         },
         {
-          slug: "confusion_matrix",
-          title: "Confusion Matrix",
+          path: "/posts/confusion_matrix",
+          title: "Confusion Matrix 😵‍💫❓",
           subtitle: "Learn what the confusion matrix and its metrics are by interacting with a simple MNIST classifier.",
           date: 'July 15, 2021',
         }

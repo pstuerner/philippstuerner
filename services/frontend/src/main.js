@@ -1,13 +1,13 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import { createMetaManager, Meta } from 'vue-meta'
-import './assets/styles.css';    
-import './assets/index-styles.css';  
-import './assets/stackoverflow-dark.css';  
+import { createMetaManager } from 'vue-meta';
+import VueProgressiveImage from 'vue-progressive-image';
+import "vue-progressive-image/dist/style.css";
 
 const app = createApp(App)
     .use(router)
+    .use(VueProgressiveImage)
     .use(createMetaManager())
 
 await router.isReady()
