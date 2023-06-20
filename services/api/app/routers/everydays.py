@@ -83,8 +83,8 @@ async def day(
     artwork = db.artwork.find_one({"date": date}, {"images_100": 0, "images_050": 0, "images_025": 0, "images_0125": 0, "_id": 0})
     
     if artwork:
-        img_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=100"
-        placeholder_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
+        img_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=100"
+        placeholder_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
         essay_20 = int(len(artwork["essay"])*.20)
         essay_60 = int(len(artwork["essay"])*.60)
         cutoff_1 = essay_20 + artwork["essay"][essay_20:].find(". ")
@@ -121,8 +121,8 @@ async def calendarweek(
     
     if timetable:
         days = []
-        img_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=025"
-        placeholder_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
+        img_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=025"
+        placeholder_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
         
         for dt_str, name in timetable["data"].items():
             dt_ = dt.strptime(dt_str, "%Y%m%d")
@@ -171,8 +171,8 @@ async def year(
         for timetable in timetables:
             days = []
             names = []
-            img_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=0125"
-            placeholder_url = "http://localhost:8000/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
+            img_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=0125"
+            placeholder_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
 
             for dt_str, name in timetable["data"].items():
                 dt_ = dt.strptime(dt_str, "%Y%m%d")
