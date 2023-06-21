@@ -38,6 +38,12 @@ const routes = [
         ]
     },
     {
+        path: '/e/:year/:month/:day',
+        redirect: to => {
+            return { name: 'EverydaysDay' }
+        }
+    },
+    {
         path: '/posts/don_conjugator/practice/:mode/:verbs',
         name: 'DonConjugatorPractice',
         component: DonConjugatorPractice,

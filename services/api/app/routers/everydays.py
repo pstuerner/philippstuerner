@@ -1,4 +1,5 @@
 import os
+from pytz import timezone
 from datetime import datetime as dt
 from datetime import timedelta as td
 from typing import Optional
@@ -112,12 +113,12 @@ async def calendarweek(
     day: int,
 ):
     try:
-        date = dt(year,month,day)
+        date = dt(year,month,day,tzinfo=timezone("Europe/Berlin"))
     except Exception as e:
         return {}
-    dt_now = dt.now()
-    dt_today = dt(dt_now.year,dt_now.month,dt_now.day)
-    timetable = db.timetable.find_one({"date": date})
+    dt_now = dt.now(tz=timezone("Europe/Berlin"))
+    dt_today = dt(dt_now.year,dt_now.month,dt_now.day,tzinfo=timezone("Europe/Berlin"))
+    timetable = db.timetable.find_one({"date": date.replace(tzinfo=None)})
     
     if timetable:
         days = []
@@ -125,7 +126,7 @@ async def calendarweek(
         placeholder_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
         
         for dt_str, name in timetable["data"].items():
-            dt_ = dt.strptime(dt_str, "%Y%m%d")
+            dt_ = dt.strptime(dt_str, "%Y%m%d").replace(tzinfo=timezone("Europe/Berlin"))
             
             if (dt_ < dt_today) or (dt_ == dt_today and dt_now.hour >= 9):
                 days.append(
