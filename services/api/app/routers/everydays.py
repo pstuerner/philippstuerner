@@ -159,13 +159,13 @@ async def year(
     day: int,
 ):
     try:
-        date = dt(year,month,day)
+        date = dt(year,month,day,tzinfo=timezone("Europe/Berlin"))
     except Exception as e:
         return {}
-    date_1 = dt(year+1,month,day)
-    dt_now = dt.now()
-    dt_today = dt(dt_now.year,dt_now.month,dt_now.day)
-    timetables = db.timetable.find({"date": {"$gte": date, "$lte": min(date_1,dt_today)}})
+    date_1 = dt(year+1,month,day,tzinfo=timezone("Europe/Berlin"))
+    dt_now = dt.now(tz=timezone("Europe/Berlin"))
+    dt_today = dt(dt_now.year,dt_now.month,dt_now.day,tzinfo=timezone("Europe/Berlin"))
+    timetables = db.timetable.find({"date": {"$gte": date.replace(tzinfo=None), "$lte": min(date_1.replace(tzinfo=None),dt_today.replace(tzinfo=None))}})
     r = []
     
     if timetables:
@@ -176,7 +176,7 @@ async def year(
             placeholder_url = "https://api.philippstuerner.com/everydays/image?year={}&month={}&day={}&slice={}&resolution=002"
 
             for dt_str, name in timetable["data"].items():
-                dt_ = dt.strptime(dt_str, "%Y%m%d")
+                dt_ = dt.strptime(dt_str, "%Y%m%d").replace(tzinfo=timezone("Europe/Berlin"))
 
                 if (dt_ < dt_today) or (dt_ == dt_today and dt_now.hour >= 9):
                     names.append(name)
