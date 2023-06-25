@@ -4,7 +4,7 @@
           👻 There's no artwork for this day (yet) 👻<br /><br />New content drops every day at 9am CET (GMT+2)!
         </p>
         <p v-else-if="(Object.keys(info).length>0 && loaded && diffDays == 1)" style="text-align: center;">
-          Come back tomorrow to to find out what's next. Here's a small hint 😎:<br /><br /><b>{{ maskName(this.info.name) }}</b>
+          Come back tomorrow to find out what's next. Here's a small hint 😎:<br /><br /><b>{{ maskName(this.info.name) }}</b>
         </p>
         <p v-else-if="(Object.keys(info).length>0 && loaded && diffDays > 0)" style="text-align: center;">
           👻 There's no artwork for this day (yet) 👻

@@ -38,9 +38,9 @@ async def name(
 async def timetable():
     dt_ = dt.now()
     dt_today = dt(dt_.year,dt_.month,dt_.day)
-    timetables = db.timetable.find({"date": {"$lte": dt_today}}, {"date":1, "topic":1, "data": 1, "_id":0})
+    timetables = db.timetable.find({"date": {"$lte": dt_today+td(days=1)}}, {"date":1, "topic":1, "data": 1, "_id":0})
     d = {}
-
+    
     for timetable in timetables:
         year = timetable["date"].year
         week = timetable["date"].isocalendar().week
