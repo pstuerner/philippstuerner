@@ -146,7 +146,7 @@ async def calendarweek(
             
         return {
             "topic": timetable["topic"],
-            "ratio": timetable["width"] / timetable["height"],
+            "ratio": eval(timetable["ar"].replace(":","/")),
             "days": days
         }
     else:
@@ -165,7 +165,19 @@ async def year(
     date_1 = dt(year+1,month,day,tzinfo=timezone("Europe/Berlin"))
     dt_now = dt.now(tz=timezone("Europe/Berlin"))
     dt_today = dt(dt_now.year,dt_now.month,dt_now.day,tzinfo=timezone("Europe/Berlin"))
-    timetables = db.timetable.find({"date": {"$gte": date.replace(tzinfo=None), "$lte": min(date_1.replace(tzinfo=None),dt_today.replace(tzinfo=None))}})
+    timetables = (
+        db
+        .timetable
+        .find(
+            {
+                "date": {
+                    "$gte": date.replace(tzinfo=None),
+                    "$lte": min(date_1.replace(tzinfo=None),dt_today.replace(tzinfo=None))
+                }
+            }
+        )
+        .sort("date", -1)
+    )
     r = []
     
     if timetables:
@@ -199,7 +211,7 @@ async def year(
                 {
                     "topic": timetable["topic"],
                     "names": names,
-                    "ratio": timetable["width"] / timetable["height"],
+                    "ratio": eval(timetable["ar"].replace(":","/")),
                     "days" : days
                 }
             )
