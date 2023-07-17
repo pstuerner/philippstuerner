@@ -29,8 +29,8 @@ async def name(
     except Exception as e:
         return {}
     
-    timetable = db.timetable.find_one({"date": {"$lte": date}}, {"data": 1, "_id":0})
-
+    timetable = db.timetable.find_one({"date": date-td(days=date.weekday())}, {"data": 1, "_id":0})
+    
     return {"name": timetable["data"][date.strftime("%Y%m%d")]}
 
 
