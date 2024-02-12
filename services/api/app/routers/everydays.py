@@ -38,35 +38,48 @@ async def name(
 async def timetable():
     dt_ = dt.now()
     dt_today = dt(dt_.year,dt_.month,dt_.day)
-    timetables = db.timetable.find({"date": {"$lte": dt_today+td(days=1)}}, {"date":1, "topic":1, "data": 1, "_id":0})
-    d = {}
-    
-    for timetable in timetables:
-        year = timetable["date"].year
-        week = timetable["date"].isocalendar().week
-        topic = timetable["topic"]
-        data = []
 
-        for k,v in timetable["data"].items():
-            day_date = dt.strptime(k,"%Y%m%d")
+    min_date = list(db.timetable.find({},{"_id":0,"date":1}).sort("date", 1).limit(1))[0]["date"]
+    max_date = list(db.timetable.find({},{"_id":0,"date":1}).sort("date", -1).limit(1))[0]["date"]
 
-            if day_date <= dt_today+td(days=1):
-                data.append({
+    d = []
+    for year in reversed(range(min_date.year, max_date.year+1)):
+        weeks_ = db.timetable.find({"date": {"$lte": dt_today+td(days=1)}, "$expr": { "$eq": [{ "$year": "$date" }, year] } }).sort("date", -1)
+
+        weeks = []
+        for week in weeks_:
+
+            days = []
+            for k, v in week["data"].items():
+                day_date = dt.strptime(k,"%Y%m%d")
+                name = v if day_date < dt_today+td(days=1) else "👀🤔🔜"
+
+                days.append({
                     "year": day_date.year,
                     "month": day_date.month,
                     "day": day_date.day,
-                    "weekday_int": weekday_sun_zero(day_date.isoweekday()),
-                    "weekday_str": day_date.strftime("%a"),
-                    "name": v if day_date < dt_today+td(days=1) else "👀🤔🔜"
+                    "name": name
                 })
 
-        if year not in d:
-            d[year] = {}
+                if name == "👀🤔🔜":
+                    break
+
+            weeks.append(
+                {
+                    "week": week["date"].isocalendar().week,
+                    "month": week["date"].month,
+                    "day": week["date"].day,
+                    "topic": week["topic"],
+                    "days": days
+                }
+            )
         
-        d[year][week] = {
-            **{"topic": topic},
-            **{"days":data}
-        }
+        d.append(
+            {
+                "year": year,
+                "weeks": weeks
+            }
+        )
 
     return d
 
@@ -165,18 +178,16 @@ async def year(
     date_1 = dt(year+1,month,day,tzinfo=timezone("Europe/Berlin"))
     dt_now = dt.now(tz=timezone("Europe/Berlin"))
     dt_today = dt(dt_now.year,dt_now.month,dt_now.day,tzinfo=timezone("Europe/Berlin"))
+
     timetables = (
         db
         .timetable
         .find(
             {
-                "date": {
-                    "$gte": date.replace(tzinfo=None),
-                    "$lte": min(date_1.replace(tzinfo=None),dt_today.replace(tzinfo=None))
-                }
-            }
-        )
-        .sort("date", -1)
+                "$expr": { "$eq": [{ "$year": "$date" }, year] },
+                "date": {"$lte": dt_now}
+            },
+        ).sort("date", -1)
     )
     r = []
     
