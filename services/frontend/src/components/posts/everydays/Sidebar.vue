@@ -1,17 +1,14 @@
 <template>
     <div class="sidebar custom-sidebar">
         <ul class="nav flex-column" style="padding-left: 1.25em; list-style-type: disc">
-            <li class="nav-item" v-for="(yearData, year) in sidebarData" :key="year">
-                <router-link :to="{ name: 'EverydaysYear', params: { year: +year, month: 1, day: 1 }}"><span style="cursor: pointer;">{{ year }}</span></router-link>
-                <!-- <span style="cursor: pointer;" @click="select('year',year,1,1)">{{ year }}</span> -->
+            <li class="nav-item" v-for="year in sidebarData" :key="year">
+                <router-link :to="{ name: 'EverydaysYear', params: { year: +year.year, month: 1, day: 1 }}"><span style="cursor: pointer;">{{ year.year }}</span></router-link>
                 <ul style="padding-left: 0.5em; list-style-type: disc">
-                    <li class="nav-item" v-for="(calendarWeekData, calendarWeek) in yearData" :key="calendarWeek">
-                        <router-link :to="{ name: 'EverydaysCalendarWeek', params: { year: year, month: calendarWeekData.days[0]['month'], day: calendarWeekData.days[0]['day'] }}"><span style="cursor: pointer;">{{ calendarWeek }} - {{ calendarWeekData.topic }}</span></router-link>
-                        <!-- <span style="cursor: pointer;" @click="select('calendarweek',year,calendarWeekData.days[0]['month'],calendarWeekData.days[0]['day'])">{{ calendarWeek }} - {{ calendarWeekData.topic }}</span> -->
+                    <li class="nav-item" v-for="week in year.weeks" :key="week">
+                        <router-link :to="{ name: 'EverydaysCalendarWeek', params: { year: +year.year, month: week.month, day: week.day }}"><span style="cursor: pointer;">{{ week.week }} - {{ week.topic }}</span></router-link>
                         <ul style="padding-left: 0.75em; list-style-type: disc;">
-                            <li class="nav-item" v-for="day in calendarWeekData.days" :key="day.str">
-                                <router-link :to="{ name: 'EverydaysDay', params: { year: day.year, month: day.month, day: day.day }}"><span style="cursor: pointer;">{{ day.weekday_str }} - {{ day.name }}</span></router-link>
-                                <!-- <span style="cursor: pointer;" @click="select('day', day.year, day.month, day.day)">{{ day.weekday_str }} - {{ day.name }}</span> -->
+                            <li class="nav-item" v-for="day in week.days" :key="day.str">
+                                <router-link :to="{ name: 'EverydaysDay', params: { year: day.year, month: day.month, day: day.day }}"><span style="cursor: pointer;">{{ day.name }}</span></router-link>
                             </li>
                         </ul>
                     </li>
@@ -36,6 +33,8 @@ export default {
     methods: {
         fetchSidebarData() {
             json('https://api.philippstuerner.com/everydays/timetable').then(data => {
+                console.log("bubba")
+                console.log(data)
                 this.sidebarData = data;
             }).catch(error => {
                 console.error('Error fetching sidebar data:', error);

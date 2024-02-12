@@ -1,5 +1,5 @@
 <template>
-  <p style="text-align: center; margin-bottom: 0.2em">{{ year }}-{{ month }}-{{ day }}</p>
+  <p style="text-align: center; margin-bottom: 0.2em">{{ year }}</p>
 
   <div class="container">
     <div v-for="timetable, index in info.timetables" :key="index" class="row">
