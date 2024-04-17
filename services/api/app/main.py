@@ -6,6 +6,7 @@ from .routers import cmcscanner
 from .routers import don_conjugator
 from .routers import everydays
 from .routers import freedom
+from .routers import lookielookie
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.include_router(linear_models.router, prefix="/linear_models")
 app.include_router(don_conjugator.router, prefix="/don_conjugator")
 app.include_router(everydays.router, prefix="/everydays")
 app.include_router(freedom.router, prefix="/freedom")
+app.include_router(lookielookie.router, prefix="/lookielookie")
 
 
 @app.get("/")
