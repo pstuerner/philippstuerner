@@ -4,6 +4,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from './components/Home.vue';
 import About from './components/About.vue';
 import BlogPost from './components/BlogPost.vue';
+import Lookielookie from './components/posts/lookielookie/Lookielookie.vue';
+import LookielookieOverview from './components/posts/lookielookie/LookielookieOverview.vue';
+import LookielookieTicker from './components/posts/lookielookie/LookielookieTicker.vue';
 import Everydays from './components/posts/everydays/everydays.vue';
 import EverydaysDay from './components/posts/everydays/Day.vue';
 import EverydaysCalendarWeek from './components/posts/everydays/CalendarWeek.vue';
@@ -35,6 +38,15 @@ const routes = [
             { path: ':year/:month/:day/day', name: 'EverydaysDay', component: EverydaysDay },
             { path: ':year/:month/:day/calendarweek', name: 'EverydaysCalendarWeek', component: EverydaysCalendarWeek },
             { path: ':year/:month/:day/year', name: 'EverydaysYear', component: EverydaysYear },
+        ]
+    },
+    {
+        path: '/posts/lookielookie',
+        name: 'Lookielookie',
+        component: Lookielookie,
+        children: [
+            { path: 'overview', name: 'LookielookieOverview', component: LookielookieOverview },
+            { path: 'ticker/:ticker', name: 'LookielookieTicker', component: LookielookieTicker },
         ]
     },
     {

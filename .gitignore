@@ -6,6 +6,7 @@ letsencrypt
 Pipfile
 Pipfile.lock
 services/frontend/static/files
+services/frontend/dist
 
 **/*.pyc
 **/*.env

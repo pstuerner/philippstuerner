@@ -34,6 +34,12 @@ export default {
     return {
       blogPosts: [
         {
+          path: `/posts/lookielookie/overview`,
+          title: 'LookieLookie 👀',
+          subtitle: "Get a list of daily trading signals and filter your way to your final pick.",
+          date: 'April 17, 2024'
+        },
+        {
           path: `/posts/everydays/${year}/${month}/${day}/day`,
           title: 'Everydays 📆⏰',
           subtitle: "Combining OpenAI's GPT3.5 and Stable Diffusion to generate an interesting post every day.",
