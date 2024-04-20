@@ -14,7 +14,52 @@
             <router-link class="nav-link px-lg-3 py-3 py-lg-4" to="/about">About</router-link>
           </li>
         </ul>
+          <ul class="navbar-nav">
+            <li v-if="!isAuthenticated && !isLoading" class="nav-item">
+              <span
+                id="qsLoginBtn"
+                class="nav-link"
+                style="cursor: pointer;"
+                @click.prevent="login"
+              >
+                🔑
+              </span>
+            </li>
+            <li v-else class="nav-item">
+              <router-link to="/profile" class="nav-link" style="display: inline;">
+                <span style="font-size: large;">👤</span>
+              </router-link>
+            </li>
+          </ul>
+
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+import { useAuth0 } from '@auth0/auth0-vue';
+
+export default {
+  name: "NavBar",
+  setup() {
+    const auth0 = useAuth0();
+    
+    return {
+      isAuthenticated: auth0.isAuthenticated,
+      isLoading: auth0.isLoading,
+      user: auth0.user,
+      login() {
+        auth0.loginWithRedirect();
+      },
+      logout() {
+        auth0.logout({
+          logoutParams: {
+            returnTo: window.location.origin
+          }
+        });
+      }
+    }
+  }
+};
+</script>
