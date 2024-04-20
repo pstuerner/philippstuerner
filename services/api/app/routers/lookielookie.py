@@ -258,6 +258,56 @@ async def get_atr(ticker: str):
 
     return res.to_dict("records")[0]
 
+@router.get("/get_reminders")
+async def get_reminders(mail: str):
+    reminders = (
+        db
+        .reminders
+        .find(
+            {"mail": mail},
+            {"_id": 0, "mail": 0}
+        )
+    )
+
+    res = []
+    for reminder in reminders:
+        price = (
+            db
+            .timeseries
+            .find({"ticker": reminder["ticker"]}, {"_id": 0, "adjclose": 1})
+            .sort("date", -1)
+            .limit(1)
+        )[0]["adjclose"]
+        triggered = eval(f"{price}{reminder['operator']}{reminder['price']}")
+        res.append({**reminder,**{"triggered": triggered}})
+
+    return sorted(res, key=lambda f: f["triggered"]==False)
+
+@router.get("/set_reminder")
+async def set_reminder(mail: str, ticker: str, operator: str, price: float):
+    ins = (
+        db
+        .reminders
+        .update_one(
+            {"mail": mail, "ticker": ticker, "operator": operator, "price": price},
+            {"$set": {"mail": mail, "ticker": ticker, "operator": operator, "price": price}},
+            upsert=True
+        )
+    )
+
+    return True
+
+@router.get("/remove_reminder")
+async def set_reminder(mail: str, ticker: str, operator: str, price: float):
+    rem = (
+        db
+        .reminders
+        .delete_one(
+            {"mail": mail, "ticker": ticker, "operator": operator, "price": price}
+        )
+    )
+
+    return True
 
 @router.get("/")
 async def root(request: Request):

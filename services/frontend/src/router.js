@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { createAuthGuard } from "@auth0/auth0-vue";
 
 // Import components for routing
 import Home from './components/Home.vue';
 import About from './components/About.vue';
+import Profile from './components/Profile.vue';
 import BlogPost from './components/BlogPost.vue';
 import Lookielookie from './components/posts/lookielookie/Lookielookie.vue';
 import LookielookieOverview from './components/posts/lookielookie/LookielookieOverview.vue';
@@ -24,6 +26,12 @@ const routes = [
         path: '/about',
         name: 'About',
         component: About,
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile,
+        beforeEnter: createAuthGuard(app)
     },
     {
         path: '/posts/:name',

@@ -61,14 +61,45 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
+        <div class="col-12 text-center" style="margin-left: auto; margin-right: auto; margin-top: 2em">
+            <h3>🔔 Reminder 🔔</h3>
+            <div v-if="user!=null">
+                <p style="text-align: center;">
+                    Remind me when the price of {{ this.params.ticker }} is
+                    <select v-model="operator">
+                        <option value=">">higher</option>
+                        <option value="<">lower</option>
+                        <option value=">=">higher equal</option>
+                        <option value="<=">lower equal</option>
+                    </select>
+                    than <input v-model="priceRemind" class="inline" type="number" name="age" step="0.1">!
+                </p>
+                <p v-if="reminded" style="text-align: center;">
+                    Done! You can check your profile to see if your reminder got triggered.
+                </p>
+                <button @click="setReminder" type="button" class="btn btn-primary">GO</button>
+            </div>
+            <div v-else>
+                <p style="text-align: center;">You must log in before you can use this feature!</p>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import { useAuth0 } from '@auth0/auth0-vue';
 import { Chart, CompanyProfile, SymbolInfo } from '@/assets/js/tradingview-vue.js';
-import { ref, computed } from 'vue';
 import axios from 'axios';
 
 export default {
+    setup() {
+      const auth0 = useAuth0();
+      
+      return {
+        user: auth0.user,
+      }
+    },
     data() {
         return {
             params: this.$route.params,
@@ -79,6 +110,9 @@ export default {
             },
             atr: 0,
             price: 0,
+            operator: ">",
+            priceRemind: 0,
+            reminded: false,
         };
     },
     computed: {
@@ -135,11 +169,20 @@ export default {
     },
     methods: {
         fetchData() {
-            console.log(`https://api.philippstuerner.com/lookielookie/atr?ticker=${this.params.ticker}`)
             axios.get(`https://api.philippstuerner.com/lookielookie/atr?ticker=${this.params.ticker}`)
                 .then(response => {
                     this.atr = response.data["indicators"]["atr"];
                     this.price = response.data.adjclose;
+                    this.priceRemind = this.price;
+                })
+                .catch(error => {
+                    console.error('Failed to fetch data:', error);
+                });
+        },
+        setReminder() {
+            axios.get(`https://api.philippstuerner.com/lookielookie/set_reminder?mail=${this.user.email}&ticker=${this.params.ticker}&operator=${this.operator}&price=${this.priceRemind}`)
+                .then(response => {
+                    this.reminded = true;
                 })
                 .catch(error => {
                     console.error('Failed to fetch data:', error);
@@ -205,5 +248,13 @@ export default {
             width: 100%;
             margin-bottom: 0.5rem;
         }
+    }
+
+    input.inline {
+        font-size: 16px;
+        margin: 0 5px;
+        vertical-align: middle;
+        padding: 4px 2px;
+        display: inline;
     }
 </style>

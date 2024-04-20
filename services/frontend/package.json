@@ -9,6 +9,7 @@
         "watch": "vue-cli-service build --watch --inline-vue"
     },
     "dependencies": {
+        "@auth0/auth0-vue": "^2.3.3",
         "@vuepic/vue-datepicker": "^8.3.2",
         "axios": "^1.6.8",
         "core-js": "^3.8.3",
