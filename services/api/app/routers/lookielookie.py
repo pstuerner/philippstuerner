@@ -149,10 +149,30 @@ async def name(
     month: int,
     day: int,
 ):
+    EMPTY_RES = {
+        "SIDE_TO_LONG": [],
+        "LONG_TO_SIDE": [],
+        "LONG_TO_LONG": [],
+
+        "SIDE_TO_SHORT": [],
+        "SHORT_TO_SIDE": [],
+        "SHORT_TO_SHORT": [],
+
+        "SIDE_TO_SIDE": [],
+    }
+
     try:
         end_date = dt(year,month,day)
     except Exception as e:
         return {}
+    
+    aapl_db = db.timeseries.find_one({"date": end_date, "ticker": "AAPL"})
+    if aapl_db is None:
+        return EMPTY_RES
+
+    changes_db = db.changes.find_one({"date": end_date}, {"_id": 0, "date": 0})
+    if changes_db is not None:
+        return changes_db
 
     # Calculate 10 days before the date of interest
     start_date = end_date - td(days=6)
@@ -237,10 +257,17 @@ async def name(
 
             "SIDE_TO_SIDE": r.loc[lambda df: df.SIDE_t0 & df.SIDE_t1].ticker.tolist(),
         }
-
-        return res
     else:
-        return {"LONG": [], "SHORT": []}
+        res = EMPTY_RES
+    
+    db.changes.insert_one(
+        {
+            **{"date": end_date},
+            **res
+        }
+    )
+
+    return res
 
 
 @router.get("/atr")
