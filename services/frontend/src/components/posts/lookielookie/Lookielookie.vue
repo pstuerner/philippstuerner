@@ -29,7 +29,7 @@ import ToTopButton from '@/components/ToTopButton.vue';
 export default {
     data() {
         return {
-            title: "Lookielookie 👀",
+            title: "LookieLookie 👀",
             title_meta: "Lookielookie",
             subheading: "Daily trading signals and filter options.",
             img: "lookielookie_header.jpg",

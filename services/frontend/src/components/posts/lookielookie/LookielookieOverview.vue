@@ -32,73 +32,73 @@
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="Object.keys(symbolsSideToLong).length > 0">
             <DataTable heading="SIDE ➡️ LONG" :symbols="symbolsSideToLong" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewSideToLong" :key="symbolsSideToLong" :options="optionsSideToLong" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="Object.keys(symbolsLongToLong).length > 0">
             <DataTable heading="LONG ➡️ LONG" :symbols="symbolsLongToLong" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewLongToLong" :key="symbolsLongToLong" :options="optionsLongToLong" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="Object.keys(symbolsShortToSide).length > 0">
             <DataTable heading="SHORT ➡️ SIDE" :symbols="symbolsShortToSide" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewShortToSide" :key="symbolsShortToSide" :options="optionsShortToSide" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="symbolsSideToShort.length">
             <DataTable heading="SIDE ➡️ SHORT" :symbols="symbolsSideToShort" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewSideToShort" :key="symbolsSideToShort" :options="optionsSideToShort" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="symbolsShortToShort.length">
             <DataTable heading="SHORT ➡️ SHORT" :symbols="symbolsShortToShort" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewShortToShort" :key="symbolsShortToShort" :options="optionsShortToShort" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="symbolsLongToSide.length">
             <DataTable heading="LONG ➡️ SIDE" :symbols="symbolsLongToSide" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewLongToSide" :key="symbolsLongToSide" :options="optionsLongToSide" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
         <div v-if="symbolsSideToSide.length">
             <DataTable heading="SIDE ➡️ SIDE" :symbols="symbolsSideToSide" />
-            <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
                 <div class="col-12" style="margin-left: auto; margin-right: auto;">
                     <SymbolOverview unique-id="symbolOverviewSideToSide" :key="symbolsSideToSide" :options="optionsSideToSide" />
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -106,7 +106,7 @@
 <script>
 import DatePickerComponent from '@/components/posts/lookielookie/DatePickerComponent.vue';
 import DataTable from '@/components/posts/lookielookie/DataTable.vue';
-import { SymbolOverview } from '@/assets/js/tradingview-vue.js';
+// import { SymbolOverview } from '@/assets/js/tradingview-vue.js';
 import axios from 'axios';
 
 export default {
@@ -224,7 +224,7 @@ export default {
     },
     components: {
         DatePickerComponent,
-        SymbolOverview,
+        // SymbolOverview,
         DataTable
     }
 }

@@ -42,7 +42,7 @@ export default {
         {
           path: `/posts/everydays/${year}/${month}/${day}/day`,
           title: 'Everydays 📆⏰',
-          subtitle: "Combining OpenAI's GPT3.5 and Stable Diffusion to generate an interesting post every day.",
+          subtitle: "Combining OpenAI's GPT4 and Midjourney to generate an interesting post every day.",
           date: 'May 19, 2023'
         },
         {

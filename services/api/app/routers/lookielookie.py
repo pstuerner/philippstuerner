@@ -336,7 +336,13 @@ async def set_reminder(mail: str, ticker: str, operator: str, price: float):
 
     return True
 
+@router.get("/get_valid_dates")
+async def get_valid_dates():
+    res = db.timeseries.find({"ticker": "AAPL"}, {"_id": 0, "date": 1})
+
+    return [x["date"] for x in res]
+
 @router.get("/")
 async def root(request: Request):
     """Just a message to return something on the home endpoint"""
-    return "SuperGuppy entrypoint"
+    return "LookieLookie entrypoint"

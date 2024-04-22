@@ -15,7 +15,8 @@ const app = createApp(App)
             clientId: authConfig.clientId,
             authorizationParams: {
                 redirect_uri: window.location.origin,
-            }
+            },
+            cacheLocation: "localstorage"
         })
     )
     .use(VueProgressiveImage)

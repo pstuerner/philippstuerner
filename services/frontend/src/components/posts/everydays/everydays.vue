@@ -38,7 +38,7 @@ export default {
         return {
             title: "Everydays",
             title_meta: "Everydays",
-            subheading: "Combining OpenAI's GPT3.5 and Midjourney to generate an interesting post every day.",
+            subheading: "Combining OpenAI's GPT4 and Midjourney to generate an interesting post every day.",
             img: "everydays_header.png",
         };
     },
