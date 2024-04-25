@@ -3,7 +3,7 @@
         <div class="spinner"></div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
-        <DatePickerComponent class="responsive-datepicker" @date-changed="fetchData" style="margin-left: auto; margin-right: auto" />
+        <DatePickerComponent :apiRedirect="apiRedirect" class="responsive-datepicker" @date-changed="fetchData" style="margin-left: auto; margin-right: auto" />
         <div v-if="!date" style="display: flex; justify-content: center;">
             <p style="text-align: center;">🫨 Nothing to see 🫨<br>Pick a date</p>
         </div>
@@ -16,12 +16,10 @@
                     <tbody>
                         <tr>
                             <th>🐂</th>
-                            <th>🦀</th>
                             <th>🐻</th>
                         </tr>
                         <tr>
                             <td>{{ marketSentiment.longsRel }}%</td>
-                            <td>{{ marketSentiment.sidesRel }}%</td>
                             <td>{{ marketSentiment.shortsRel }}%</td>
                         </tr>
                     </tbody>
@@ -30,75 +28,23 @@
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="Object.keys(symbolsSideToLong).length > 0">
-            <DataTable heading="SIDE ➡️ LONG" :symbols="symbolsSideToLong" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewSideToLong" :key="symbolsSideToLong" :options="optionsSideToLong" />
-                </div>
-            </div> -->
+        <div v-if="Object.keys(shortToLong).length > 0">
+            <DataTable :websiteRedirect="websiteRedirect" :apiRedirect="apiRedirect" heading="SHORT ➡️ LONG" :symbols="shortToLong" :headersIgnore="['daysCurrent']" />
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="Object.keys(symbolsLongToLong).length > 0">
-            <DataTable heading="LONG ➡️ LONG" :symbols="symbolsLongToLong" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewLongToLong" :key="symbolsLongToLong" :options="optionsLongToLong" />
-                </div>
-            </div> -->
+        <div v-if="Object.keys(longToLong).length > 0">
+            <DataTable :websiteRedirect="websiteRedirect" :apiRedirect="apiRedirect" heading="LONG ➡️ LONG" :symbols="longToLong" :headersIgnore="['daysPast']"/>
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="Object.keys(symbolsShortToSide).length > 0">
-            <DataTable heading="SHORT ➡️ SIDE" :symbols="symbolsShortToSide" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewShortToSide" :key="symbolsShortToSide" :options="optionsShortToSide" />
-                </div>
-            </div> -->
-        </div>
-    </div>
-
-    <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="symbolsSideToShort.length">
-            <DataTable heading="SIDE ➡️ SHORT" :symbols="symbolsSideToShort" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewSideToShort" :key="symbolsSideToShort" :options="optionsSideToShort" />
-                </div>
-            </div> -->
+        <div v-if="Object.keys(longToShort).length > 0">
+            <DataTable :websiteRedirect="websiteRedirect" :apiRedirect="apiRedirect" heading="LONG ➡️ SHORT" :symbols="longToShort" :headersIgnore="['daysCurrent']" />
         </div>
     </div>
     <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="symbolsShortToShort.length">
-            <DataTable heading="SHORT ➡️ SHORT" :symbols="symbolsShortToShort" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewShortToShort" :key="symbolsShortToShort" :options="optionsShortToShort" />
-                </div>
-            </div> -->
-        </div>
-    </div>
-    <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="symbolsLongToSide.length">
-            <DataTable heading="LONG ➡️ SIDE" :symbols="symbolsLongToSide" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewLongToSide" :key="symbolsLongToSide" :options="optionsLongToSide" />
-                </div>
-            </div> -->
-        </div>
-    </div>
-
-    <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; margin-top: 2em">
-        <div v-if="symbolsSideToSide.length">
-            <DataTable heading="SIDE ➡️ SIDE" :symbols="symbolsSideToSide" />
-            <!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
-                <div class="col-12" style="margin-left: auto; margin-right: auto;">
-                    <SymbolOverview unique-id="symbolOverviewSideToSide" :key="symbolsSideToSide" :options="optionsSideToSide" />
-                </div>
-            </div> -->
+        <div v-if="Object.keys(shortToShort).length > 0">
+            <DataTable :websiteRedirect="websiteRedirect" :apiRedirect="apiRedirect" heading="Short ➡️ Short" :symbols="shortToShort" :headersIgnore="['daysPast']" />
         </div>
     </div>
 </template>
@@ -106,94 +52,40 @@
 <script>
 import DatePickerComponent from '@/components/posts/lookielookie/DatePickerComponent.vue';
 import DataTable from '@/components/posts/lookielookie/DataTable.vue';
-// import { SymbolOverview } from '@/assets/js/tradingview-vue.js';
 import axios from 'axios';
 
 export default {
+    props: ["apiRedirect", "websiteRedirect"],
     data() {
         return {
-            symbolsSideToLong: [],
-            symbolsLongToLong: [],
-            symbolsSideToShort: [],
-            symbolsShortToSide: [],
-            symbolsShortToShort: [],
-            symbolsLongToSide: [],
-            symbolsSideToSide: [],
+            shortToLong: [],
+            longToLong: [],
+            longToShort: [],
+            shortToShort: [],
             date: null,
-            loading: false
+            loading: false,
         };
     },
     computed: {
         marketSentiment() {
-            let longs = this.symbolsLongToLong.length + this.symbolsSideToLong.length;
-            let shorts = this.symbolsShortToShort.length + this.symbolsSideToShort.length;
-            let sides = this.symbolsLongToSide.length + this.symbolsShortToSide.length + this.symbolsSideToSide.length;
+            let longs = this.longToLong.length + this.shortToLong.length;
+            let shorts = this.longToShort.length + this.shortToShort.length;
 
             return {
                 "longsCnt": longs,
                 "shortsCnt": shorts,
-                "sidesCnt": sides,
-                "longsRel": (longs / (longs + shorts + sides) * 100).toFixed(1),
-                "shortsRel": (shorts / (longs + shorts + sides) * 100).toFixed(1),
-                "sidesRel": (sides / (longs + shorts + sides) * 100).toFixed(1),
+                "longsRel": (longs / (longs + shorts) * 100).toFixed(1),
+                "shortsRel": (shorts / (longs + shorts) * 100).toFixed(1),
             }
         },
-        optionsSideToLong() {
-            return {
-                symbols: this.symbolsSideToLong,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsSideToShort() {
-            return {
-                symbols: this.symbolsSideToShort,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsLongToLong() {
-            return {
-                symbols: this.symbolsLongToLong,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsShortToSide() {
-            return {
-                symbols: this.symbolsShortToSide,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsShortToShort() {
-            return {
-                symbols: this.symbolsShortToShort,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsLongToSide() {
-            return {
-                symbols: this.symbolsLongToSide,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
-        optionsSideToSide() {
-            return {
-                symbols: this.symbolsSideToSide,
-                colorTheme: "dark",
-                width: "100%",
-                height: "100%"
-            };
-        },
+        // optionsShortToLong() {
+        //     return {
+        //         symbols: this.shortToLong.map(d => ["NASDAQ:" + d.ticker, d.ticker]),
+        //         colorTheme: "dark",
+        //         width: "100%",
+        //         height: "100%"
+        //     };
+        // },
     },
     methods: {
         async fetchData(date) {
@@ -204,27 +96,20 @@ export default {
             const month = date.getMonth() + 1;
             const day = date.getDate();
             try {
-                const response = await axios.get(`https://api.philippstuerner.com/lookielookie/changes?year=${year}&month=${month}&day=${day}`);
-                this.updateSymbolOverviews(response.data)
+                const response = await axios.get(`${this.apiRedirect}/lookielookie/changes?year=${year}&month=${month}&day=${day}`);
+                this.shortToLong = response.data.SHORT_TO_LONG;
+                this.longToLong = response.data.LONG_TO_LONG;
+                this.longToShort = response.data.LONG_TO_SHORT;
+                this.shortToShort = response.data.SHORT_TO_SHORT;
             } catch (error) {
                 console.error("Failed to fetch data:", error);
             } finally {
                 this.loading = false;
             }
         },
-        updateSymbolOverviews(signals) {
-            this.symbolsSideToLong = signals.SIDE_TO_LONG.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsLongToLong = signals.LONG_TO_LONG.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsSideToShort = signals.SIDE_TO_SHORT.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsShortToSide = signals.SHORT_TO_SIDE.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsShortToShort = signals.SHORT_TO_SHORT.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsLongToSide = signals.LONG_TO_SIDE.map(ticker => ["NASDAQ:" + ticker, ticker]);
-            this.symbolsSideToSide = signals.SIDE_TO_SIDE.map(ticker => ["NASDAQ:" + ticker, ticker]);
-        },
     },
     components: {
         DatePickerComponent,
-        // SymbolOverview,
         DataTable
     }
 }
@@ -268,3 +153,9 @@ export default {
     }
 }
 </style>
+
+<!-- <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; height: 50vh;">
+    <div class="col-12" style="margin-left: auto; margin-right: auto;">
+        <SymbolOverview unique-id="symbolOverviewSideToLong" :key="symbolsSideToLong" :options="optionsSideToLong" />
+    </div>
+</div> -->

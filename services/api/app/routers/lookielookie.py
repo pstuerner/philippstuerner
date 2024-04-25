@@ -150,16 +150,11 @@ async def name(
     day: int,
 ):
     EMPTY_RES = {
-        "SIDE_TO_LONG": [],
-        "LONG_TO_SIDE": [],
-        "LONG_TO_LONG": [],
-
-        "SIDE_TO_SHORT": [],
-        "SHORT_TO_SIDE": [],
-        "SHORT_TO_SHORT": [],
-
-        "SIDE_TO_SIDE": [],
-    }
+            "SHORT_TO_LONG": [],
+            "LONG_TO_SHORT": [],
+            "LONG_TO_LONG":[],
+            "SHORT_TO_SHORT": [],
+        }
 
     try:
         end_date = dt(year,month,day)
@@ -183,7 +178,7 @@ async def name(
             "date": {
                 "$gte": start_date,  # 10 days before the date of interest
                 "$lte": end_date     # The date of interest
-            }
+            },
             }
         },
         {
@@ -213,7 +208,7 @@ async def name(
             "$project": {
                 "_id": 0,
                 "ticker": 1,
-                "signals": 1,
+                "signals.lookielookie_10_2": 1,
                 "date": 1
             }
         }
@@ -227,7 +222,7 @@ async def name(
         .assign(
             date=lambda df: pd.to_datetime(df.date, unit="ms"),
         )
-        .rename(columns={"signals.LONG":"LONG","signals.SHORT":"SHORT","signals.SIDE":"SIDE"})
+        .rename(columns={"signals.lookielookie_10_2.supertrend":"supertrend","signals.lookielookie_10_2.cnt":"cnt"})
         .set_index("date")
     )
 
@@ -235,27 +230,20 @@ async def name(
         df
         .groupby("ticker", as_index=False)
         .agg(
-            LONG_t0=pd.NamedAgg(column="LONG",aggfunc="first"),
-            LONG_t1=pd.NamedAgg(column="LONG",aggfunc="last"),
-            SHORT_t0=pd.NamedAgg(column="SHORT",aggfunc="first"),
-            SHORT_t1=pd.NamedAgg(column="SHORT",aggfunc="last"),
-            SIDE_t0=pd.NamedAgg(column="SIDE",aggfunc="first"),
-            SIDE_t1=pd.NamedAgg(column="SIDE",aggfunc="last"),
+            supertrend_t0=pd.NamedAgg(column="supertrend",aggfunc="first"),
+            supertrend_t1=pd.NamedAgg(column="supertrend",aggfunc="last"),
+            cnt_t0=pd.NamedAgg(column="cnt",aggfunc="first"),
+            cnt_t1=pd.NamedAgg(column="cnt",aggfunc="last"),
         )
-        [["ticker","LONG_t0", "LONG_t1","SHORT_t0", "SHORT_t1","SIDE_t0", "SIDE_t1"]]
+        [["ticker","supertrend_t0","supertrend_t1","cnt_t0","cnt_t1"]]
     )
 
     if end_date in df.index.unique():
         res = {
-            "SIDE_TO_LONG": r.loc[lambda df: df.LONG_t0 & df.SIDE_t1].ticker.tolist(),
-            "LONG_TO_SIDE": r.loc[lambda df: df.SIDE_t0 & df.LONG_t1].ticker.tolist(),
-            "LONG_TO_LONG": r.loc[lambda df: df.LONG_t0 & df.LONG_t1].ticker.tolist(),
-
-            "SIDE_TO_SHORT": r.loc[lambda df: df.SHORT_t0 & df.SIDE_t1].ticker.tolist(),
-            "SHORT_TO_SIDE": r.loc[lambda df: df.SIDE_t0 & df.SHORT_t1].ticker.tolist(),
-            "SHORT_TO_SHORT": r.loc[lambda df: df.SHORT_t0 & df.SHORT_t1].ticker.tolist(),
-
-            "SIDE_TO_SIDE": r.loc[lambda df: df.SIDE_t0 & df.SIDE_t1].ticker.tolist(),
+            "SHORT_TO_LONG": r.loc[lambda df: (df.supertrend_t0==1) & (df.supertrend_t1==-1)].to_dict("records"),
+            "LONG_TO_SHORT": r.loc[lambda df: (df.supertrend_t0==-1) & (df.supertrend_t1==1)].to_dict("records"),
+            "LONG_TO_LONG": r.loc[lambda df: (df.supertrend_t0==1) & (df.supertrend_t1==1)].to_dict("records"),
+            "SHORT_TO_SHORT": r.loc[lambda df: (df.supertrend_t0==-1) & (df.supertrend_t1==-1)].to_dict("records"),
         }
     else:
         res = EMPTY_RES
@@ -277,7 +265,7 @@ async def get_atr(ticker: str):
         .timeseries
         .find(
             {"ticker": ticker.upper()},
-            {"_id":0, "date": 1, "ticker": 1, "adjclose": 1, "indicators.atr": 1}
+            {"_id":0, "date": 1, "ticker": 1, "adjclose": 1, "indicators.atr_10": 1}
         )
         .sort("date", -1)
         .limit(1)

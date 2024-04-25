@@ -12,10 +12,11 @@
   
   export default {
     components: { VueDatePicker },
+    props: ["apiRedirect", "websiteRedirect"],
     data() {
         return {
             date: null,
-            validDates: []
+            validDates: [],
         };
     },
     methods: {
@@ -24,7 +25,7 @@
             this.$emit('date-changed', newDate);
         },
         getValidDates() {
-            axios.get("https://api.philippstuerner.com/lookielookie/get_valid_dates")
+            axios.get(`${this.apiRedirect}/lookielookie/get_valid_dates`)
                 .then(response => {
                     this.validDates = response.data.map(d => d.split("T")[0])
                 })

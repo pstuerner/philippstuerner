@@ -100,6 +100,7 @@ export default {
         user: auth0.user,
       }
     },
+    props: ["apiRedirect", "websiteRedirect"],
     data() {
         return {
             params: this.$route.params,
@@ -138,7 +139,19 @@ export default {
                 save_image: false,
                 calendar: false,
                 studies: [
-                    "STD;Supertrend"
+                    {
+                        id: "STD;Supertrend",
+                        inputs: {
+                            in_0: 10,
+                            in_1: 2
+                        }
+                    },
+                    {
+                        id: "STD;RSI",
+                        inputs: {
+                            in_0: 10,
+                        }
+                    },
                 ],
             }
         },
@@ -169,9 +182,9 @@ export default {
     },
     methods: {
         fetchData() {
-            axios.get(`https://api.philippstuerner.com/lookielookie/atr?ticker=${this.params.ticker}`)
+            axios.get(`${this.apiRedirect}/lookielookie/atr?ticker=${this.params.ticker}`)
                 .then(response => {
-                    this.atr = response.data["indicators"]["atr"];
+                    this.atr = response.data["indicators"]["atr_10"];
                     this.price = response.data.adjclose;
                     this.priceRemind = this.price;
                 })
@@ -180,7 +193,7 @@ export default {
                 });
         },
         setReminder() {
-            axios.get(`https://api.philippstuerner.com/lookielookie/set_reminder?mail=${this.user.email}&ticker=${this.params.ticker}&operator=${this.operator}&price=${this.priceRemind}`)
+            axios.get(`${this.apiRedirect}/lookielookie/set_reminder?mail=${this.user.email}&ticker=${this.params.ticker}&operator=${this.operator}&price=${this.priceRemind}`)
                 .then(response => {
                     this.reminded = true;
                 })

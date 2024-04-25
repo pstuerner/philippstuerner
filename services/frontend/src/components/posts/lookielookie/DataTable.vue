@@ -19,7 +19,7 @@
                 <tbody>
                     <tr v-for="(item, index) in filteredData" :key="index">
                         <td v-for="header in headers" :key="header.value">
-                            <component :is="header.value==='symbol'?'a':'span'" :href="header.value==='symbol' ? `https://philippstuerner.com/posts/lookielookie/ticker/${item[header.value]}` : ''" target="_blank">
+                            <component :is="header.value==='symbol'?'a':'span'" :href="header.value==='symbol' ? `${this.websiteRedirect}/posts/lookielookie/ticker/${item[header.value]}` : ''" target="_blank">
                                 <div v-if="header.format" class="formatted-value">
                                     {{ header.format(item[header.value]) }}
                                     <br>
@@ -45,13 +45,28 @@
     export default {
         name: 'DataTable',
 
+        props: {
+            heading: String,
+            symbols: {
+                type: Array,
+                default: () => [],
+            },
+            headersIgnore: {
+                type: Array,
+                default: () => [],
+            },
+            apiRedirect: String,
+            websiteRedirect: String
+        },
         data() {
             return {
-                test:"A",
                 headers: [
                     { text: "Symbol", value: "symbol" },
                     { text: "Sector", value: "sector" },
                     { text: "Industry", value: "industry" },
+                    { text: "Days Current", value: "daysCurrent" },
+                    { text: "Days Past", value: "daysPast" },
+
                     { text: "Market Cap", value: "marketCap", format: this.toHumanReadable },
                     { text: "EValue", value: "enterpriseValue", format: this.toHumanReadable },
                     { text: "Trailing P/E", value: "trailingPE", format: this.toFixedDigits },
@@ -101,13 +116,6 @@
                 sort: { column: null, direction: 'asc' },
             }
         },
-        props: {
-            heading: String,
-            symbols: {
-                type: Array,
-                default: () => [],
-            },
-        },
         watch: {
             symbols: {
             immediate: true, 
@@ -119,20 +127,27 @@
             }
             }
         },
+        mounted () {
+            this.headers = this.headers.filter(item => !this.headersIgnore.includes(item.value));
+        },
         methods: {
             async fetchData(tickers) {
                 try {
                     if (Array.isArray(tickers) && tickers.length > 1) {
-                        let ts = tickers.map(function (x) {return x[1].toUpperCase()}).join(",")
+                        let ts = tickers.map(function (x) {return x.ticker.toUpperCase()}).join(",")
                         const keysToInclude = this.headers.map((d) => {return d.value});
-                        const response = await axios.get(`https://api.philippstuerner.com/lookielookie/fundamentals?tickers=${ts}`);
+                        const response = await axios.get(`${this.apiRedirect}/lookielookie/fundamentals?tickers=${ts}`);
                         this.rowItems = response.data.map(dictionary => {
-                            return keysToInclude.reduce((acc, key) => {
+                            let fundamentals = keysToInclude.reduce((acc, key) => {
                                 if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
                                     acc[key] = dictionary[key];
                                 }
                                 return acc;
                             }, {});
+                            let tickerData = this.symbols.find(obj => obj.ticker === fundamentals.symbol);
+                            fundamentals["daysCurrent"] = tickerData["cnt_t0"];
+                            fundamentals["daysPast"] = tickerData["cnt_t1"];
+                            return fundamentals
                         });
                     }
                 } catch (error) {
@@ -141,7 +156,7 @@
             },
             async fetchAvgs() {
                 try {
-                    const response = await axios.get(`https://api.philippstuerner.com/lookielookie/avgs`);
+                    const response = await axios.get(`${this.apiRedirect}/lookielookie/avgs`);
                     this.avgs = response.data;
                 } catch (error) {
                     console.error("Failed to fetch data:", error);

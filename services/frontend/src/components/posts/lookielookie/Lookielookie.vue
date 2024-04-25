@@ -14,7 +14,7 @@
         <div id="master-container" class="col-12">
             <div class="container">
                 <div class="row">
-                    <router-view  :key="$route.fullPath"/>
+                    <router-view :apiRedirect="apiRedirect" :websiteRedirect="websiteRedirect" :key="$route.fullPath"/>
                 </div>
             </div>
         </div>
@@ -33,6 +33,8 @@ export default {
             title_meta: "Lookielookie",
             subheading: "Daily trading signals and filter options.",
             img: "lookielookie_header.jpg",
+            apiRedirect: 'https://api.philippstuerner.com',
+            websiteRedirect: 'https://philippstuerner.com'
         };
     },
     setup () {
