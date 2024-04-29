@@ -19,7 +19,7 @@
                 <tbody>
                     <tr v-for="(item, index) in filteredData" :key="index">
                         <td v-for="header in headers" :key="header.value">
-                            <component :is="header.value==='symbol'?'a':'span'" :href="header.value==='symbol' ? `${this.websiteRedirect}/posts/lookielookie/ticker/${item[header.value]}` : ''" target="_blank">
+                            <component :is="header.value==='symbol'?'a':'span'" :class="header.value==='symbol'?'ticker-url':''" :href="header.value==='symbol' ? `${this.websiteRedirect}/posts/lookielookie/ticker/${item[header.value]}` : ''" target="_blank">
                                 <div v-if="header.format" class="formatted-value">
                                     {{ header.format(item[header.value]) }}
                                     <br>
@@ -360,18 +360,18 @@
     font-size: 0.75em;
 }
 
-a {
+.ticker-url {
     outline-color: transparent;
     text-decoration: none;
     padding: 2px 1px 0;
 }
 
-a:focus,
-a:hover {
+.ticker-url:focus,
+.ticker-url:hover {
     border-bottom: 1px solid;
 }
 
-a[href^="http"] {
+.ticker-url[href^="http"] {
     display: inline-block;
     background: url("../../../assets/img/external-link.png") no-repeat 100% 0;
     background-size: 16px 16px;

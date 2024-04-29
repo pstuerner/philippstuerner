@@ -32,7 +32,7 @@
                             <tbody>
                                 <tr v-for="(reminder, index) in reminders" :key="index">
                                     <td>{{ reminder.triggered_at ? '✅' : '❌' }}</td>
-                                    <td><a :href="'https://philippstuerner.com/posts/lookielookie/ticker/'+reminder.ticker" target="_blank">{{ reminder.ticker }}</a></td>
+                                    <td><a class="ticker-url" :href="'https://philippstuerner.com/posts/lookielookie/ticker/'+reminder.ticker" target="_blank">{{ reminder.ticker }}</a></td>
                                     <td>{{ reminder.operator }}</td>
                                     <td>{{ reminder.price }}</td>
                                     <td>{{ formatDate(reminder.inserted_at) }}</td>
@@ -164,18 +164,18 @@
         }
     }
 
-a {
+.ticker-url {
     outline-color: transparent;
     text-decoration: none;
     padding: 2px 1px 0;
 }
 
-a:focus,
-a:hover {
+.ticker-url:focus,
+.ticker-url:hover {
     border-bottom: 1px solid;
 }
 
-a[href^="http"] {
+.ticker-url[href^="http"] {
     background: url("../assets/img/external-link.png") no-repeat 100% 0;
     background-size: 16px 16px;
     padding-right: 19px;
