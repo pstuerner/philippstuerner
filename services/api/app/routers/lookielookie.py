@@ -275,28 +275,49 @@ async def get_atr(ticker: str):
 
 @router.get("/get_reminders")
 async def get_reminders(mail: str):
-    reminders = (
+    operator_dict = {
+        ">": "$gt",
+        ">=": "$gte",
+        "<": "$lt",
+        "<=": "$lte"
+    }
+
+    reminders = list(
         db
         .reminders
         .find(
             {"mail": mail},
-            {"_id": 0, "mail": 0}
         )
     )
 
     res = []
-    for reminder in reminders:
-        price = (
+    for i, reminder in enumerate(reminders):
+        res.append({"ticker": reminder["ticker"],"operator":reminder["operator"],"price":reminder["price"],"inserted_at":reminder["inserted_at"],"triggered_at":reminder["triggered_at"]})
+        
+        if reminder["triggered_at"] is not None:
+            continue
+
+        triggered_at = list(
             db
             .timeseries
-            .find({"ticker": reminder["ticker"]}, {"_id": 0, "adjclose": 1})
-            .sort("date", -1)
+            .find(
+                {
+                    "ticker": reminder["ticker"],
+                    "adjclose": {operator_dict[reminder["operator"]]: reminder["price"]},
+                    "date": {"$gte": reminder["inserted_at"]}
+                },
+                {"_id": 0, "date":1}
+            )
+            .sort("date", 1)
             .limit(1)
-        )[0]["adjclose"]
-        triggered = eval(f"{price}{reminder['operator']}{reminder['price']}")
-        res.append({**reminder,**{"triggered": triggered}})
+        )
 
-    return sorted(res, key=lambda f: f["triggered"]==False)
+        if len(triggered_at) != 0:
+            triggered_at = triggered_at[0]["date"]
+            res[-1]["triggered_at"] = triggered_at
+            db.reminders.update_one({"_id": reminder["_id"]}, {"$set": {"triggered_at": triggered_at}})
+    
+    return sorted(res, key=lambda f: f["triggered_at"] or dt(1900,1,1), reverse=True)
 
 @router.get("/set_reminder")
 async def set_reminder(mail: str, ticker: str, operator: str, price: float):

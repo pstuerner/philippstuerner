@@ -20,19 +20,23 @@
                         <table id="tbl-lookielookie" style="text-align: center;">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Ticker</th>
                                     <th></th>
                                     <th>Price</th>
+                                    <th>Set</th>
                                     <th>Triggered</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(reminder, index) in reminders" :key="index">
+                                    <td>{{ reminder.triggered_at ? '✅' : '❌' }}</td>
                                     <td><a :href="'https://philippstuerner.com/posts/lookielookie/ticker/'+reminder.ticker" target="_blank">{{ reminder.ticker }}</a></td>
                                     <td>{{ reminder.operator }}</td>
                                     <td>{{ reminder.price }}</td>
-                                    <td>{{ reminder.triggered ? '✅' : '❌' }}</td>
+                                    <td>{{ formatDate(reminder.inserted_at) }}</td>
+                                    <td>{{ formatDate(reminder.triggered_at) }}</td>
                                     <td><span @click="removeRow(index)" style="cursor: pointer;">🗑️</span></td>
                                 </tr>
                             </tbody>
@@ -123,6 +127,13 @@
                     console.error('Failed to fetch data:', error);
                 });
         },
+        formatDate(dt) {
+            if (dt == null) {
+                return "-"
+            } else {
+                return dt.split('T')[0]
+            }
+        }
     },
     mounted() {
         this.fetchData();
@@ -144,8 +155,30 @@
     @media (max-width: 768px) {
         /* Styles for mobile */
         #tbl-lookielookie {
-            width: 90vw;
+            max-width: 100vw;
+            display: table-cell;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-spacing: 10px;
+            border-collapse: separate;
         }
     }
+
+a {
+    outline-color: transparent;
+    text-decoration: none;
+    padding: 2px 1px 0;
+}
+
+a:focus,
+a:hover {
+    border-bottom: 1px solid;
+}
+
+a[href^="http"] {
+    background: url("../assets/img/external-link.png") no-repeat 100% 0;
+    background-size: 16px 16px;
+    padding-right: 19px;
+}
   </style>
   

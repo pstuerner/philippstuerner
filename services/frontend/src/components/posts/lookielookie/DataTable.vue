@@ -304,40 +304,40 @@
     background: white;
     min-width: 100px;
     max-width: 150px;
-    white-space: nowrap; /* Prevents line breaks */
+    white-space: nowrap;
     text-align: center;
-    overflow: hidden; /* Hides any content that overflows the cell's box */
-    text-overflow: ellipsis; /* Optional: Adds an ellipsis (...) to indicate hidden overflow content */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .sticky-table th:first-child, .sticky-table td:first-child {
     position: sticky;
     left: 0;
     z-index: 1;
-    border-right: 2px solid #000; /* Adds a vertical border on the right side */
+    border-right: 2px solid #000;
     width: 80px;
 }
 
-@media (max-width: 768px) { /* Adjusting for devices with width 768px or less */
+@media (max-width: 768px) {
     .sticky-table th:first-child, .sticky-table td:first-child {
-        width: 60px; /* Even smaller width for mobile devices */
-        min-width: 60px; /* Ensuring it doesn't get any smaller than 60px */
-        max-width: 60px; /* Prevent it from expanding */
-        white-space: nowrap; /* Ensure text doesn't wrap */
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 }
 
 .sticky-table thead th {
-  position: -webkit-sticky; /* for Safari */
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-  border-bottom: 2px solid #000; /* Adds a horizontal border at the bottom */
+  border-bottom: 2px solid #000; 
 }
 
 .sticky-table tbody th {
-  position: -webkit-sticky; /* for Safari */
+  position: -webkit-sticky;
   position: sticky;
   left: 0;
 }
@@ -353,11 +353,29 @@
 }
 
 .formatted-value {
-    text-align: center; /* If you want the values also to be centered */
+    text-align: center;
 }
 
 .small-text {
-    font-size: 0.75em; /* Smaller font size for the text in brackets */
+    font-size: 0.75em;
+}
+
+a {
+    outline-color: transparent;
+    text-decoration: none;
+    padding: 2px 1px 0;
+}
+
+a:focus,
+a:hover {
+    border-bottom: 1px solid;
+}
+
+a[href^="http"] {
+    display: inline-block;
+    background: url("../../../assets/img/external-link.png") no-repeat 100% 0;
+    background-size: 16px 16px;
+    padding-right: 19px;
 }
   </style>
   
