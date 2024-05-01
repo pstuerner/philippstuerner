@@ -321,12 +321,15 @@ async def get_reminders(mail: str):
 
 @router.get("/set_reminder")
 async def set_reminder(mail: str, ticker: str, operator: str, price: float):
+    dt_now = dt.now()
+    dt_today = dt(dt_now.year, dt_now.month, dt_now.day)
+    
     ins = (
         db
         .reminders
         .update_one(
             {"mail": mail, "ticker": ticker, "operator": operator, "price": price},
-            {"$set": {"mail": mail, "ticker": ticker, "operator": operator, "price": price}},
+            {"$set": {"mail": mail, "ticker": ticker, "operator": operator, "price": price, "inserted_at": dt_today, "triggered_at": None}},
             upsert=True
         )
     )
