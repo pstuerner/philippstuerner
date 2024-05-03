@@ -231,7 +231,7 @@ export default {
         async getWatchlists() {
             await axios.get(`${this.apiRedirect}/lookielookie/get_watchlists?mail=${this.user.email}`)
                 .then(response => {
-                    this.watchlists.push([... new Set(response.data.map(d => d["watchlist"]))]);
+                    this.watchlists.push(...[... new Set(response.data.map(d => d["watchlist"]))]);
                     if (!this.watchlists.includes("default")) {
                         this.watchlists.push("default")
                     }
