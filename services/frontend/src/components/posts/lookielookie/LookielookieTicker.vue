@@ -85,6 +85,28 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;">
+        <div class="col-12 text-center" style="margin-left: auto; margin-right: auto; margin-top: 2em">
+            <h3>👀 Watchlist 👀</h3>
+            <div v-if="user!=null">
+                <p style="text-align: center;">
+                    Add {{ this.params.ticker }} to the
+                    <select v-model="watchlist">
+                        <option v-for="(watchlist, index) in watchlists" :key="index" :value="watchlist">{{ watchlist }}</option>
+                    </select>
+                    <span v-if="watchlist=='new'"> <input v-model="newWatchlistName" class="inline" placeholder="new watchlist name" type="text"> </span>
+                    watchlist. Any notes or comments? Leave them here: <input v-model="watchlistNotes" class="inline" type="text">.
+                </p>
+                <p v-if="watchlisted" style="text-align: center;">
+                    Done! You can check your profile to see your watchlists.
+                </p>
+                <button @click="setWatchlist" type="button" class="btn btn-primary">GO</button>
+            </div>
+            <div v-else>
+                <p style="text-align: center;">You must log in before you can use this feature!</p>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -114,6 +136,11 @@ export default {
             operator: ">",
             priceRemind: 0,
             reminded: false,
+            watchlist: "default",
+            watchlists: ["new"],
+            watchlistNotes: "",
+            newWatchlistName: null,
+            watchlisted: false,
         };
     },
     computed: {
@@ -200,10 +227,39 @@ export default {
                 .catch(error => {
                     console.error('Failed to fetch data:', error);
                 });
+        },
+        async getWatchlists() {
+            await axios.get(`${this.apiRedirect}/lookielookie/get_watchlists?mail=${this.user.email}`)
+                .then(response => {
+                    this.watchlists.push(...response.data.map(d => d["watchlist"]));
+                    if (!this.watchlists.includes("default")) {
+                        this.watchlists.push("default")
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Failed to fetch data:', error);
+                });
+        },
+        setWatchlist() {
+            if (this.newWatchlistName!=null) {
+                this.watchlist = this.newWatchlistName;
+                this.newWatchlistName = null;
+            }
+            
+            axios.get(`${this.apiRedirect}/lookielookie/set_watchlist?mail=${this.user.email}&ticker=${this.params.ticker}&watchlist=${this.watchlist}&notes=${this.watchlistNotes}`)
+                .then(response => {
+                    this.watchlisted = true;
+                    this.getWatchlists();
+                })
+                .catch(error => {
+                    console.error('Failed to fetch data:', error);
+                });
         }
     },
     mounted() {
         this.fetchData();
+        this.getWatchlists();
     },
     components: {
         CompanyProfile,

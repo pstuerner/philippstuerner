@@ -15,9 +15,9 @@
           <div class="row gx-4 gx-lg-5 justify-content-center">
             <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
                 <div>
-                    <h3 style="text-align: center;">👀 LookieLookie 👀</h3>
+                    <h3 style="text-align: center;">🔔 Reminders 🔔</h3>
                     <div v-if="reminders.length>0" style="justify-content: center; display: flex;">
-                        <table id="tbl-lookielookie" style="text-align: center;">
+                        <table class="tbl" style="text-align: center;">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -41,6 +41,37 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div v-else>
+                        <p style="text-align: center;">Nothing to see (yet)!</p>
+                    </div>
+                </div>
+                <div style="padding-top: 3em;">
+                    <h3 style="text-align: center;">👀 Watchlists 👀</h3>
+                    <div v-if="Object.keys(watchlists).length > 0">
+                        <div v-for="(items, key) in watchlists" :key="key" style="justify-content: center; text-align: center; padding-top: 2em;">
+                        <h4>{{ key }}</h4>
+                        <div style="display: flex;">
+                            <table class="tbl">
+                                <thead>
+                                    <tr>
+                                        <th>Ticker</th>
+                                        <th>Date</th>
+                                        <th>Notes</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in items" :key="index">
+                                        <td style="width: 20%;"><a class="ticker-url" :href="'https://philippstuerner.com/posts/lookielookie/ticker/'+item.ticker" target="_blank">{{ item.ticker }}</a></td>
+                                        <td style="width: 20%;">{{ formatDate(item.inserted_at) }}</td>
+                                        <td style="width: 60%;">{{ item.notes }}</td>
+                                        <td><span @click="removeWatchlist(item.ticker, item.watchlist)" style="cursor: pointer;">🗑️</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     </div>
                     <div v-else>
                         <p style="text-align: center;">Nothing to see (yet)!</p>
@@ -71,7 +102,8 @@
             title_meta: "Profile",
             subheading: "Reminders & More",
             img: "profile_header.jpg",
-            reminders: []
+            reminders: [],
+            watchlists: {}
         }
     },
     setup () {
@@ -117,11 +149,39 @@
                 });
             }
         },
+        async getWatchlists() {
+            await axios.get(`https://api.philippstuerner.com/lookielookie/get_watchlists?mail=${this.user.email}`)
+                .then(response => {
+                    this.watchlists = response.data.reduce((acc, item) => {
+                        const key = item.watchlist;
+
+                        if (!acc[key]) {
+                            acc[key] = [];
+                        }
+
+                        acc[key].push(item);
+
+                        return acc;
+                    }, {});
+                })
+                .catch(error => {
+                    console.error('Failed to fetch data:', error);
+                });
+        },
         removeRow(index) {
             let el = this.reminders[index];
             axios.get(`https://api.philippstuerner.com/lookielookie/remove_reminder?mail=${this.user.email}&ticker=${el.ticker}&operator=${el.operator}&price=${el.price}`)
                 .then(response => {
                     this.reminders.splice(index, 1);
+                })
+                .catch(error => {
+                    console.error('Failed to fetch data:', error);
+                });
+        },
+        removeWatchlist(ticker, watchlist) {
+            axios.get(`https://api.philippstuerner.com/lookielookie/remove_watchlist?mail=${this.user.email}&ticker=${ticker}&watchlist=${watchlist}`)
+                .then(response => {
+                    this.getWatchlists();
                 })
                 .catch(error => {
                     console.error('Failed to fetch data:', error);
@@ -137,6 +197,7 @@
     },
     mounted() {
         this.fetchData();
+        this.getWatchlists();
     },
     components: {
         ToTopButton
@@ -147,14 +208,14 @@
   <style scoped>
   @media (min-width: 769px) {
         /* Styles for desktop */
-        #tbl-lookielookie {
+        .tbl {
             width: 50vw;
         }
     }
 
     @media (max-width: 768px) {
         /* Styles for mobile */
-        #tbl-lookielookie {
+        .tbl {
             max-width: 100vw;
             display: table-cell;
             overflow-x: auto;

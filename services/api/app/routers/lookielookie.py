@@ -348,6 +348,48 @@ async def set_reminder(mail: str, ticker: str, operator: str, price: float):
 
     return True
 
+@router.get("/get_watchlists")
+async def get_watchlists(mail: str):
+    watchlists = list(
+        db
+        .watchlists
+        .find(
+            {"mail": mail},
+            {"_id": 0}
+        )
+    )
+    
+    return list(watchlists)
+
+@router.get("/set_watchlist")
+async def set_watchlist(mail: str, ticker: str, watchlist: str, notes: str):
+    dt_now = dt.now()
+    dt_today = dt(dt_now.year, dt_now.month, dt_now.day)
+    
+    ins = (
+        db
+        .watchlists
+        .update_one(
+            {"mail": mail, "ticker": ticker, "watchlist": watchlist},
+            {"$set": {"mail": mail, "ticker": ticker, "watchlist": watchlist, "notes": notes, "inserted_at": dt_today}},
+            upsert=True
+        )
+    )
+
+    return True
+
+@router.get("/remove_watchlist")
+async def set_reminder(mail: str, ticker: str, watchlist: str):
+    rem = (
+        db
+        .watchlists
+        .delete_one(
+            {"mail": mail, "ticker": ticker, "watchlist": watchlist}
+        )
+    )
+
+    return True
+
 @router.get("/get_valid_dates")
 async def get_valid_dates():
     res = db.timeseries.find({"ticker": "AAPL"}, {"_id": 0, "date": 1})
