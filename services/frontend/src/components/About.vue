@@ -16,7 +16,7 @@
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div id="master-container" class="col-md-10 col-lg-10 col-xl-8">
             <p>
-              I'm a data scientist at ING Germany. This website is my personal playground on which I develop side projects, try out new technologies and talk about ideas worth sharing. I am interested in everything related to machine learning and data visualization. That's probably why most of my content is either related to one or both of these topics. My main tools are Python, D3.js, Vue.js, and Docker. Feel free to skip through my existing content. I really hope that you find it useful 🙂 I'm always happy to catch up, so don't hesitate to get in touch with me by mail or LinkedIn.<br><br>Best,<br>Philipp
+              I'm a data scientist at <a href="https://www.hal-privatbank.com/">Hauck Aufhäuser Lampe</a> <s><a href="https://www.ing.de/">ING Germany</a></s>. This website is my personal playground on which I develop side projects, try out new technologies and talk about ideas worth sharing. I am interested in everything related to machine learning and data visualization. That's probably why most of my content is either related to one or both of these topics. My main tools are Python, D3.js, Vue.js, and Docker. Feel free to skip through my existing content. I really hope that you find it useful 🙂 I'm always happy to catch up, so don't hesitate to get in touch with me by mail or LinkedIn.<br><br>Best,<br>Philipp
             </p>
           </div>
         </div>
